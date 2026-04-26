@@ -1,9 +1,12 @@
 package com.example.tourismservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "restaurant")
 public class Restaurant {
 
     @Id
@@ -14,12 +17,10 @@ public class Restaurant {
     private String description;
     private String address;
     private double rating;
-    private String image;
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    @JsonIgnore
-    private City city;
+    private String city;
 
     public Restaurant() {}
 
@@ -63,19 +64,25 @@ public class Restaurant {
         this.rating = rating;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public City getCity() {
+    @JsonProperty("city")
+    public String getCityNameForJson() {
+        return city != null ? city : "";
+    }
+
+    public String getCity() {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(String city) {
         this.city = city;
     }
+
 }

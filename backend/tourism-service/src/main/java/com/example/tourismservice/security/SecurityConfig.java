@@ -23,8 +23,22 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/hotels/**", "/cities/**", "/restaurants/**").permitAll()
-            .anyRequest().authenticated()
+
+            // Lecture publique
+            .requestMatchers(HttpMethod.GET,
+                "/hotels/**",
+                "/restaurants/**",
+                "/beaches/**",
+                "/cities/**",
+                "/reviews/**"
+            ).permitAll()
+
+            .requestMatchers(HttpMethod.POST,
+                "/reviews/**"
+            ).permitAll()
+
+            //  Autoriser temporairement toutes les requêtes pour debug
+            .anyRequest().permitAll()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

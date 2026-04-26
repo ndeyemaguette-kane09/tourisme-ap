@@ -1,9 +1,11 @@
 package com.example.tourismservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "hotel")
 public class Hotel {
 
     @Id
@@ -13,12 +15,15 @@ public class Hotel {
     @Column(name = "image_url")
     private String imageUrl;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String address;
     private double price;
     private double rating;
-    
 
+    @Column(name = "city_name")
+    private String cityName;
+    
     @ManyToOne
     @JoinColumn(name = "city_id")
     @JsonIgnore
@@ -74,12 +79,20 @@ public class Hotel {
         this.rating = rating;
     }
 
-    public String getImage() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.imageUrl = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public City getCity() {
@@ -88,5 +101,16 @@ public class Hotel {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    @JsonProperty("city")
+    public String getCityForJson() {
+        if (cityName != null && !cityName.isEmpty()) {
+            return cityName;
+        }
+        if (city != null) {
+            return city.getName(); // assumes City has getName()
+        }
+        return "";
     }
 }

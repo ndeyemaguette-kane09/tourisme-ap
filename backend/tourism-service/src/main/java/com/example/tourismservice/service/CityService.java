@@ -22,4 +22,9 @@ public class CityService {
     public List<City> getAllCities(){
         return cityRepository.findAll();
     }
+    
+    public City findByName(String name) {
+    return cityRepository.findByNameIgnoreCase(name.trim())
+        .orElseThrow(() -> new RuntimeException("City not found: " + name));
+}
 }

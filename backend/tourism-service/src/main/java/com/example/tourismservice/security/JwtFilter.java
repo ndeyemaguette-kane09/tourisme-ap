@@ -6,12 +6,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
+import io.jsonwebtoken.Claims;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -21,6 +24,7 @@ public class JwtFilter extends OncePerRequestFilter {
     public JwtFilter(JwtService jwtService){
         this.jwtService = jwtService;
     }
+    
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -35,33 +39,32 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String path = request.getServletPath();
-
-// Autoriser les appels internes entre microservices
-if (path.startsWith("/hotels") ||
-    path.startsWith("/cities") ||
-    path.startsWith("/restaurants") ||
-    path.startsWith("/notifications") ||
-    path.startsWith("/users")) {
-    filterChain.doFilter(request, response);
-    return;
-}
-
-
         String token = authHeader.substring(7);
         String username = jwtService.extractEmail(token);
 
-        if(username != null){
+        if (username != null) {
+            // 🔥 récupérer les claims (inclut le rôle)
+            Claims claims = jwtService.extractAllClaims(token);
+
+            // 🔥 récupérer le rôle (ADMIN / USER)
+            String role = claims.get("role", String.class);
+
+            // 🔥 créer les autorités Spring (ROLE_ADMIN / ROLE_USER)
+            List<SimpleGrantedAuthority> authorities = List.of(
+                new SimpleGrantedAuthority("ROLE_" + role)
+            );
+
             UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            Collections.emptyList()
-                    );
+                new UsernamePasswordAuthenticationToken(
+                    username,
+                    null,
+                    authorities
+                );
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

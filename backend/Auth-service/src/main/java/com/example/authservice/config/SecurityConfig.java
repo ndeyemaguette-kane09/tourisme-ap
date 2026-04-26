@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").permitAll() // appels internes microservices
+                        .requestMatchers("/users/**").permitAll() 
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

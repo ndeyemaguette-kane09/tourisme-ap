@@ -38,8 +38,8 @@ services:
       - discovery-server
       - mysql
 
-  reservation-service:
-    build: ./reservation-service
+  booking-service:
+    build: ./booking-service
     ports:
       - "8086:8086"
     depends_on:
@@ -54,6 +54,19 @@ services:
       - discovery-server
       - mysql
 
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - discovery-server
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tourisme_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    
   mysql:
     image: mysql:8
     container_name: tourisme-mysql

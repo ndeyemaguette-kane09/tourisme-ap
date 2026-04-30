@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:tourisme_app/services/api_service.dart';
+import '../config/api_config.dart';
 
 class ReservationService {
-  final String baseUrl = ApiService.baseUrl;
+  final String baseUrl = ApiConfig.baseUrl;
 Future<List<dynamic>> getUserReservations(int userId, String token) async {
   final response = await http.get(
     Uri.parse("$baseUrl/reservations/user/$userId"),
@@ -23,9 +23,9 @@ Future<List<dynamic>> getUserReservations(int userId, String token) async {
   Future<void> createReservation(
     int userId,
     int hotelId,
-    DateTime checkInDate,   // ← ajoute
-    DateTime checkOutDate,  // ← ajoute
-    int guests,             // ← ajoute
+    DateTime checkInDate,   
+    DateTime checkOutDate,  
+    int guests,             
     String token,
   ) async {
     final response = await http.post(

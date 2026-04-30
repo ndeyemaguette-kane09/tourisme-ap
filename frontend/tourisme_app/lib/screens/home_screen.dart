@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'hotel_swipe_screen.dart';
+import 'restaurant_swipe_screen.dart';
 import 'my_reservations_screen.dart';
 import 'profile_screen.dart';
+import 'beach_swipe_screen.dart';
+import 'favorites_screen.dart';
+import 'map_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String token;
@@ -216,12 +220,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (_) => HotelSwipeScreen(
                         token: widget.token,
                         userId: widget.userId,
+                        userName: widget.userName,
                       ),
                     ),
                   );
                 }),
-                _categoryItem("Plages", Icons.beach_access, () {}),
-                _categoryItem("Restos", Icons.restaurant, () {}),
+                _categoryItem("Plages", Icons.beach_access, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BeachSwipeScreen(token: widget.token),
+                    ),
+                  );
+                }),
+                _categoryItem("Restos", Icons.restaurant, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RestaurantSwipeScreen(
+                        token: widget.token,
+                        userId: widget.userId,
+                      ),
+                    ),
+                  );
+                }),
                 _categoryItem("Culture", Icons.museum, () {}),
               ],
             ),
@@ -289,9 +311,13 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _currentIndex == 0
           ? homeContent
           : _currentIndex == 1
-              ? _placeholderScreen("Carte", Icons.map)
+              ? MapScreen(
+                  token: widget.token,
+                  userId: widget.userId,
+                  userName: widget.userName,
+                )
               : _currentIndex == 2
-                  ? _placeholderScreen("Favoris", Icons.favorite)
+                  ? const FavoritesScreen()
                   : ProfileScreen(
                       token: widget.token,
                       userId: widget.userId,

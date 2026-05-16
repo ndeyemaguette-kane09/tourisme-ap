@@ -1,6 +1,7 @@
 package com.example.authservice.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        if (path.startsWith("/auth") || path.startsWith("/users")) {
+        if (path.equals("/auth/login") || path.equals("/auth/register")) {
     filterChain.doFilter(request, response);
     return;
 }
@@ -52,15 +54,40 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            //UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            System.out.println("EMAIL FROM TOKEN = " + email);
 
+UserDetails userDetails;
+
+try {
+    userDetails = userDetailsService.loadUserByUsername(email);
+    System.out.println("USER FOUND = " + userDetails.getUsername());
+} catch (Exception e) {
+    System.out.println("USER NOT FOUND");
+    e.printStackTrace();
+    filterChain.doFilter(request, response);
+    return;
+}
+
+
+
+            System.out.println("TOKEN = " + token);
+System.out.println("EMAIL = " + email);
             if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+                System.out.println("TOKEN VALID");
+                // 🔥 Extract role from token
+                String role = jwtService.extractClaim(token, claims -> claims.get("role", String.class));
 
+                // 🔥 Convert role to Spring Security format
+               List<SimpleGrantedAuthority> authorities =
+        List.of(new SimpleGrantedAuthority(role));
+
+                // 🔥 Create authentication with role
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
-                                userDetails.getAuthorities()
+                                authorities
                         );
 
                 authToken.setDetails(
@@ -68,6 +95,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("AUTHENTICATION SET");
             }
         }
 

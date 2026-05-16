@@ -5,6 +5,8 @@ import com.example.tourismservice.entity.Hotel;
 import com.example.tourismservice.service.HotelService;
 import com.example.tourismservice.service.CityService;
 import org.springframework.web.bind.annotation.*;
+import com.example.tourismservice.entity.Category;
+import com.example.tourismservice.service.CategoryService;
 
 import java.util.List;
 import java.util.Map;
@@ -15,16 +17,21 @@ public class HotelController {
 
     private final HotelService hotelService;
     private final CityService cityService;
+    private final CategoryService categoryService;
 
-    public HotelController(HotelService hotelService, CityService cityService){
-        this.hotelService = hotelService;
-        this.cityService = cityService;
-    }
+    public HotelController(HotelService hotelService,
+                       CityService cityService,
+                       CategoryService categoryService){
+
+    this.hotelService = hotelService;
+    this.cityService = cityService;
+    this.categoryService = categoryService;
+}
 
     @PostMapping
     public Hotel createHotel(@RequestBody Map<String, Object> data){
 
-        System.out.println("🔥 HOTEL RECU: " + data);
+        
 
         Hotel hotel = new Hotel();
 
@@ -32,7 +39,31 @@ public class HotelController {
         hotel.setPrice(Double.parseDouble(data.get("price").toString()));
         hotel.setImageUrl((String) data.get("imageUrl"));
 
-        // 🔥 FIX CITY (same logic as update)
+
+        hotel.setDescription((String) data.get("description"));
+hotel.setAddress((String) data.get("address"));
+
+Object ratingObj = data.get("rating");
+if (ratingObj != null) {
+    hotel.setRating(Double.parseDouble(ratingObj.toString()));
+}
+Object categoryObj = data.get("category");
+
+if (categoryObj instanceof Map<?, ?> categoryMap) {
+
+    Object categoryIdObj = categoryMap.get("id");
+
+    if (categoryIdObj != null) {
+
+        Long categoryId = Long.parseLong(categoryIdObj.toString());
+
+        Category category = categoryService.getCategoryById(categoryId);
+
+        hotel.setCategory(category);
+    }
+}
+
+        //  FIX CITY (same logic as update)
         Object cityObj = data.get("city");
         if (cityObj == null) {
             cityObj = data.get("cityName");
@@ -51,7 +82,22 @@ public class HotelController {
             }
         }
 
-        return hotelService.saveHotel(hotel);
+       
+        System.out.println("NAME = " + hotel.getName());
+        System.out.println("ADDRESS = " + hotel.getAddress());
+        System.out.println("DESCRIPTION = " + hotel.getDescription());
+        System.out.println("PRICE = " + hotel.getPrice());
+        System.out.println("RATING = " + hotel.getRating());
+        System.out.println("IMAGE = " + hotel.getImageUrl());
+        System.out.println("CITY NAME = " + hotel.getCityName());
+        System.out.println("CATEGORY = " + hotel.getCategory());
+
+        Hotel savedHotel = hotelService.saveHotel(hotel);
+
+        
+        System.out.println(savedHotel);
+
+        return savedHotel;
     }
 
     @GetMapping
@@ -73,8 +119,7 @@ public class HotelController {
     @PutMapping("/{id}")
 public Hotel updateHotel(@PathVariable Long id, @RequestBody Map<String, Object> data) {
 
-    System.out.println("🔥 PUT HOTEL CALLED");
-System.out.println("DATA: " + data);
+    
 
 
     Hotel existing = hotelService.getHotelById(id);
@@ -82,6 +127,10 @@ System.out.println("DATA: " + data);
     if (data.get("description") != null) {
         existing.setDescription((String) data.get("description"));
     }
+    if (data.get("address") != null) {
+    existing.setAddress((String) data.get("address"));
+}
+
     existing.setName((String) data.get("name"));
     existing.setPrice(Double.parseDouble(data.get("price").toString()));
     existing.setImageUrl((String) data.get("imageUrl"));
@@ -112,8 +161,33 @@ System.out.println("DATA: " + data);
             System.out.println("⚠️ City not found: " + cityName);
         }
     }
+    Object categoryObj = data.get("category");
+
+if (categoryObj instanceof Map<?, ?> categoryMap) {
+
+    Object categoryIdObj = categoryMap.get("id");
+
+    if (categoryIdObj != null) {
+
+        Long categoryId = Long.parseLong(categoryIdObj.toString());
+
+        Category category = categoryService.getCategoryById(categoryId);
+
+        existing.setCategory(category);
+    }
+}
 
     return hotelService.saveHotel(existing);
 }
     
+
+@GetMapping("/category/{id}")
+public List<Hotel> getHotelsByCategory(@PathVariable Long id) {
+    return hotelService.getHotelsByCategory(id);
+}
+
+@GetMapping("/category/name/{name}")
+public List<Hotel> getHotelsByCategoryName(@PathVariable String name) {
+    return hotelService.getHotelsByCategoryName(name);
+}
 }

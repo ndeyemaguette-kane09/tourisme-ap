@@ -27,44 +27,50 @@ public class JwtFilter extends OncePerRequestFilter {
     
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+protected void doFilterInternal(HttpServletRequest request,
+                                HttpServletResponse response,
+                                FilterChain filterChain)
+        throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+    String authHeader = request.getHeader("Authorization");
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request, response);
-            return;
-        }
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
 
-        String token = authHeader.substring(7);
+    String token = authHeader.substring(7);
+
+    try {
         String username = jwtService.extractEmail(token);
 
         if (username != null) {
-            // 🔥 récupérer les claims (inclut le rôle)
             Claims claims = jwtService.extractAllClaims(token);
-
-            // 🔥 récupérer le rôle (ADMIN / USER)
             String role = claims.get("role", String.class);
 
-            // 🔥 créer les autorités Spring (ROLE_ADMIN / ROLE_USER)
             List<SimpleGrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority("ROLE_" + role)
+                new SimpleGrantedAuthority(role)  
             );
 
             UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    authorities
-                );
+                new UsernamePasswordAuthenticationToken(username, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
 
-        filterChain.doFilter(request, response);
+    } catch (io.jsonwebtoken.ExpiredJwtException e) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\": \"Token expired\"}");
+        return;
+    } catch (io.jsonwebtoken.JwtException e) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\": \"Invalid token\"}");
+        return;
     }
+
+    filterChain.doFilter(request, response);
+}
 
 }

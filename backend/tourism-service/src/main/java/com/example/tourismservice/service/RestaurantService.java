@@ -1,5 +1,6 @@
 package com.example.tourismservice.service;
 
+import com.example.tourismservice.entity.Hotel;
 import com.example.tourismservice.entity.Restaurant;
 import com.example.tourismservice.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,12 @@ public Restaurant getRestaurantById(Long id) {
 
 public Restaurant save(Restaurant restaurant) {
     return restaurantRepository.save(restaurant);
+}
+
+public List<Restaurant> getRestaurantsByCategory(Long categoryId) {
+    return restaurantRepository.findByCategoryId(categoryId);
+}
+public List<Restaurant> getRestaurantsByCategoryName(String categoryName) {
+    return restaurantRepository.findByCategoryName(categoryName);
 }
 }

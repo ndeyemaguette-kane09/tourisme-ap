@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/restaurant.dart';
 import '../screens/restaurant_details_screen.dart';
+import '../services/favorite_service.dart';
 
 class RestaurantSwipeCard extends StatelessWidget {
   final Restaurant restaurant;
@@ -72,6 +73,43 @@ class RestaurantSwipeCard extends StatelessWidget {
                       Colors.black.withOpacity(0.88),
                     ],
                     stops: const [0.35, 0.6, 1.0],
+                  ),
+                ),
+              ),
+
+              // ── FAVORIS ──
+              Positioned(
+                top: 20,
+                left: 20,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () async {
+                    FocusScope.of(context).unfocus();
+
+                    await FavoriteService.addFavorite({
+                      "id": restaurant.id,
+                      "type": "restaurant",
+                      "title": restaurant.name,
+                      "image": restaurant.imageUrl,
+                      "subtitle": restaurant.address,
+                      "city": restaurant.city,
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Ajouté aux favoris")),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.35),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.favorite_border,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   ),
                 ),
               ),

@@ -2,6 +2,7 @@ package com.example.tourismservice.service;
 
 
 import com.example.tourismservice.entity.Beach;
+import com.example.tourismservice.entity.Hotel;
 import com.example.tourismservice.repository.BeachRepository;
 import org.springframework.stereotype.Service;
 
@@ -46,4 +47,11 @@ public Beach getBeachById(Long id) {
 public Beach save(Beach beach) {
     return repository.save(beach);
 }
+public List<Beach> getBeachesByCategory(Long categoryId) {
+    return repository.findByCategoryId(categoryId);
+}
+public List<Beach> getBeachesByCategoryName(String categoryName) {
+    return repository.findByCategoryName(categoryName);
+}
+
 }

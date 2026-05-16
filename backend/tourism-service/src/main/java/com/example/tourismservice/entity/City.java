@@ -10,6 +10,11 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
+
     private String name;
 
     @OneToMany(mappedBy = "city")
@@ -51,4 +56,11 @@ public class City {
     public void setRestaurants(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
+    public Category getCategory() {
+    return category;
+}
+
+public void setCategory(Category category) {
+    this.category = category;
+}
 }

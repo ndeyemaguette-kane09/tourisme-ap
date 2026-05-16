@@ -13,6 +13,10 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
+
     private String name;
     private String description;
     private String address;
@@ -84,5 +88,13 @@ public class Restaurant {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public Category getCategory() {
+    return category;
+}
+
+public void setCategory(Category category) {
+    this.category = category;
+}
 
 }

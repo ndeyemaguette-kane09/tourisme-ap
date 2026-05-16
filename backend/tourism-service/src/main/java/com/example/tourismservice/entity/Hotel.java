@@ -12,6 +12,10 @@ public class Hotel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
+
     @Column(name = "image_url")
     private String imageUrl;
     private String name;
@@ -102,6 +106,13 @@ public class Hotel {
     public void setCity(City city) {
         this.city = city;
     }
+    public Category getCategory() {
+    return category;
+}
+
+public void setCategory(Category category) {
+    this.category = category;
+}
 
     @JsonProperty("city")
     public String getCityForJson() {

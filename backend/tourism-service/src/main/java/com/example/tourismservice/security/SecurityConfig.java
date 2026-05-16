@@ -17,32 +17,57 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-   @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**").permitAll()
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
 
-            // Lecture publique
-            .requestMatchers(HttpMethod.GET,
-                "/hotels/**",
-                "/restaurants/**",
-                "/beaches/**",
-                "/cities/**",
-                "/reviews/**"
-            ).permitAll()
+    .httpBasic(httpBasic -> httpBasic.disable())
 
-            .requestMatchers(HttpMethod.POST,
-                "/reviews/**"
-            ).permitAll()
+    .formLogin(form -> form.disable())
 
-            //  Autoriser temporairement toutes les requêtes pour debug
-            .anyRequest().permitAll()
-        )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    .authorizeHttpRequests(auth -> auth
 
-    return http.build();
-}
+                // ✅ Auth publique
+                .requestMatchers("/auth/**").permitAll()
+
+                // ✅ Lecture publique pour tout le monde
+                .requestMatchers(HttpMethod.GET,
+                    "/hotels/**",
+                    "/restaurants/**",
+                    "/beaches/**",
+                    "/cities/**",
+                    "/reviews/**",
+                    "/categories",
+                    "/categories/**"
+                ).permitAll()
+
+
+                
+
+                // ✅ Avis : tout le monde peut poster un review
+                .requestMatchers(HttpMethod.POST, "/reviews/**").permitAll()
+
+                // ✅ Création/modification/suppression : ADMIN uniquement
+                .requestMatchers(HttpMethod.POST,
+                    "/hotels/**",
+                    "/restaurants/**",
+                    "/beaches/**",
+                    "/cities/**",
+                    "/categories",
+                    "/categories/**"
+                ).hasAuthority("ADMIN")
+
+                .requestMatchers(HttpMethod.PUT, "/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/**").hasAuthority("ADMIN")
+
+                // ✅ Tout le reste nécessite d'être connecté
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }

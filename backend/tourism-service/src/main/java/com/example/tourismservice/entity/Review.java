@@ -11,6 +11,10 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
+
     private String username;
 
     private double rating;
@@ -81,4 +85,11 @@ public class Review {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    public Category getCategory() {
+    return category;
+}
+
+public void setCategory(Category category) {
+    this.category = category;
+}
 }

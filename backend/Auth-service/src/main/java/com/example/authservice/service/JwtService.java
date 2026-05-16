@@ -2,6 +2,7 @@ package com.example.authservice.service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
@@ -16,14 +17,7 @@ public class JwtService {
 
     private String SECRET_KEY = "mysecretkeymysecretkeymysecretkey12";
 
-    public String generateToken(String email) {
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
+    
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -58,4 +52,15 @@ public class JwtService {
     private Key getSignInKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
+
+
+    public String generateToken(Map<String, Object> extraClaims, String username) {
+    return Jwts.builder()
+            .setClaims(extraClaims)
+            .setSubject(username)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
+}
 }

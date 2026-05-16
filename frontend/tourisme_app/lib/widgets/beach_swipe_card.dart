@@ -15,6 +15,7 @@ class BeachSwipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.deferToChild,
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
@@ -51,17 +52,37 @@ class BeachSwipeCard extends StatelessWidget {
                     ),
                   ),
                   child: const Center(
-                    child: Icon(Icons.restaurant_rounded,
+                    child: Icon(Icons.beach_access_rounded,
                         size: 80, color: Colors.white30),
                   ),
                 ),
               ),
 
+              // ── GRADIENT ──  ← déplacé ici, avant les boutons
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.1),
+                      Colors.black.withOpacity(0.85),
+                    ],
+                    stops: const [0.35, 0.6, 1.0],
+                  ),
+                ),
+              ),
+
+              // ── BOUTON FAVORI ──  ← même logique que HotelSwipeCard
               Positioned(
                 top: 20,
                 left: 20,
                 child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () async {
+                    FocusScope.of(context).unfocus();
+
                     await FavoriteService.addFavorite({
                       "id": beach.id,
                       "type": "beach",
@@ -94,7 +115,7 @@ class BeachSwipeCard extends StatelessWidget {
                 ),
               ),
 
-              // ── BADGE SWIPE HINT (coin supérieur) ──
+              // ── BADGE HINT ──
               Positioned(
                 top: 20,
                 right: 20,
@@ -126,22 +147,6 @@ class BeachSwipeCard extends StatelessWidget {
                 ),
               ),
 
-              // ── GRADIENT INFÉRIEUR ──
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.1),
-                      Colors.black.withOpacity(0.85),
-                    ],
-                    stops: const [0.35, 0.6, 1.0],
-                  ),
-                ),
-              ),
-
               // ── INFOS BAS DE CARTE ──
               Positioned(
                 bottom: 0,
@@ -152,7 +157,6 @@ class BeachSwipeCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Nom
                       Text(
                         beach.name,
                         style: const TextStyle(
@@ -166,18 +170,20 @@ class BeachSwipeCard extends StatelessWidget {
 
                       const SizedBox(height: 6),
 
-                      // Adresse
                       Row(
                         children: [
                           Icon(Icons.location_on_rounded,
                               color: Colors.white.withOpacity(0.7),
                               size: 13),
                           const SizedBox(width: 4),
-                          Text(
-                            beach.address,
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                              fontSize: 13,
+                          Expanded(
+                            child: Text(
+                              "${beach.city ?? ''} — ${beach.address}",
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.7),
+                                fontSize: 13,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -185,7 +191,6 @@ class BeachSwipeCard extends StatelessWidget {
 
                       const SizedBox(height: 14),
 
-                      // Tags : ville + note
                       Row(
                         children: [
                           _tag(
@@ -204,7 +209,6 @@ class BeachSwipeCard extends StatelessWidget {
                             ),
                           ),
                           const Spacer(),
-                          // Bouton détail compact
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(

@@ -1,9 +1,5 @@
 package com.example.authservice.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.example.authservice.client.NotificationClient;
 import com.example.authservice.dto.AuthResponse;
 import com.example.authservice.dto.LoginRequest;
 import com.example.authservice.dto.RegisterRequest;
@@ -11,77 +7,176 @@ import com.example.authservice.entity.Role;
 import com.example.authservice.entity.User;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
+import com.example.authservice.service.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final NotificationClient notificationClient;
+private final RoleRepository roleRepository;
+private final PasswordEncoder passwordEncoder;
+private final JwtService jwtService;
 
+    @Autowired
     public AuthService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder,
-                       JwtService jwtService,
-                       NotificationClient notificationClient) {
+                       JwtService jwtService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.notificationClient = notificationClient;
     }
 
-    public User register(RegisterRequest request) {
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new RuntimeException("Cet Email à déja été enregistré!");
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public void deleteUser(Long id, Authentication authentication) {
+
+    String email = authentication.getName();
+
+    User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (!currentUser.getId().equals(id) &&
+        !currentUser.getRole().getName().equals("ADMIN")) {
+        throw new RuntimeException("Forbidden");
+    }
+
+    userRepository.deleteById(id);
+}
+
+    // 🔥 Update sécurisé (user modifie SON compte ou ADMIN)
+    public User updateUser(
+            Long id,
+            User updatedUser,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+                System.out.println("AUTH USER = " + authentication.getName());
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 🔐 sécurité : user ne modifie que son compte ou admin
+        if (!currentUser.getId().equals(id) && 
+            !currentUser.getRole().getName().equals("ADMIN")) {
+            throw new RuntimeException("Forbidden");
         }
 
-        Role role = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhone(request.getPhone());
-        user.setRole(role);
+        // 🔥 mise à jour des champs
+        if (updatedUser.getName() != null) {
+            user.setName(updatedUser.getName());
+        }
+
+        if (updatedUser.getPhone() != null) {
+            user.setPhone(updatedUser.getPhone());
+        }
+
+        if (updatedUser.getEmail() != null) {
+            user.setEmail(updatedUser.getEmail());
+        }
+
+        // 🔐 password sécurisé
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
 
         User savedUser = userRepository.save(user);
-
-        // Appel Notification Service
-        Map<String, Object> notification = new HashMap<>();
-        notification.put("userId", savedUser.getId());
-        notification.put("message", "Bienvenue sur l'application !");
-        notification.put("type", "REGISTER");
-        notification.put("read", false);
-
-        notificationClient.sendNotification(notification);
 
         return savedUser;
     }
 
-    public AuthResponse login(LoginRequest request) {
+    public User register(RegisterRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    User user = new User();
+    user.setEmail(request.getEmail());
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException("Invalid password");
-        }
+    // ⚠️ rôle par défaut USER
+    Role role = roleRepository.findByName("USER")
+            .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        String token = jwtService.generateToken(user.getEmail());
+    user.setRole(role);
 
-        return new AuthResponse(
-        token,
-        user.getId(),
-        user.getName(),
-        user.getRole().getName()
-);
+    return userRepository.save(user);
+}
+
+
+public AuthResponse login(LoginRequest request) {
+
+    User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        throw new RuntimeException("Invalid credentials");
     }
+
+    //  JWT avec rôle
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("role", user.getRole().getName());
+
+    String token = jwtService.generateToken(claims, user.getEmail());
+
+    return new AuthResponse(
+    token,
+    user.getId(),
+    user.getName(),
+    user.getRole().getName()
+);
+}
+
+// 🔐 Changement de mot de passe sécurisé
+public void changePassword(
+        Long userId,
+        String oldPassword,
+        String newPassword,
+        Authentication authentication) {
+
+   
+    String email = authentication.getName();
+
+    User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+    System.out.println("TOKEN USER ID = " + currentUser.getId());
+System.out.println("REQUEST USER ID = " + userId);
+System.out.println("ROLE = " + currentUser.getRole().getName());
+    // 🔒 Vérifier que l'utilisateur modifie SON compte ou est ADMIN
+    if (!currentUser.getId().equals(userId) &&
+        !currentUser.getRole().getName().equals("ADMIN")) {
+        throw new RuntimeException("Forbidden");
+    }
+
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    // 🔐 Vérification ancien mot de passe
+    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        throw new RuntimeException("Incorrect old password");
+    }
+
+    // 🔥 Mise à jour sécurisée
+    user.setPassword(passwordEncoder.encode(newPassword));
+
+    userRepository.save(user);
+}
 }

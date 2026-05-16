@@ -34,4 +34,6 @@ class FavoriteService {
         .map((e) => jsonDecode(e) as Map<String, dynamic>)
         .toList();
   }
+
+  static removeFavorite(favorit) {}
 }

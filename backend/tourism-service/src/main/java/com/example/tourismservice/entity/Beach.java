@@ -4,11 +4,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "beach")
+
 public class Beach {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+    @ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
 
     private String name;
     @Column(name = "address")
@@ -21,8 +27,9 @@ public class Beach {
 
     public Beach() {}
 
-    public Beach(Long id, String name, String address, String city, String description, double rating, String image) {
+    public Beach(Long id, Category category, String name, String address, String city, String description, double rating, String image) {
         this.id = id;
+        this.category = category;
         this.name = name;
         this.address = address;
         this.city = city;
@@ -51,4 +58,12 @@ public class Beach {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public Category getCategory() {
+    return category;
+}
+
+public void setCategory(Category category) {
+    this.category = category;
+}
 }

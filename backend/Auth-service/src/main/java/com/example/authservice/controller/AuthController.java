@@ -1,6 +1,12 @@
 package com.example.authservice.controller;
 
+import java.util.Map;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,5 +34,24 @@ public class AuthController {
     @PostMapping("/login")
 public AuthResponse login(@RequestBody LoginRequest request){
     return authService.login(request);
+}
+
+@PutMapping("/change-password/{id}")
+public ResponseEntity<?> changePassword(
+        @PathVariable Long id,
+        @RequestBody Map<String, String> request,
+        Authentication authentication) {
+
+    String oldPassword = request.get("oldPassword");
+    String newPassword = request.get("newPassword");
+
+    authService.changePassword(
+            id,
+            oldPassword,
+            newPassword,
+            authentication
+    );
+
+    return ResponseEntity.ok("Password updated successfully");
 }
 }

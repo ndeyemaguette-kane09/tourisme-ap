@@ -1,6 +1,7 @@
 package com.example.tourismservice.service;
 
 import com.example.tourismservice.entity.City;
+import com.example.tourismservice.entity.Hotel;
 import com.example.tourismservice.repository.CityRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,8 @@ public class CityService {
     public City findByName(String name) {
     return cityRepository.findByNameIgnoreCase(name.trim())
         .orElseThrow(() -> new RuntimeException("City not found: " + name));
+}
+public List<City> getCitiesByCategory(Long categoryId) {
+    return cityRepository.findByCategoryId(categoryId);
 }
 }

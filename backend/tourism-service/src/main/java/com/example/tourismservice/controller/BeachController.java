@@ -1,8 +1,11 @@
 package com.example.tourismservice.controller;
 
 import com.example.tourismservice.entity.Beach;
+import com.example.tourismservice.entity.Hotel;
 import com.example.tourismservice.service.BeachService;
 import org.springframework.web.bind.annotation.*;
+import com.example.tourismservice.entity.Category;
+import com.example.tourismservice.service.CategoryService;
 
 import java.util.List;
 import java.util.Map;
@@ -11,17 +14,52 @@ import java.util.Map;
 @RequestMapping("/beaches")
 @CrossOrigin(origins = "*")
 public class BeachController {
+private final BeachService service;
+private final CategoryService categoryService;
 
-    private final BeachService service;
-
-    public BeachController(BeachService service) {
-        this.service = service;
-    }
+    public BeachController(BeachService service, CategoryService categoryService) {
+    this.service = service;
+    this.categoryService = categoryService;
+}
 
     @PostMapping
-    public Beach createBeach(@RequestBody Beach beach) {
-        return service.saveBeach(beach);
+public Beach createBeach(@RequestBody Map<String, Object> data) {
+
+    Beach beach = new Beach();
+
+    beach.setName((String) data.get("name"));
+    beach.setDescription((String) data.get("description"));
+    beach.setAddress((String) data.get("address"));
+    beach.setImageUrl((String) data.get("imageUrl"));
+
+    Object ratingObj = data.get("rating");
+    if (ratingObj != null) {
+        beach.setRating(Double.parseDouble(ratingObj.toString()));
     }
+
+    String city = (String) data.get("city");
+    if (city != null) {
+        beach.setCity(city);
+    }
+
+    Object categoryObj = data.get("category");
+
+    if (categoryObj instanceof Map<?, ?> categoryMap) {
+
+        Object categoryIdObj = categoryMap.get("id");
+
+        if (categoryIdObj != null) {
+
+            Long categoryId = Long.parseLong(categoryIdObj.toString());
+
+            Category category = categoryService.getCategoryById(categoryId);
+
+            beach.setCategory(category);
+        }
+    }
+
+    return service.saveBeach(beach);
+}
 
     @GetMapping
     public List<Beach> getAllBeaches() {
@@ -44,7 +82,7 @@ public Beach updateBeach(@PathVariable Long id, @RequestBody Map<String, Object>
     beach.setName((String) data.get("name"));
     beach.setDescription((String) data.get("description"));
 
-    // 🔥 ADDRESS FIX
+    //  ADDRESS FIX
     String address = (String) data.get("address");
     if (address != null) {
         beach.setAddress(address);
@@ -52,7 +90,7 @@ public Beach updateBeach(@PathVariable Long id, @RequestBody Map<String, Object>
 
     String image = (String) data.get("imageUrl");
     if (image != null) {
-        System.out.println("🔥 IMAGE RECUE: " + data.get("imageUrl"));
+        
         beach.setImageUrl(image);
     }
 
@@ -66,4 +104,16 @@ public Beach updateBeach(@PathVariable Long id, @RequestBody Map<String, Object>
 
     
 }
+
+@GetMapping("/category/{id}")
+public List<Beach> getBeachesByCategory(@PathVariable Long id) {
+    return service.getBeachesByCategory(id);
+}
+
+
+@GetMapping("/category/name/{name}")
+public List<Beach> getBeachesByCategoryName(@PathVariable String name) {
+    return service.getBeachesByCategoryName(name);
+}
+
 }

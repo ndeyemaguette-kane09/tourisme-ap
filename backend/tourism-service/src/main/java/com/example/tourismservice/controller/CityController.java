@@ -1,6 +1,7 @@
 package com.example.tourismservice.controller;
 
 import com.example.tourismservice.entity.City;
+import com.example.tourismservice.entity.Hotel;
 import com.example.tourismservice.service.CityService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,4 +26,9 @@ public class CityController {
     public List<City> getCities(){
         return cityService.getAllCities();
     }
+
+    @GetMapping("/category/{id}")
+public List<City> getCitiesByCategory(@PathVariable Long id) {
+    return cityService.getCitiesByCategory(id);
+}
 }

@@ -172,3 +172,9 @@ UPDATE place SET sub_type = 'Réserve naturelle' WHERE id IN (118) AND sub_type 
 UPDATE place SET sub_type = 'Réserve animalière' WHERE id IN (119) AND sub_type IS NULL;
 UPDATE place SET sub_type = 'Désert' WHERE id IN (120) AND sub_type IS NULL;
 UPDATE place SET sub_type = 'Cascade' WHERE id IN (124) AND sub_type IS NULL;
+
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Monument_renaissance.jpg?width=1200' WHERE id = 102 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Lac_Rose_in_Senegal.jpg?width=1200' WHERE id = 105 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Touba_moschee.jpg?width=1200' WHERE id = 110 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Island_of_Saint-Louis-113799.jpg?width=1200' WHERE id = 114 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Saintlouis_pont_Faidherbe.jpg?width=1200' WHERE id = 115 AND image_url IS NULL;

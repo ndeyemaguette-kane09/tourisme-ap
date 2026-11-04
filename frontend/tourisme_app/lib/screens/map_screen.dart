@@ -55,11 +55,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late Animation<Offset> _sheetAnim;
 
   // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFE64A19);
-  static const Color _orangeDark = Color(0xFFBF360C);
-  static const Color _orangeLight = Color(0xFFF57C00);
-  static const Color _cream = Color(0xFFFFF8F0);
-  static const Color _amber = Color(0xFFFFF3E0);
+  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _orangeDark = Color(0xFF15171C);
+  static const Color _orangeLight = Color(0xFFFF8A6B);
+  static const Color _cream = Color(0xFFFAFAF7);
+  static const Color _amber = Color(0xFFF2F2EE);
 
   // Centre Sénégal (Dakar)
   static const LatLng _senegalCenter = LatLng(14.6928, -17.4467);
@@ -674,7 +674,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       Row(
                         children: [
                           const Icon(Icons.star_rounded,
-                              color: Color(0xFFF57C00), size: 15),
+                              color: Color(0xFFFF8A6B), size: 15),
                           const SizedBox(width: 4),
                           Text(
                             rating.toStringAsFixed(1),

@@ -113,9 +113,9 @@ class _SignupScreenState extends State<SignupScreen>
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFFBF360C),
-                  Color(0xFFE64A19),
-                  Color(0xFFF57C00),
+                  Color(0xFF15171C),
+                  Color(0xFFFF6B4A),
+                  Color(0xFFFF8A6B),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -241,7 +241,7 @@ class _SignupScreenState extends State<SignupScreen>
                       Container(
                         padding: const EdgeInsets.all(28),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFF8F0),
+                          color: const Color(0xFFFAFAF7),
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
@@ -259,7 +259,7 @@ class _SignupScreenState extends State<SignupScreen>
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFF4E1B00),
+                                color: Color(0xFF15171C),
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -308,7 +308,7 @@ class _SignupScreenState extends State<SignupScreen>
                                   _obscurePassword
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
-                                  color: const Color(0xFFE64A19),
+                                  color: const Color(0xFFFF6B4A),
                                   size: 20,
                                 ),
                                 onPressed: () => setState(
@@ -331,7 +331,7 @@ class _SignupScreenState extends State<SignupScreen>
                                   _obscureConfirm
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
-                                  color: const Color(0xFFE64A19),
+                                  color: const Color(0xFFFF6B4A),
                                   size: 20,
                                 ),
                                 onPressed: () => setState(
@@ -348,11 +348,11 @@ class _SignupScreenState extends State<SignupScreen>
                               child: ElevatedButton(
                                 onPressed: isLoading ? null : signup,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFBF360C),
+                                  backgroundColor: const Color(0xFF15171C),
                                   foregroundColor: Colors.white,
                                   elevation: 4,
                                   shadowColor:
-                                      const Color(0xFFBF360C).withOpacity(0.5),
+                                      const Color(0xFF15171C).withOpacity(0.5),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
@@ -446,7 +446,7 @@ class _SignupScreenState extends State<SignupScreen>
       style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF4E1B00),
+        color: Color(0xFF15171C),
       ),
     );
   }
@@ -463,14 +463,14 @@ class _SignupScreenState extends State<SignupScreen>
       controller: controller,
       obscureText: obscure,
       keyboardType: keyboardType,
-      style: const TextStyle(fontSize: 15, color: Color(0xFF2D1200)),
+      style: const TextStyle(fontSize: 15, color: Color(0xFF15171C)),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
-        prefixIcon: Icon(icon, color: const Color(0xFFE64A19), size: 20),
+        prefixIcon: Icon(icon, color: const Color(0xFFFF6B4A), size: 20),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: const Color(0xFFFFF3E0),
+        fillColor: const Color(0xFFF2F2EE),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         border: OutlineInputBorder(
@@ -479,11 +479,11 @@ class _SignupScreenState extends State<SignupScreen>
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFFFFCCBC), width: 1.2),
+          borderSide: const BorderSide(color: Color(0xFFFFD9CF), width: 1.2),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFFE64A19), width: 1.8),
+          borderSide: const BorderSide(color: Color(0xFFFF6B4A), width: 1.8),
         ),
       ),
     );

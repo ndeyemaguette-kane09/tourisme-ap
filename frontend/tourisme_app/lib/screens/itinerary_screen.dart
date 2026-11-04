@@ -56,9 +56,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Mon itinéraire"),
-        backgroundColor: AppColors.secondary,
-        foregroundColor: Colors.white,
+        title: const Text("Ton circuit"),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -169,11 +167,12 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     final hotel = day["hotel"];
     final restaurant = day["restaurant"];
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+    final isLast = day["day"] == (result?["days"] as List?)?.length;
+    final card = Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.field,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.line),
       ),
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -181,20 +180,11 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundColor: AppColors.secondary,
-                child: Text(
-                  "J${day["day"]}",
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800),
-                ),
-              ),
-              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   day["city"] ?? "",
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textDark,
                   ),
@@ -224,6 +214,38 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             _suggestion(Icons.hotel_rounded, "Dormir", Map<String, dynamic>.from(hotel)),
           if (restaurant != null)
             _suggestion(Icons.restaurant_rounded, "Manger", Map<String, dynamic>.from(restaurant)),
+        ],
+      ),
+    );
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            width: 40,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: day["day"] == 1 ? AppColors.coral : AppColors.ink,
+                  child: Text(
+                    "J${day["day"]}",
+                    style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800),
+                  ),
+                ),
+                if (!isLast)
+                  Expanded(child: Container(width: 2, color: AppColors.line)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: card,
+            ),
+          ),
         ],
       ),
     );

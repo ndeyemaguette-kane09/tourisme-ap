@@ -83,8 +83,8 @@ class _SearchScreenState extends State<SearchScreen> {
         label: Text(label),
         selected: selected,
         onSelected: (_) => onTap(),
-        selectedColor: AppColors.secondary,
-        backgroundColor: Colors.white,
+        selectedColor: AppColors.ink,
+        backgroundColor: AppColors.field,
         labelStyle: TextStyle(
           color: selected ? Colors.white : AppColors.textDark,
           fontWeight: FontWeight.w600,
@@ -159,18 +159,16 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.secondary,
-        foregroundColor: Colors.white,
+        titleSpacing: 0,
         title: TextField(
           controller: queryController,
           autofocus: widget.initialQuery == null && widget.initialCategory == null,
           onChanged: _onQueryChanged,
-          style: const TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
+          cursorColor: AppColors.ink,
           decoration: const InputDecoration(
-            hintText: "Gorée, plage, thiéboudienne...",
-            hintStyle: TextStyle(color: Colors.white70),
-            border: InputBorder.none,
+            hintText: "Gorée, une mosquée, une plage…",
+            prefixIcon: Icon(Icons.search_rounded, color: AppColors.ink),
+            contentPadding: EdgeInsets.symmetric(vertical: 12),
           ),
         ),
         actions: [

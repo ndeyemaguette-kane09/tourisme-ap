@@ -116,7 +116,7 @@ class _AddHotelScreenState extends State<AddHotelScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8F0),
+      backgroundColor: const Color(0xFFFAFAF7),
       body: Stack(
         children: [
           // ── Cercles déco ──
@@ -145,9 +145,9 @@ class _AddHotelScreenState extends State<AddHotelScreen>
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Color(0xFFBF360C),
-                            Color(0xFFE64A19),
-                            Color(0xFFF57C00),
+                            Color(0xFF15171C),
+                            Color(0xFFFF6B4A),
+                            Color(0xFFFF8A6B),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -305,11 +305,11 @@ class _AddHotelScreenState extends State<AddHotelScreen>
                             child: ElevatedButton(
                               onPressed: _isLoading ? null : addHotel,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFBF360C),
+                                backgroundColor: const Color(0xFF15171C),
                                 foregroundColor: Colors.white,
                                 elevation: 5,
                                 shadowColor:
-                                    const Color(0xFFBF360C).withOpacity(0.4),
+                                    const Color(0xFF15171C).withOpacity(0.4),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18),
                                 ),
@@ -376,7 +376,7 @@ class _AddHotelScreenState extends State<AddHotelScreen>
           width: 4,
           height: 18,
           decoration: BoxDecoration(
-            color: const Color(0xFFE64A19),
+            color: const Color(0xFFFF6B4A),
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -386,7 +386,7 @@ class _AddHotelScreenState extends State<AddHotelScreen>
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF4E1B00),
+            color: Color(0xFF15171C),
           ),
         ),
       ],
@@ -424,18 +424,18 @@ class _AddHotelScreenState extends State<AddHotelScreen>
         controller: controller,
         keyboardType: keyboardType,
         maxLines: maxLines,
-        style: const TextStyle(fontSize: 15, color: Color(0xFF2D1200)),
+        style: const TextStyle(fontSize: 15, color: Color(0xFF15171C)),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF4E1B00),
+            color: Color(0xFF15171C),
           ),
           hintText: hint,
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
           prefixIcon:
-              Icon(icon, color: const Color(0xFFE64A19), size: 20),
+              Icon(icon, color: const Color(0xFFFF6B4A), size: 20),
           border: InputBorder.none,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
@@ -448,7 +448,7 @@ class _AddHotelScreenState extends State<AddHotelScreen>
     return Divider(
       height: 1,
       thickness: 1,
-      color: const Color(0xFFFFCCBC).withOpacity(0.5),
+      color: const Color(0xFFFFD9CF).withOpacity(0.5),
       indent: 52,
     );
   }

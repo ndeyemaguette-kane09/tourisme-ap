@@ -50,7 +50,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8F0),
+      backgroundColor: const Color(0xFFFAFAF7),
       body: Stack(
         children: [
           // Décoration de fond
@@ -84,9 +84,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Color(0xFFBF360C),
-                            Color(0xFFE64A19),
-                            Color(0xFFF57C00),
+                            Color(0xFF15171C),
+                            Color(0xFFFF6B4A),
+                            Color(0xFFFF8A6B),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -97,7 +97,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0x40BF360C),
+                            color: Color(0x4015171C),
                             blurRadius: 20,
                             offset: Offset(0, 8),
                           ),
@@ -163,7 +163,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               icon: Icons.hotel,
                               count: "12",
                               label: "Hôtels",
-                              color: const Color(0xFFE64A19),
+                              color: const Color(0xFFFF6B4A),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -172,7 +172,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               icon: Icons.restaurant,
                               count: "8",
                               label: "Restaurants",
-                              color: const Color(0xFFFF6F00),
+                              color: const Color(0xFFFF6B4A),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -181,7 +181,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               icon: Icons.beach_access,
                               count: "5",
                               label: "Plages",
-                              color: const Color(0xFFF57C00),
+                              color: const Color(0xFFFF8A6B),
                             ),
                           ),
                         ],
@@ -196,7 +196,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                         children: [
                           Icon(
                             Icons.flash_on,
-                            color: Color(0xFFBF360C),
+                            color: Color(0xFF15171C),
                             size: 22,
                           ),
                           SizedBox(width: 8),
@@ -205,7 +205,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             style: TextStyle(
                               fontSize: 19,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFF4E1B00),
+                              color: Color(0xFF15171C),
                             ),
                           ),
                         ],
@@ -225,7 +225,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Créer un nouvel hébergement",
                             icon: Icons.hotel,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFBF360C), Color(0xFFE64A19)],
+                              colors: [Color(0xFF15171C), Color(0xFFFF6B4A)],
                             ),
                             screen: AddHotelScreen(token: widget.token),
                           ),
@@ -235,7 +235,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Référencer un établissement",
                             icon: Icons.restaurant,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFE64A19), Color(0xFFFF6F00)],
+                              colors: [Color(0xFFFF6B4A), Color(0xFFFF6B4A)],
                             ),
                             screen: AddRestaurantScreen(token: widget.token),
                           ),
@@ -245,7 +245,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Enregistrer un site balnéaire",
                             icon: Icons.beach_access,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFFF6F00), Color(0xFFF57C00)],
+                              colors: [Color(0xFFFF6B4A), Color(0xFFFF8A6B)],
                             ),
                             screen: AddBeachScreen(token: widget.token),
                           ),
@@ -255,7 +255,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Modifier ou supprimer",
                             icon: Icons.hotel_class,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFF57C00), Color(0xFFFF8A50)],
+                              colors: [Color(0xFFFF8A6B), Color(0xFFFF8A6B)],
                             ),
                             screen: ManageHotelsScreen(token: widget.token),
                           ),
@@ -265,7 +265,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Modifier ou supprimer",
                             icon: Icons.restaurant_menu,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFFF7043), Color(0xFFFFA726)],
+                              colors: [Color(0xFFFF6B4A), Color(0xFFFF8A6B)],
                             ),
                             screen: ManageRestaurantsScreen(token: widget.token)
                           ),
@@ -275,7 +275,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Modifier ou supprimer",
                             icon: Icons.beach_access,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFFF8A65), Color(0xFFFFB74D)],
+                              colors: [Color(0xFFFF8A6B), Color(0xFFFFB59F)],
                             ),
                             screen: ManageBeachesScreen(token: widget.token),
                           ),
@@ -285,7 +285,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                             subtitle: "Confirmer ou annuler les demandes",
                             icon: Icons.event_available,
                             gradient: const LinearGradient(
-                              colors: [Color(0xFFBF360C), Color(0xFFF57C00)],
+                              colors: [Color(0xFF15171C), Color(0xFFFF8A6B)],
                             ),
                             screen: ManageReservationsScreen(token: widget.token),
                           ),
@@ -385,7 +385,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFBF360C).withOpacity(0.2),
+            color: const Color(0xFF15171C).withOpacity(0.2),
             blurRadius: 16,
             offset: const Offset(0, 6),
           ),

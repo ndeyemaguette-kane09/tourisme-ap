@@ -118,7 +118,7 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8F0),
+      backgroundColor: const Color(0xFFFAFAF7),
       body: Stack(
         children: [
           // ── Cercles déco ──
@@ -147,9 +147,9 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Color(0xFFBF360C),
-                            Color(0xFFE64A19),
-                            Color(0xFFF57C00),
+                            Color(0xFF15171C),
+                            Color(0xFFFF6B4A),
+                            Color(0xFFFF8A6B),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -300,11 +300,11 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
                             child: ElevatedButton(
                               onPressed: isLoading ? null : addRestaurant,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFBF360C),
+                                backgroundColor: const Color(0xFF15171C),
                                 foregroundColor: Colors.white,
                                 elevation: 5,
                                 shadowColor:
-                                    const Color(0xFFBF360C).withOpacity(0.4),
+                                    const Color(0xFF15171C).withOpacity(0.4),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18),
                                 ),
@@ -371,7 +371,7 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
           width: 4,
           height: 18,
           decoration: BoxDecoration(
-            color: const Color(0xFFE64A19),
+            color: const Color(0xFFFF6B4A),
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -381,7 +381,7 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF4E1B00),
+            color: Color(0xFF15171C),
           ),
         ),
       ],
@@ -419,17 +419,17 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
         controller: controller,
         keyboardType: keyboardType,
         maxLines: maxLines,
-        style: const TextStyle(fontSize: 15, color: Color(0xFF2D1200)),
+        style: const TextStyle(fontSize: 15, color: Color(0xFF15171C)),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF4E1B00),
+            color: Color(0xFF15171C),
           ),
           hintText: hint,
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
-          prefixIcon: Icon(icon, color: const Color(0xFFE64A19), size: 20),
+          prefixIcon: Icon(icon, color: const Color(0xFFFF6B4A), size: 20),
           border: InputBorder.none,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
@@ -442,7 +442,7 @@ class _AddRestaurantScreenState extends State<AddRestaurantScreen>
     return Divider(
       height: 1,
       thickness: 1,
-      color: const Color(0xFFFFCCBC).withOpacity(0.5),
+      color: const Color(0xFFFFD9CF).withOpacity(0.5),
       indent: 52,
     );
   }

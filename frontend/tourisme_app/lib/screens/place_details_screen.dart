@@ -281,6 +281,14 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                     place["description"] ?? "",
                     style: const TextStyle(fontSize: 15, height: 1.5),
                   ),
+                  if ((place["imageUrl"] ?? "").toString().contains("wikimedia"))
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Text(
+                        "Photo : Wikimedia Commons, licence libre",
+                        style: TextStyle(fontSize: 11, color: AppColors.muted),
+                      ),
+                    ),
                   const SizedBox(height: 24),
                   const Text(
                     "Avis des voyageurs",

@@ -17,9 +17,9 @@ class HotelSwipeCard extends StatelessWidget {
     required this.userName,
   });
 
-  static const Color _orange = Color(0xFFE64A19);
-  static const Color _orangeDark = Color(0xFFBF360C);
-  static const Color _orangeLight = Color(0xFFF57C00);
+  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _orangeDark = Color(0xFF15171C);
+  static const Color _orangeLight = Color(0xFFFF8A6B);
 
   @override
   Widget build(BuildContext context) {
@@ -224,8 +224,8 @@ class HotelSwipeCard extends StatelessWidget {
                             label: hotel.rating.toStringAsFixed(1),
                             gradient: const LinearGradient(
                               colors: [
-                                Color(0xFFF57C00),
-                                Color(0xFFFFA726)
+                                Color(0xFFFF8A6B),
+                                Color(0xFFFF8A6B)
                               ],
                             ),
                           ),

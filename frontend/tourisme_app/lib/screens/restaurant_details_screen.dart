@@ -25,11 +25,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   bool _isFavorite = false;
 
   // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFE64A19);
-  static const Color _orangeDark = Color(0xFFBF360C);
-  static const Color _orangeLight = Color(0xFFF57C00);
-  static const Color _cream = Color(0xFFFFF8F0);
-  static const Color _amber = Color(0xFFFFF3E0);
+  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _orangeDark = Color(0xFF15171C);
+  static const Color _orangeLight = Color(0xFFFF8A6B);
+  static const Color _cream = Color(0xFFFAFAF7);
+  static const Color _amber = Color(0xFFF2F2EE);
 
   @override
   void initState() {

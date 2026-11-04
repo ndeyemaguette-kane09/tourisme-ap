@@ -30,7 +30,7 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
   };
 
   static const _statusColors = {
-    "EN_ATTENTE": Color(0xFFF57C00),
+    "EN_ATTENTE": Color(0xFFFF8A6B),
     "CONFIRMEE": Color(0xFF2E7D32),
     "ANNULEE": Color(0xFF9E9E9E),
     "TERMINEE": Color(0xFF1565C0),
@@ -104,7 +104,6 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text("Mes réservations"),
-        backgroundColor: AppColors.accent,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

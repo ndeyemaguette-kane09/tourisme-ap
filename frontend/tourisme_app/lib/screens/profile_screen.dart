@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8F0),
+      backgroundColor: const Color(0xFFFAFAF7),
       body: FadeTransition(
         opacity: _fadeAnim,
         child: CustomScrollView(
@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               expandedHeight: 240,
               pinned: true,
               automaticallyImplyLeading: false,
-              backgroundColor: const Color(0xFFBF360C),
+              backgroundColor: const Color(0xFF15171C),
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   children: [
@@ -87,9 +87,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Color(0xFFBF360C),
-                            Color(0xFFE64A19),
-                            Color(0xFFF57C00),
+                            Color(0xFF15171C),
+                            Color(0xFFFF6B4A),
+                            Color(0xFFFF8A6B),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -153,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   child: Container(
                                     padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF4E1B00),
+                                      color: const Color(0xFF15171C),
                                       shape: BoxShape.circle,
                                       border: Border.all(
                                           color: Colors.white, width: 2),
@@ -301,13 +301,13 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         child: Column(
           children: [
-            Icon(icon, color: const Color(0xFFE64A19), size: 22),
+            Icon(icon, color: const Color(0xFFFF6B4A), size: 22),
             const SizedBox(height: 6),
             Text(value,
                 style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF4E1B00))),
+                    color: Color(0xFF15171C))),
             Text(label,
                 style: TextStyle(fontSize: 11, color: Colors.grey.shade500)),
           ],
@@ -322,7 +322,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF4E1B00),
+        color: Color(0xFF15171C),
       ),
     );
   }
@@ -334,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
-    final color = isDestructive ? const Color(0xFFBF360C) : const Color(0xFFE64A19);
+    final color = isDestructive ? const Color(0xFF15171C) : const Color(0xFFFF6B4A);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -372,8 +372,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: isDestructive
-                              ? const Color(0xFFBF360C)
-                              : const Color(0xFF2D1200))),
+                              ? const Color(0xFF15171C)
+                              : const Color(0xFF15171C))),
                   Text(subtitle,
                       style: TextStyle(
                           fontSize: 12, color: Colors.grey.shade500)),

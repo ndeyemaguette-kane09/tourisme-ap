@@ -21,11 +21,11 @@ class _ManageBeachesScreenState extends State<ManageBeachesScreen>
   late Animation<double> _pulseAnim;
 
   // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFE64A19);
-  static const Color _orangeDark = Color(0xFFBF360C);
-  static const Color _orangeLight = Color(0xFFF57C00);
-  static const Color _cream = Color(0xFFFFF8F0);
-  static const Color _amber = Color(0xFFFFF3E0);
+  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _orangeDark = Color(0xFF15171C);
+  static const Color _orangeLight = Color(0xFFFF8A6B);
+  static const Color _cream = Color(0xFFFAFAF7);
+  static const Color _amber = Color(0xFFF2F2EE);
 
   @override
   void initState() {
@@ -468,8 +468,8 @@ class _BeachCard extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  static const Color _orange = Color(0xFFE64A19);
-  static const Color _amber = Color(0xFFFFF3E0);
+  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _amber = Color(0xFFF2F2EE);
 
   const _BeachCard({
     required this.beach,
@@ -565,14 +565,14 @@ class _BeachCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.star_rounded,
-                                color: Color(0xFFF57C00), size: 12),
+                                color: Color(0xFFFF8A6B), size: 12),
                             const SizedBox(width: 3),
                             Text(
                               beach.rating.toStringAsFixed(1),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFFBF360C),
+                                color: Color(0xFF15171C),
                               ),
                             ),
                           ],

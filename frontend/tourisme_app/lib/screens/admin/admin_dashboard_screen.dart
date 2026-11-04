@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../config/api_config.dart';
 import '../../services/beach_service.dart';
+import '../../services/event_service.dart';
 import '../../services/hotel_service.dart';
 import '../../services/place_service.dart';
 import '../../services/restaurant_service.dart';
@@ -11,6 +12,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../login_screen.dart';
 import 'manage_beaches_screen.dart';
+import 'manage_events_screen.dart';
 import 'manage_hotels_screen.dart';
 import 'manage_places_screen.dart';
 import 'manage_reservations_screen.dart';
@@ -49,6 +51,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       _count(() => HotelService().getHotels(token)),
       _count(() => RestaurantService().getRestaurants(token)),
       _count(() => BeachService().getBeaches(token)),
+      _count(() => EventService.getUpcoming()),
     ]);
 
     int? waiting;
@@ -69,6 +72,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       counts["hotels"] = results[1];
       counts["restaurants"] = results[2];
       counts["beaches"] = results[3];
+      counts["events"] = results[4];
       pending = waiting;
     });
   }
@@ -134,6 +138,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   _tile("Restaurants", Icons.restaurant_rounded, counts["restaurants"],
                       ManageRestaurantsScreen(token: token)),
                   _tile("Plages", Icons.beach_access_rounded, counts["beaches"], ManageBeachesScreen(token: token)),
+                  _tile("Fêtes à venir", Icons.event_rounded, counts["events"], ManageEventsScreen(token: token)),
                 ],
               ),
             ],

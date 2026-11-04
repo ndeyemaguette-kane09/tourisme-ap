@@ -10,7 +10,9 @@ import 'favorites_screen.dart';
 import 'map_screen.dart';
 import 'search_screen.dart';
 import 'itinerary_screen.dart';
+import 'events_screen.dart';
 import '../services/discover_service.dart';
+import '../services/event_service.dart';
 import '../services/favorite_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -146,6 +148,7 @@ class _HomeTabState extends State<_HomeTab> {
   bool _loading = true;
   List<Map<String, dynamic>> _featured = [];
   List<Map<String, dynamic>> _recommended = [];
+  Map<String, dynamic>? _nextEvent;
   final _pageController = PageController();
   Timer? _timer;
 
@@ -154,6 +157,7 @@ class _HomeTabState extends State<_HomeTab> {
     super.initState();
     _loadFeatured();
     _loadRecommended();
+    _loadNextEvent();
     _timer = Timer.periodic(const Duration(seconds: 4), (_) => _nextSlide());
   }
 
@@ -199,6 +203,13 @@ class _HomeTabState extends State<_HomeTab> {
     }
   }
 
+  Future<void> _loadNextEvent() async {
+    try {
+      final events = await EventService.getUpcoming();
+      if (mounted && events.isNotEmpty) setState(() => _nextEvent = events.first);
+    } catch (_) {}
+  }
+
   void _open(Widget screen) {
     Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
@@ -236,6 +247,10 @@ class _HomeTabState extends State<_HomeTab> {
               const SizedBox(height: 12),
               _recommendedList(),
               const SizedBox(height: 24),
+            ],
+            if (_nextEvent != null) ...[
+              _eventBanner(_nextEvent!),
+              const SizedBox(height: 12),
             ],
             _itineraryBanner(),
           ],
@@ -567,6 +582,46 @@ class _HomeTabState extends State<_HomeTab> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _eventBanner(Map<String, dynamic> event) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Material(
+        color: AppColors.ink,
+        borderRadius: BorderRadius.circular(24),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+          onTap: () => _open(const EventsScreen()),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "PROCHAIN GRAND RENDEZ-VOUS · ${EventService.countdown(event).toUpperCase()}",
+                        style: const TextStyle(color: AppColors.coralSoft, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(event["name"] ?? "", style: AppTheme.display(size: 19, color: Colors.white)),
+                      const SizedBox(height: 2),
+                      Text(
+                        "${EventService.dateLabel(event)} · ${event["city"] ?? ""}",
+                        style: const TextStyle(color: Colors.white70, fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.calendar_month_rounded, color: AppColors.coral, size: 30),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

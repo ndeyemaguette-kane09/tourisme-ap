@@ -43,7 +43,9 @@ public class SecurityConfig {
                     "/search",
                     "/search/**",
                     "/categories",
-                    "/categories/**"
+                    "/categories/**",
+                    "/events",
+                    "/events/**"
                 ).permitAll()
 
 
@@ -60,7 +62,9 @@ public class SecurityConfig {
                     "/places/**",
                     "/cities/**",
                     "/categories",
-                    "/categories/**"
+                    "/categories/**",
+                    "/events",
+                    "/events/**"
                 ).hasAuthority("ADMIN")
 
                 .requestMatchers(HttpMethod.PUT, "/**").hasAuthority("ADMIN")

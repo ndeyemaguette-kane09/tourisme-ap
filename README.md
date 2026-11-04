@@ -16,7 +16,8 @@ Backend en **microservices Spring Boot** (Eureka, API Gateway, JWT, Feign, Resil
 - Réservation d'hôtel avec statuts `EN_ATTENTE → CONFIRMEE / ANNULEE`, annulation côté client, validation côté admin, notification à chaque changement
 - Recommandations personnalisées (voir plus bas)
 - Itinéraire personnalisé : nombre de jours + centres d'intérêt + ville de départ → circuit jour par jour avec hôtel et restaurant suggérés
-- Espace admin : gestion des hôtels, restaurants, plages et réservations
+- Calendrier des grands rassemblements religieux (Magal de Touba, Gamou de Tivaouane et de Médina Baye, pèlerinage de Popenguine) : dates, compte à rebours, conseils pratiques et lien vers le lieu ; les dates lunaires sont marquées « estimées » jusqu'à l'annonce officielle
+- Espace admin : gestion des sites, hôtels, restaurants, plages, réservations et du calendrier, avec coordonnées GPS
 
 ## Architecture
 
@@ -118,9 +119,9 @@ Resilience4j protège les appels inter-services :
 | Méthode | Route | Accès |
 |---|---|---|
 | POST | `/auth/register`, `/auth/login` | public |
-| GET | `/hotels`, `/restaurants`, `/beaches`, `/places`, `/categories` | public |
+| GET | `/hotels`, `/restaurants`, `/beaches`, `/places`, `/categories`, `/events` | public |
 | GET | `/search?q=&type=&city=&category=&minRating=&maxPrice=` | public |
-| POST/PUT/DELETE | `/hotels`, `/restaurants`, `/beaches`, `/places` | ADMIN |
+| POST/PUT/DELETE | `/hotels`, `/restaurants`, `/beaches`, `/places`, `/events` | ADMIN |
 | GET / POST | `/reviews?entityId=&entityType=` | public |
 | POST | `/reservations` | connecté |
 | GET | `/reservations/user/{id}` | connecté |
@@ -143,7 +144,6 @@ Photos issues de Wikimedia Commons, sous licence libre. Les auteurs et licences 
 - Grande Mosquée de Touba — [Touba_moschee.jpg](https://commons.wikimedia.org/wiki/File:Touba_moschee.jpg)
 - Île de Saint-Louis — [Island_of_Saint-Louis-113799.jpg](https://commons.wikimedia.org/wiki/File:Island_of_Saint-Louis-113799.jpg)
 - Pont Faidherbe — [Saintlouis_pont_Faidherbe.jpg](https://commons.wikimedia.org/wiki/File:Saintlouis_pont_Faidherbe.jpg)
-
 - Maison des esclaves — [Maison des Esclaves 04045.JPG](https://commons.wikimedia.org/wiki/File:Maison_des_Esclaves_04045.JPG), Serge Ottaviani
 - Musée des Civilisations noires — [Musée des civilisations noires 2022.jpg](https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_des_civilisations_noires_2022.jpg), PMO Barbados, domaine public
 - Musée Théodore Monod — [Musée d'art africain Théodore Monod.jpg](https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_d'art_africain_Th%C3%A9odore_Monod.jpg), Zythème

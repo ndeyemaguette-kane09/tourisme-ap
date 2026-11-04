@@ -34,6 +34,10 @@ class PlaceDetailsScreen extends StatelessWidget {
       location: location,
       rating: ((place["rating"] ?? 0) as num).toDouble(),
       description: place["description"],
+      sections: [
+        DetailSection("Histoire", place["history"] ?? ""),
+        DetailSection("Bon à savoir", place["tips"] ?? ""),
+      ],
       infos: [
         DetailInfo(
           Icons.schedule_rounded,

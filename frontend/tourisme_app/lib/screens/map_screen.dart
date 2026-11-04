@@ -57,7 +57,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   // ── Palette Teranga ──
   static const Color _orange = Color(0xFFB9502B);
   static const Color _orangeDark = Color(0xFF15171C);
-  static const Color _orangeLight = Color(0xFFD4876A);
   static const Color _cream = Color(0xFFFAFAF7);
   static const Color _amber = Color(0xFFF2F2EE);
 
@@ -252,22 +251,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   mapToolbarEnabled: false,
                 ),
 
-          // ── HEADER GRADIENT ──
+          // ── HEADER ──
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    _orangeDark,
-                    _orange.withValues(alpha: 0.95),
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+              decoration: const BoxDecoration(
+                color: _orangeDark,
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
               ),
               child: SafeArea(
                 child: Padding(
@@ -565,19 +557,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                // Gradient
                 Container(
                   height: 130,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.6)
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
+                  color: Colors.black.withValues(alpha: 0.3),
                 ),
                 // Fermer
                 Positioned(
@@ -697,11 +679,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 12),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [_orangeDark, _orange, _orangeLight],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
+                      color: _orange,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
@@ -830,8 +808,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                gradient:
-                    const LinearGradient(colors: [_orange, _orangeLight]),
+                color: _orange,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Icon(Icons.map_rounded,

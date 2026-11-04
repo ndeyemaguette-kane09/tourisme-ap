@@ -36,6 +36,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             //  user + admin
             .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
             .requestMatchers("/auth/change-password/**").hasAnyAuthority("USER", "ADMIN")
+            .requestMatchers("/auth/profile/**").hasAnyAuthority("USER", "ADMIN")
 
             //  tout le reste sécurisé
             .anyRequest().authenticated()

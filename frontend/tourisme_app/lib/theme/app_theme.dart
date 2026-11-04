@@ -6,24 +6,22 @@ import '../widgets/motion.dart';
 
 class AppTheme {
   static TextStyle display({double size = 28, FontWeight weight = FontWeight.w800, Color color = AppColors.ink}) {
-    try {
-      return GoogleFonts.getFont(
-        'Bricolage Grotesque',
-        fontSize: size,
-        fontWeight: weight,
+    if (size >= 22) {
+      return GoogleFonts.instrumentSerif(
+        fontSize: size * 1.12,
+        fontWeight: FontWeight.w400,
         color: color,
-        letterSpacing: -0.4,
-        height: 1.05,
-      );
-    } catch (_) {
-      return GoogleFonts.dmSans(
-        fontSize: size,
-        fontWeight: weight,
-        color: color,
-        letterSpacing: -0.4,
+        letterSpacing: -0.2,
         height: 1.05,
       );
     }
+    return GoogleFonts.instrumentSans(
+      fontSize: size,
+      fontWeight: weight.value > 600 ? FontWeight.w600 : weight,
+      color: color,
+      letterSpacing: -0.2,
+      height: 1.15,
+    );
   }
 
   static ThemeData light() {
@@ -48,7 +46,7 @@ class AppTheme {
           TargetPlatform.linux: SoftPageTransitionsBuilder(),
         },
       ),
-      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).apply(
+      textTheme: GoogleFonts.instrumentSansTextTheme(base.textTheme).apply(
         bodyColor: AppColors.ink,
         displayColor: AppColors.ink,
       ),
@@ -66,7 +64,7 @@ class AppTheme {
           foregroundColor: Colors.white,
           minimumSize: const Size(0, 54),
           elevation: 0,
-          textStyle: GoogleFonts.dmSans(fontWeight: FontWeight.w700, fontSize: 15),
+          textStyle: GoogleFonts.instrumentSans(fontWeight: FontWeight.w600, fontSize: 15),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         ),
       ),

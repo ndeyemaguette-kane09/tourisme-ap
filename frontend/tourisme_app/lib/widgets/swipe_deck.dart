@@ -186,13 +186,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
           children: [
             NetImage(url: e.imageUrl, seed: e.name, icon: widget.icon, heroTag: "img-${e.type}-${e.id}"),
             DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.65)],
-                ),
-              ),
+              decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.34)),
             ),
             if (e.badge != null)
               Positioned(

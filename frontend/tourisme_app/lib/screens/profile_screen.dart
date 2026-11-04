@@ -10,6 +10,10 @@ import '../services/reservation_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'favorites_screen.dart';
+import 'events_screen.dart';
+import 'account_screens.dart';
+import '../services/account_service.dart';
+import '../widgets/admin_kit.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String token;
@@ -33,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   final ImagePicker picker = ImagePicker();
   int? _favoriteCount;
   int? _reservationCount;
+  late String _name = widget.userName;
 
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
@@ -109,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.userName, style: AppTheme.display(size: 22, weight: FontWeight.w700)),
+                          Text(_name, style: AppTheme.display(size: 26)),
                           const SizedBox(height: 2),
                           const Text("Touche la photo pour la changer", style: TextStyle(color: AppColors.muted, fontSize: 13)),
                         ],
@@ -145,20 +150,54 @@ class _ProfileScreenState extends State<ProfileScreen>
                     MaterialPageRoute(builder: (_) => const FavoritesScreen()),
                   ).then((_) => _loadCounts()),
                 ),
+                _profileOption(
+                  icon: Icons.event_outlined,
+                  title: "Calendrier des fêtes",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const EventsScreen()),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 _sectionTitle("Compte"),
+                _profileOption(
+                  icon: Icons.person_outline_rounded,
+                  title: "Informations personnelles",
+                  onTap: _openAccountInfo,
+                ),
+                _profileOption(
+                  icon: Icons.lock_outline_rounded,
+                  title: "Mot de passe",
+                  onTap: () async {
+                    final ok = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(builder: (_) => PasswordScreen(userId: widget.userId)),
+                    );
+                    if (ok == true && mounted) showAdminMessage(context, "Mot de passe mis à jour");
+                  },
+                ),
+                const SizedBox(height: 20),
+                _sectionTitle("Aide"),
+                _profileOption(
+                  icon: Icons.info_outline_rounded,
+                  title: "À propos de Cap Teranga",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AboutScreen()),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 _profileOption(
                   icon: Icons.logout_rounded,
                   title: "Déconnexion",
                   isDestructive: true,
-                  onTap: () {
-                    Session.clear();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
-                    );
-                  },
+                  onTap: _logout,
+                ),
+                _profileOption(
+                  icon: Icons.delete_outline_rounded,
+                  title: "Supprimer mon compte",
+                  isDestructive: true,
+                  onTap: _deleteAccount,
                 ),
               ],
             ),
@@ -166,6 +205,37 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
       ),
     );
+  }
+
+  Future<void> _openAccountInfo() async {
+    final ok = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => AccountInfoScreen(userId: widget.userId)),
+    );
+    if (ok == true && mounted) {
+      setState(() => _name = Session.userName ?? _name);
+      showAdminMessage(context, "Informations enregistrées");
+    }
+  }
+
+  void _logout() {
+    Session.clear();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+
+  Future<void> _deleteAccount() async {
+    if (!await confirmDelete(context, "mon compte")) return;
+    final ok = await AccountService.delete(widget.userId);
+    if (!mounted) return;
+    if (ok) {
+      _logout();
+    } else {
+      showAdminMessage(context, "Suppression impossible pour le moment");
+    }
   }
 
   Widget _avatar() {
@@ -182,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               backgroundImage: profileImage != null ? FileImage(profileImage!) : null,
               child: profileImage == null
                   ? Text(
-                      widget.userName.isNotEmpty ? widget.userName[0].toUpperCase() : "?",
+                      _name.isNotEmpty ? _name[0].toUpperCase() : "?",
                       style: AppTheme.display(size: 28, color: AppColors.ink),
                     )
                   : null,

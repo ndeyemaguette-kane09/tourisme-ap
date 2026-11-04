@@ -35,7 +35,6 @@ class _ReservationScreenState extends State<ReservationScreen>
   // ── Palette Teranga ──
   static const Color _orange = Color(0xFFB9502B);
   static const Color _orangeDark = Color(0xFF15171C);
-  static const Color _orangeLight = Color(0xFFD4876A);
   static const Color _cream = Color(0xFFFAFAF7);
   static const Color _amber = Color(0xFFF2F2EE);
 
@@ -169,20 +168,14 @@ class _ReservationScreenState extends State<ReservationScreen>
         opacity: _fadeAnim,
         child: Stack(
           children: [
-            // ── HEADER GRADIENT ──
+            // ── HEADER ──
             Positioned(
               top: 0,
               left: 0,
               right: 0,
               child: Container(
                 height: size.height * 0.20,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [_orangeDark, _orange, _orangeLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                decoration: const BoxDecoration(color: _orangeDark),
               ),
             ),
 
@@ -406,11 +399,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                 child: Container(
                   height: 58,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [_orangeDark, _orange, _orangeLight],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
+                    color: _orange,
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
@@ -562,11 +551,7 @@ class _ReservationScreenState extends State<ReservationScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [_orangeDark, _orange],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
+        color: _orangeDark,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -675,8 +660,8 @@ class _ReservationScreenState extends State<ReservationScreen>
   Widget _paymentSelector() {
     final methods = [
       {"value": "Carte", "icon": Icons.credit_card_rounded},
-      {"value": "Wave", "icon": Icons.waves_rounded},
-      {"value": "Orange Money", "icon": Icons.phone_android_rounded},
+      {"value": "Wave", "icon": Icons.waves_rounded, "logo": "assets/payments/wave.png"},
+      {"value": "Orange Money", "icon": Icons.phone_android_rounded, "logo": "assets/payments/orange_money.png"},
       {"value": "Paiement sur place", "icon": Icons.storefront_rounded},
     ];
 
@@ -684,6 +669,7 @@ class _ReservationScreenState extends State<ReservationScreen>
       children: methods.map((m) {
         final val = m["value"] as String;
         final icon = m["icon"] as IconData;
+        final logo = m["logo"] as String?;
         final selected = paymentMethod == val;
         return GestureDetector(
           onTap: () => setState(() => paymentMethod = val),
@@ -713,17 +699,18 @@ class _ReservationScreenState extends State<ReservationScreen>
             ),
             child: Row(
               children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color: selected ? _orange : Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon,
-                      color: selected ? Colors.white : Colors.grey.shade400,
-                      size: 20),
-                ),
+                logo != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          logo,
+                          width: 38,
+                          height: 38,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => _methodIcon(icon, selected),
+                        ),
+                      )
+                    : _methodIcon(icon, selected),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Text(
@@ -753,6 +740,18 @@ class _ReservationScreenState extends State<ReservationScreen>
           ),
         );
       }).toList(),
+    );
+  }
+
+  Widget _methodIcon(IconData icon, bool selected) {
+    return Container(
+      width: 38,
+      height: 38,
+      decoration: BoxDecoration(
+        color: selected ? _orange : Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(icon, color: selected ? Colors.white : Colors.grey.shade400, size: 20),
     );
   }
 }

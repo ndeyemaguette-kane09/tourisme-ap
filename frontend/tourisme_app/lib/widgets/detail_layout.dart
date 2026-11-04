@@ -15,6 +15,13 @@ class DetailInfo {
   const DetailInfo(this.icon, this.label, this.value);
 }
 
+class DetailSection {
+  final String title;
+  final String text;
+
+  const DetailSection(this.title, this.text);
+}
+
 class DetailLayout extends StatefulWidget {
   final String type;
   final int id;
@@ -25,6 +32,7 @@ class DetailLayout extends StatefulWidget {
   final double rating;
   final String? description;
   final List<DetailInfo> infos;
+  final List<DetailSection> sections;
   final String? actionLabel;
   final IconData actionIcon;
   final VoidCallback? onAction;
@@ -40,6 +48,7 @@ class DetailLayout extends StatefulWidget {
     this.tags = const [],
     this.description,
     this.infos = const [],
+    this.sections = const [],
     this.actionLabel,
     this.actionIcon = Icons.add_rounded,
     this.onAction,
@@ -321,6 +330,12 @@ class _DetailLayoutState extends State<DetailLayout> {
                                 style: const TextStyle(color: AppColors.ink, fontWeight: FontWeight.w700),
                               ),
                             ),
+                        ],
+                        for (final section in widget.sections.where((s) => s.text.trim().isNotEmpty)) ...[
+                          const SizedBox(height: 22),
+                          Text(section.title, style: AppTheme.display(size: 24)),
+                          const SizedBox(height: 8),
+                          Text(section.text.trim(), style: const TextStyle(fontSize: 15, height: 1.55)),
                         ],
                         if ((widget.imageUrl ?? "").contains("wikimedia"))
                           const Padding(

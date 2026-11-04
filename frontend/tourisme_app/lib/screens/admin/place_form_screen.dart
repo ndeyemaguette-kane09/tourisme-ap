@@ -31,6 +31,8 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
   late final address = TextEditingController(text: p["address"]);
   late final image = TextEditingController(text: p["imageUrl"]);
   late final description = TextEditingController(text: p["description"]);
+  late final history = TextEditingController(text: p["history"]);
+  late final tips = TextEditingController(text: p["tips"]);
   late final duration = TextEditingController(text: numberText((p["visitDuration"] as num?)?.toDouble()));
   late final entry = TextEditingController(text: numberText((p["entryPrice"] as num?)?.toDouble()));
   late final latitude = TextEditingController(text: numberText((p["latitude"] as num?)?.toDouble()));
@@ -55,7 +57,7 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
 
   @override
   void dispose() {
-    for (final c in [name, subType, city, region, address, image, description, duration, entry, latitude, longitude]) {
+    for (final c in [name, subType, city, region, address, image, description, history, tips, duration, entry, latitude, longitude]) {
       c.dispose();
     }
     super.dispose();
@@ -82,6 +84,8 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
       "address": address.text.trim(),
       "imageUrl": image.text.trim(),
       "description": description.text.trim(),
+      "history": history.text.trim(),
+      "tips": tips.text.trim(),
       "visitDuration": parseNumber(duration.text),
       "entryPrice": parseNumber(entry.text),
       "latitude": parseNumber(latitude.text),
@@ -160,6 +164,8 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
         AdminSection(title: "Présentation", children: [
           AdminField(label: "URL de la photo", controller: image, hint: "https://…"),
           AdminField(label: "Description", controller: description, maxLines: 5),
+          AdminField(label: "Histoire", controller: history, maxLines: 6, hint: "Origine, dates clés, personnages"),
+          AdminField(label: "Bon à savoir", controller: tips, maxLines: 4, hint: "Horaires, tenue, meilleure période"),
         ]),
         AdminSection(title: "Position", children: [
           GpsFields(latitude: latitude, longitude: longitude),

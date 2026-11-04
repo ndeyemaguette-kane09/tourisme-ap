@@ -41,6 +41,12 @@ public class Place {
     // en FCFA, 0 si l'entrée est libre
     private Double entryPrice;
 
+    @Column(columnDefinition = "TEXT")
+    private String history;
+
+    @Column(columnDefinition = "TEXT")
+    private String tips;
+
     public Place() {}
 
     public Long getId() {
@@ -161,5 +167,21 @@ public class Place {
 
     public void setEntryPrice(Double entryPrice) {
         this.entryPrice = entryPrice;
+    }
+
+    public String getHistory() {
+        return history;
+    }
+
+    public void setHistory(String history) {
+        this.history = history;
+    }
+
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
     }
 }

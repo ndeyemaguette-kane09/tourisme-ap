@@ -444,17 +444,13 @@ class _SkeletonState extends State<Skeleton> with SingleTickerProviderStateMixin
     return AnimatedBuilder(
       animation: _c,
       builder: (context, _) {
-        final x = _c.value * 3 - 1;
+        final t = Curves.easeInOut.transform(1 - (_c.value * 2 - 1).abs());
         return Container(
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.radius),
-            gradient: LinearGradient(
-              begin: Alignment(x - 1, 0),
-              end: Alignment(x + 1, 0),
-              colors: const [AppColors.chip, Color(0xFFF7F7F3), AppColors.chip],
-            ),
+            color: Color.lerp(AppColors.chip, const Color(0xFFF7F7F3), t),
           ),
         );
       },

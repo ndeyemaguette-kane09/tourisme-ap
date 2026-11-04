@@ -45,7 +45,7 @@ class ItineraryServiceTest {
                 item("hotel", 10, "Saint-Louis", "HISTORIQUE", 16.025, -16.505, null)
         ));
 
-        Map<String, Object> result = service.build(2, List.of("nature"), "Dakar");
+        Map<String, Object> result = service.build(3, List.of("nature"), "Dakar");
         List<?> days = (List<?>) result.get("days");
 
         assertEquals(2, days.size());
@@ -54,6 +54,32 @@ class ItineraryServiceTest {
                 assertEquals("NATURE", ((Map<?, ?>) p).get("category"));
             }
         }
+    }
+
+    @Test
+    void neverSendsTheTravellerFarAwayOnTheLastDay() {
+        ItineraryService service = service(List.of(
+                item("place", 1, "Dakar", "HISTORIQUE", 14.667, -17.399, 4.0),
+                item("place", 2, "Dakar", "HISTORIQUE", 14.722, -17.495, 4.0),
+                item("place", 3, "Saint-Louis", "HISTORIQUE", 16.027, -16.504, 3.0)
+        ));
+
+        Map<String, Object> result = service.build(3, List.of("HISTORIQUE"), "Dakar");
+
+        assertFalse(((List<?>) result.get("cities")).contains("Saint-Louis"));
+    }
+
+    @Test
+    void countsDrivingTimeInTheDay() {
+        ItineraryService service = service(List.of(
+                item("place", 1, "Dakar", "HISTORIQUE", 14.667, -17.399, 2.0),
+                item("place", 2, "Saint-Louis", "HISTORIQUE", 16.027, -16.504, 3.0)
+        ));
+
+        Map<String, Object> result = service.build(4, List.of("HISTORIQUE"), "Dakar");
+        Map<?, ?> second = (Map<?, ?>) ((List<?>) result.get("days")).get(1);
+
+        assertTrue(((Number) second.get("driveHours")).doubleValue() >= 3);
     }
 
     @Test

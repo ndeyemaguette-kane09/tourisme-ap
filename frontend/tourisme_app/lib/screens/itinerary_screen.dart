@@ -191,7 +191,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 ),
               ),
               Text(
-                "${day["travelKm"]} km",
+                (day["driveHours"] ?? 0) >= 1
+                    ? "${day["travelKm"]} km · ${_hours(day["driveHours"])} de route"
+                    : "${day["travelKm"]} km",
                 style: const TextStyle(fontSize: 12, color: Colors.black54),
               ),
             ],
@@ -266,5 +268,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
         ),
       ),
     );
+  }
+
+  String _hours(dynamic h) {
+    final v = (h as num).toDouble();
+    return v % 1 == 0 ? "${v.toInt()} h" : "${v.floor()} h 30";
   }
 }

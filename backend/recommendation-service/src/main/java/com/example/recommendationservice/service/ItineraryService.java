@@ -17,6 +17,13 @@ public class ItineraryService {
 
     static final double DISTANCE_PENALTY_KM = 150;
 
+    // vol d'oiseau -> route, et vitesse moyenne sur les nationales
+    static final double ROAD_FACTOR = 1.3;
+    static final double ROAD_KMH = 55;
+
+    // au-delà, la ville demande au moins deux jours restants (trajet + visite)
+    static final double FAR_KM = 100;
+
     private static final double[] DAKAR = {14.6928, -17.4467};
 
     private final CatalogGateway catalogGateway;
@@ -50,7 +57,8 @@ public class ItineraryService {
         byCity.values().forEach(list -> list.sort(
                 Comparator.comparingDouble((Map<String, Object> p) -> score(p, wanted)).reversed()));
 
-        double[] position = startPosition(startCity, places);
+        double[] start = startPosition(startCity, places);
+        double[] position = start;
         List<Map<String, Object>> plan = new ArrayList<>();
         double totalKm = 0;
 
@@ -62,7 +70,10 @@ public class ItineraryService {
                 if (byCity.isEmpty()) {
                     break;
                 }
-                String city = nextCity(byCity, position, wanted);
+                String city = nextCity(byCity, position, start, wanted, days - day.number + 1);
+                if (city == null) {
+                    break;
+                }
                 double km = distance(position, centroid(byCity.get(city)));
                 if (!day.visits.isEmpty() && (day.hours >= HOURS_PER_DAY / 2 || km > SAME_DAY_KM)) {
                     plan.add(day.build(hotels, restaurants));
@@ -74,14 +85,14 @@ public class ItineraryService {
             }
 
             Map<String, Object> next = queue.peek();
-            if (!day.visits.isEmpty() && day.hours + duration(next) > HOURS_PER_DAY) {
+            double km = distance(position, coords(next));
+            if (!day.visits.isEmpty() && day.hours + travelHours(km) + duration(next) > HOURS_PER_DAY) {
                 plan.add(day.build(hotels, restaurants));
                 day = new DayBuilder(day.number + 1);
                 continue;
             }
 
             queue.poll();
-            double km = distance(position, coords(next));
             totalKm += km;
             position = coords(next);
             day.add(next, duration(next), km);
@@ -92,7 +103,7 @@ public class ItineraryService {
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("days", plan);
-        result.put("totalKm", Math.round(totalKm));
+        result.put("totalKm", Math.round(totalKm * ROAD_FACTOR));
         result.put("cities", plan.stream()
                 .flatMap(d -> ((List<?>) d.get("cities")).stream())
                 .distinct()
@@ -114,7 +125,7 @@ public class ItineraryService {
         void add(Map<String, Object> place, double duration, double travelKm) {
             visits.add(place);
             cities.add(str(place.get("city")));
-            hours += duration;
+            hours += duration + travelHours(travelKm);
             km += travelKm;
         }
 
@@ -124,7 +135,8 @@ public class ItineraryService {
             d.put("day", number);
             d.put("city", String.join(" → ", cities));
             d.put("cities", new ArrayList<>(cities));
-            d.put("travelKm", Math.round(km));
+            d.put("travelKm", Math.round(km * ROAD_FACTOR));
+            d.put("driveHours", Math.round(travelHours(km) * 2) / 2.0);
             d.put("hours", hours);
             d.put("places", visits);
             d.put("hotel", nearest(hotels, coords(visits.get(visits.size() - 1)), HOTEL_RADIUS_KM));
@@ -133,12 +145,17 @@ public class ItineraryService {
         }
     }
 
-    private String nextCity(Map<String, List<Map<String, Object>>> byCity, double[] position, Set<String> wanted) {
+    private String nextCity(Map<String, List<Map<String, Object>>> byCity, double[] position, double[] start,
+                            Set<String> wanted, int daysLeft) {
         String best = null;
         double bestValue = -1;
         for (Map.Entry<String, List<Map<String, Object>>> e : byCity.entrySet()) {
+            double[] center = centroid(e.getValue());
+            if (daysLeft < 2 && distance(start, center) > FAR_KM) {
+                continue;
+            }
             double interest = e.getValue().stream().limit(3).mapToDouble(p -> score(p, wanted)).sum();
-            double km = distance(position, centroid(e.getValue()));
+            double km = distance(position, center);
             double value = interest / (1 + km / DISTANCE_PENALTY_KM);
             if (value > bestValue) {
                 bestValue = value;
@@ -156,6 +173,10 @@ public class ItineraryService {
                 .filter(p -> str(p.get("city")).equalsIgnoreCase(startCity.trim()))
                 .toList();
         return inCity.isEmpty() ? DAKAR : centroid(inCity);
+    }
+
+    static double travelHours(double km) {
+        return km * ROAD_FACTOR / ROAD_KMH;
     }
 
     double score(Map<String, Object> place, Set<String> wanted) {

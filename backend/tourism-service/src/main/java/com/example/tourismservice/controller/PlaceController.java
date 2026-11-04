@@ -80,6 +80,8 @@ public class PlaceController {
         if (data.get("region") != null) place.setRegion((String) data.get("region"));
         if (data.get("address") != null) place.setAddress((String) data.get("address"));
         if (data.get("imageUrl") != null) place.setImageUrl((String) data.get("imageUrl"));
+        if (data.get("history") != null) place.setHistory((String) data.get("history"));
+        if (data.get("tips") != null) place.setTips((String) data.get("tips"));
 
         Double lat = Values.toDouble(data.get("latitude"));
         Double lng = Values.toDouble(data.get("longitude"));

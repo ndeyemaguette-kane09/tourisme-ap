@@ -438,13 +438,7 @@ class _HomeTabState extends State<_HomeTab> {
         children: [
           NetImage(url: item["imageUrl"], seed: item["name"], heroTag: "img-${item["type"]}-${item["id"]}"),
           DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.center,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
-              ),
-            ),
+            decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.32)),
           ),
           Positioned(
             top: 14,

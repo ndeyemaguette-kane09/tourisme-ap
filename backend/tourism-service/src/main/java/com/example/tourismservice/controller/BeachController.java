@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import com.example.tourismservice.entity.Category;
 import com.example.tourismservice.service.CategoryService;
 
+import com.example.tourismservice.util.Values;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
@@ -58,12 +61,29 @@ public Beach createBeach(@RequestBody Map<String, Object> data) {
         }
     }
 
+
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        beach.setLatitude(lat);
+        beach.setLongitude(lng);
+    }
+
     return service.saveBeach(beach);
 }
 
     @GetMapping
     public List<Beach> getAllBeaches() {
         return service.getAllBeaches();
+    }
+
+    @GetMapping("/{id}")
+    public Beach getBeach(@PathVariable Long id) {
+        Beach beach = service.getBeachById(id);
+        if (beach == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plage non trouvée");
+        }
+        return beach;
     }
 
     @DeleteMapping("/{id}")
@@ -99,6 +119,14 @@ public Beach updateBeach(@PathVariable Long id, @RequestBody Map<String, Object>
         beach.setCity(cityName);
     }
 
+
+
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        beach.setLatitude(lat);
+        beach.setLongitude(lng);
+    }
 
     return service.save(beach);
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.tourismservice.entity.Category;
 import com.example.tourismservice.service.CategoryService;
 
+import com.example.tourismservice.util.Values;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +79,7 @@ if (categoryObj instanceof Map<?, ?> categoryMap) {
                 City city = cityService.findByName(cityName);
                 hotel.setCity(city);
             } catch (Exception e) {
-                System.out.println("⚠️ City not found: " + cityName);
+                System.out.println("City not found: " + cityName);
             }
         }
 
@@ -91,6 +92,14 @@ if (categoryObj instanceof Map<?, ?> categoryMap) {
         System.out.println("IMAGE = " + hotel.getImageUrl());
         System.out.println("CITY NAME = " + hotel.getCityName());
         System.out.println("CATEGORY = " + hotel.getCategory());
+
+
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        hotel.setLatitude(lat);
+        hotel.setLongitude(lng);
+    }
 
         Hotel savedHotel = hotelService.saveHotel(hotel);
 
@@ -135,13 +144,13 @@ public Hotel updateHotel(@PathVariable Long id, @RequestBody Map<String, Object>
     existing.setPrice(Double.parseDouble(data.get("price").toString()));
     existing.setImageUrl((String) data.get("imageUrl"));
 
-    // 🔥 FIX RATING
+    // FIX RATING
     Object ratingObj = data.get("rating");
     if (ratingObj != null) {
         existing.setRating(Double.parseDouble(ratingObj.toString()));
     }
 
-    // 🔥 FIX CITY (handle both city and cityName)
+    // FIX CITY (handle both city and cityName)
     Object cityObj = data.get("city");
     if (cityObj == null) {
         cityObj = data.get("cityName");
@@ -150,17 +159,24 @@ public Hotel updateHotel(@PathVariable Long id, @RequestBody Map<String, Object>
     if (cityObj != null) {
         String cityName = cityObj.toString().trim();
 
-        // 🔥 update visible field
+        // update visible field
         existing.setCityName(cityName);
 
         try {
-            // 🔥 update relation safely
+            // update relation safely
             City city = cityService.findByName(cityName);
             existing.setCity(city);
         } catch (Exception e) {
-            System.out.println("⚠️ City not found: " + cityName);
+            System.out.println("City not found: " + cityName);
         }
     }
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        existing.setLatitude(lat);
+        existing.setLongitude(lng);
+    }
+
     Object categoryObj = data.get("category");
 
 if (categoryObj instanceof Map<?, ?> categoryMap) {

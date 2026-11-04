@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "RESERVATION-SERVICE", configuration = FeignConfig.class)
+@FeignClient(name = "BOOKING-SERVICE", configuration = FeignConfig.class)
 public interface ReservationClient {
 
     @GetMapping("/reservations/user/{userId}")

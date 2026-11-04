@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -53,5 +55,27 @@ public ResponseEntity<?> changePassword(
     );
 
     return ResponseEntity.ok("Password updated successfully");
+}
+
+@GetMapping("/profile/{id}")
+public User getProfile(@PathVariable Long id, Authentication authentication) {
+    User current = authService.getUserById(id);
+    if (!current.getEmail().equals(authentication.getName())
+            && authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ADMIN"))) {
+        throw new RuntimeException("Forbidden");
+    }
+    return current;
+}
+
+@PutMapping("/profile/{id}")
+public User updateProfile(@PathVariable Long id, @RequestBody User user, Authentication authentication) {
+    user.setPassword(null);
+    return authService.updateUser(id, user, authentication);
+}
+
+@DeleteMapping("/profile/{id}")
+public ResponseEntity<?> deleteAccount(@PathVariable Long id, Authentication authentication) {
+    authService.deleteUser(id, authentication);
+    return ResponseEntity.ok("Account deleted");
 }
 }

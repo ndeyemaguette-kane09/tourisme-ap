@@ -34,7 +34,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         }
 
-        // 🔐 vérification
+        // vérification
         if (!user.getId().equals(id) && !user.getRole().getName().equals("ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("You can only delete your own account");

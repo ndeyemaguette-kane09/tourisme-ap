@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../config/api_config.dart';
 
 class ApiService {
-  static const String baseUrl = "http://192.168.1.105:8080";
+  static const String baseUrl = ApiConfig.baseUrl;
 
   static Map<String, String> headers(String token) {
     return {

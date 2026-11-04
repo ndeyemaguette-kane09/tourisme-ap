@@ -1,8 +1,8 @@
-
 package com.example.reservationservice.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Reservation {
@@ -15,13 +15,20 @@ public class Reservation {
 
     private Long hotelId;
 
-    private LocalDate startDate;
+    private String hotelName;
 
-    private LocalDate endDate;
+    private LocalDate checkInDate;
+
+    private LocalDate checkOutDate;
+
+    private int guests;
 
     private double totalPrice;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
+
+    private LocalDateTime createdAt;
 
     public Reservation() {
     }
@@ -50,20 +57,36 @@ public class Reservation {
         this.hotelId = hotelId;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getCheckInDate() {
+        return checkInDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public int getGuests() {
+        return guests;
+    }
+
+    public void setGuests(int guests) {
+        this.guests = guests;
     }
 
     public double getTotalPrice() {
@@ -74,11 +97,19 @@ public class Reservation {
         this.totalPrice = totalPrice;
     }
 
-    public String getStatus() {
+    public ReservationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReservationStatus status) {
         this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

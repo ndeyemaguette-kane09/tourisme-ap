@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/hotel.dart';
-import 'api_service.dart';
 import '../config/api_config.dart';
 
 class HotelService {

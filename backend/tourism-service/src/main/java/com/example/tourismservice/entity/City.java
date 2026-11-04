@@ -1,6 +1,8 @@
 package com.example.tourismservice.entity;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -18,10 +20,9 @@ private Category category;
     private String name;
 
     @OneToMany(mappedBy = "city")
+    @JsonIgnore
     private List<Hotel> hotels;
 
-    @OneToMany(mappedBy = "city")
-    private List<Restaurant> restaurants;
 
     public City() {}
 
@@ -49,13 +50,7 @@ private Category category;
         this.hotels = hotels;
     }
 
-    public List<Restaurant> getRestaurants() {
-        return restaurants;
-    }
 
-    public void setRestaurants(List<Restaurant> restaurants) {
-        this.restaurants = restaurants;
-    }
     public Category getCategory() {
     return category;
 }

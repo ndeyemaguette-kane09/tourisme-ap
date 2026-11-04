@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.tourismservice.entity.Category;
 import com.example.tourismservice.service.CategoryService;
 
+import com.example.tourismservice.util.Values;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +93,14 @@ if (categoryObj instanceof Map<?, ?> categoryMap) {
         System.out.println("CITY NAME = " + hotel.getCityName());
         System.out.println("CATEGORY = " + hotel.getCategory());
 
+
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        hotel.setLatitude(lat);
+        hotel.setLongitude(lng);
+    }
+
         Hotel savedHotel = hotelService.saveHotel(hotel);
 
         
@@ -161,6 +170,13 @@ public Hotel updateHotel(@PathVariable Long id, @RequestBody Map<String, Object>
             System.out.println("⚠️ City not found: " + cityName);
         }
     }
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        existing.setLatitude(lat);
+        existing.setLongitude(lng);
+    }
+
     Object categoryObj = data.get("category");
 
 if (categoryObj instanceof Map<?, ?> categoryMap) {

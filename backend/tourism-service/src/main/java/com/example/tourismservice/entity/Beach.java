@@ -16,6 +16,10 @@ public class Beach {
 @JoinColumn(name = "category_id")
 private Category category;
 
+    private Double latitude;
+    private Double longitude;
+    private int reviewCount;
+
     private String name;
     @Column(name = "address")
     private String address;
@@ -66,4 +70,28 @@ private Category category;
 public void setCategory(Category category) {
     this.category = category;
 }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public int getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
+    }
 }

@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import com.example.tourismservice.entity.Category;
 import com.example.tourismservice.service.CategoryService;
 
+import com.example.tourismservice.util.Values;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +72,14 @@ public class RestaurantController {
             }
         }
 
+
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        restaurant.setLatitude(lat);
+        restaurant.setLongitude(lng);
+    }
+
         return restaurantService.saveRestaurant(restaurant);
     }
 
@@ -78,6 +89,15 @@ public class RestaurantController {
     }
 
 
+
+    @GetMapping("/{id}")
+    public Restaurant getRestaurant(@PathVariable Long id) {
+        Restaurant restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant non trouvé");
+        }
+        return restaurant;
+    }
 
    @PutMapping("/{id}")
 public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Map<String, Object> data) {
@@ -114,6 +134,14 @@ public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Map<Strin
     }
 
     
+
+    Double lat = Values.toDouble(data.get("latitude"));
+    Double lng = Values.toDouble(data.get("longitude"));
+    if (lat != null && lng != null) {
+        restaurant.setLatitude(lat);
+        restaurant.setLongitude(lng);
+    }
+
     return restaurantService.save(restaurant);
 }
 

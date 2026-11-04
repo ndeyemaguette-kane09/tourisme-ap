@@ -38,6 +38,9 @@ public class SecurityConfig {
                     "/beaches/**",
                     "/cities/**",
                     "/reviews/**",
+                    "/places/**",
+                    "/search",
+                    "/search/**",
                     "/categories",
                     "/categories/**"
                 ).permitAll()
@@ -53,6 +56,7 @@ public class SecurityConfig {
                     "/hotels/**",
                     "/restaurants/**",
                     "/beaches/**",
+                    "/places/**",
                     "/cities/**",
                     "/categories",
                     "/categories/**"

@@ -1,17 +1,19 @@
 package com.example.reservationservice.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -28,33 +30,33 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        String jwt = null;
-String path = request.getServletPath();
+        String authHeader = request.getHeader("Authorization");
 
-// Autoriser les appels internes entre microservices
-if (path.startsWith("/hotels") ||
-    path.startsWith("/cities") ||
-    path.startsWith("/restaurants") ||
-    path.startsWith("/notifications") ||
-    path.startsWith("/users")) {
-    filterChain.doFilter(request, response);
-    return;
-}
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        if (jwt != null && jwtService.isTokenValid(jwt)) {
-    UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(
-                    jwtService.extractEmail(jwt),
-                    null,
-                    new ArrayList<>()
-            );
+        String jwt = authHeader.substring(7);
 
-    SecurityContextHolder.getContext().setAuthentication(authToken);
-}
+        try {
+            if (jwtService.isTokenValid(jwt)) {
+                String role = jwtService.extractRole(jwt);
+                List<SimpleGrantedAuthority> authorities = role == null
+                        ? List.of()
+                        : List.of(new SimpleGrantedAuthority(role));
+
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(jwtService.extractEmail(jwt), null, authorities);
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        } catch (JwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid token\"}");
+            return;
+        }
 
         filterChain.doFilter(request, response);
     }

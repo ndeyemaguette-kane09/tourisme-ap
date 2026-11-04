@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../config/api_config.dart';
 
 class AuthService {
-  final String baseUrl = "http://192.168.1.105:8080";
+  final String baseUrl = ApiConfig.baseUrl;
 
   String? token;
   int? userId;

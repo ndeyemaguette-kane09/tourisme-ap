@@ -119,7 +119,7 @@ class _ReservationScreenState extends State<ReservationScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("✅ Réservation confirmée !"),
+          content: const Text("✅ Demande de réservation envoyée"),
           backgroundColor: const Color(0xFF2E7D32),
           behavior: SnackBarBehavior.floating,
           shape:
@@ -132,7 +132,7 @@ class _ReservationScreenState extends State<ReservationScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Erreur lors de la réservation"),
+          content: Text(e.toString().replaceFirst("Exception: ", "")),
           backgroundColor: Colors.grey.shade700,
           behavior: SnackBarBehavior.floating,
           shape:

@@ -222,7 +222,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        category.toString(),
+                        place["subType"] != null ? "$category · ${place["subType"]}" : category.toString(),
                         style: const TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,

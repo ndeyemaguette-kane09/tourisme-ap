@@ -42,6 +42,11 @@ public class PlaceController {
         return placeRepository.findByCategoryId(id);
     }
 
+    @GetMapping("/type/{subType}")
+    public List<Place> getPlacesBySubType(@PathVariable String subType) {
+        return placeRepository.findBySubTypeIgnoreCase(subType);
+    }
+
     @GetMapping("/category/name/{name}")
     public List<Place> getPlacesByCategoryName(@PathVariable String name) {
         return placeRepository.findByCategoryName(name);
@@ -69,6 +74,7 @@ public class PlaceController {
 
     private void fill(Place place, Map<String, Object> data) {
         if (data.get("name") != null) place.setName((String) data.get("name"));
+        if (data.get("subType") != null) place.setSubType(data.get("subType").toString().trim());
         if (data.get("description") != null) place.setDescription((String) data.get("description"));
         if (data.get("city") != null) place.setCity(data.get("city").toString().trim());
         if (data.get("region") != null) place.setRegion((String) data.get("region"));

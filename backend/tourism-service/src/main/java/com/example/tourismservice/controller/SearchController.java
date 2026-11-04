@@ -41,6 +41,7 @@ public class SearchController {
                                             @RequestParam(required = false) String type,
                                             @RequestParam(required = false) String city,
                                             @RequestParam(required = false) String category,
+                                            @RequestParam(required = false) String subType,
                                             @RequestParam(required = false) Double minRating,
                                             @RequestParam(required = false) Double maxPrice) {
         List<Map<String, Object>> items = catalog();
@@ -49,6 +50,7 @@ public class SearchController {
                 .filter(i -> type == null || type.isBlank() || type.equalsIgnoreCase((String) i.get("type")))
                 .filter(i -> city == null || city.isBlank() || normalize(city).equals(normalize((String) i.get("city"))))
                 .filter(i -> category == null || category.isBlank() || category.equalsIgnoreCase((String) i.get("category")))
+                .filter(i -> subType == null || subType.isBlank() || normalize(subType).equals(normalize((String) i.get("subType"))))
                 .filter(i -> minRating == null || (double) i.get("rating") >= minRating)
                 .filter(i -> maxPrice == null || i.get("price") == null || (double) i.get("price") <= maxPrice)
                 .filter(i -> matches(i, q))
@@ -69,6 +71,7 @@ public class SearchController {
                     p.getCity(), p.getImageUrl(), p.getRating(), p.getCategory(), p.getLatitude(), p.getLongitude(), p.getEntryPrice());
             item.put("visitDuration", p.getVisitDuration());
             item.put("region", p.getRegion());
+            item.put("subType", p.getSubType());
             items.add(item);
         });
         return items;
@@ -96,7 +99,7 @@ public class SearchController {
             return true;
         }
         String haystack = normalize(item.get("name") + " " + item.get("city") + " "
-                + item.get("category") + " " + item.get("description"));
+                + item.get("category") + " " + item.get("subType") + " " + item.get("description"));
         for (String word : normalize(q).split("\\s+")) {
             if (!haystack.contains(word)) {
                 return false;

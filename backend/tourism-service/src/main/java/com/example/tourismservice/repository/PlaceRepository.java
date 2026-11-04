@@ -12,4 +12,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     List<Place> findByCategoryName(String name);
 
     List<Place> findByCityIgnoreCase(String city);
+
+    List<Place> findBySubTypeIgnoreCase(String subType);
 }

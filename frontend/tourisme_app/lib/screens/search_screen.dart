@@ -283,7 +283,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${typeLabels[item["type"]] ?? ""} · ${item["city"] ?? ""}",
+                    "${item["subType"] ?? typeLabels[item["type"]] ?? ""} · ${item["city"] ?? ""}",
                     style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                   const SizedBox(height: 6),

@@ -156,3 +156,19 @@ UPDATE beach SET latitude = 14.7553, longitude = -17.5167 WHERE id = 3 AND latit
 UPDATE hotel SET latitude = 14.6797, longitude = -17.4669 WHERE id IN (4, 5) AND latitude IS NULL;
 UPDATE restaurant SET latitude = 14.7488, longitude = -17.5136 WHERE id = 1 AND latitude IS NULL;
 UPDATE restaurant SET latitude = 14.7440, longitude = -17.5250 WHERE id = 16 AND latitude IS NULL;
+
+UPDATE place SET sub_type = 'Île' WHERE id IN (100, 121, 122) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Musée' WHERE id IN (101, 103, 104) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Monument' WHERE id IN (102, 107, 115) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Lac' WHERE id IN (105) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Mosquée' WHERE id IN (106, 110, 111) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Marché artisanal' WHERE id IN (108) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Marché' WHERE id IN (109) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Lieu de pèlerinage' WHERE id IN (112) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Église' WHERE id IN (113) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Ville historique' WHERE id IN (114) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Parc national' WHERE id IN (116, 117, 123) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Réserve naturelle' WHERE id IN (118) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Réserve animalière' WHERE id IN (119) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Désert' WHERE id IN (120) AND sub_type IS NULL;
+UPDATE place SET sub_type = 'Cascade' WHERE id IN (124) AND sub_type IS NULL;

@@ -16,6 +16,9 @@ public class Place {
 
     private String name;
 
+    // mosquée, musée, parc national… précise la catégorie
+    private String subType;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -62,6 +65,14 @@ public class Place {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 
     public String getDescription() {

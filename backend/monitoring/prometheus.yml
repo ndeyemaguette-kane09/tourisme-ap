@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: discover-senegal
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - api-gateway:8080
+          - auth-service:8082
+          - notification-service:8083
+          - tourism-service:8084
+          - user-service:8085
+          - booking-service:8086
+          - recommendation-service:8087
+          - discovery-server:8761

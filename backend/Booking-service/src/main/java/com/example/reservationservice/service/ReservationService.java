@@ -1,7 +1,6 @@
 package com.example.reservationservice.service;
 
 import com.example.reservationservice.client.HotelClient;
-import com.example.reservationservice.client.NotificationClient;
 import com.example.reservationservice.client.UserClient;
 import com.example.reservationservice.entity.Reservation;
 import com.example.reservationservice.entity.ReservationStatus;
@@ -23,16 +22,16 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final HotelClient hotelClient;
     private final UserClient userClient;
-    private final NotificationClient notificationClient;
+    private final NotificationSender notificationSender;
 
     public ReservationService(ReservationRepository reservationRepository,
                               HotelClient hotelClient,
                               UserClient userClient,
-                              NotificationClient notificationClient) {
+                              NotificationSender notificationSender) {
         this.reservationRepository = reservationRepository;
         this.hotelClient = hotelClient;
         this.userClient = userClient;
-        this.notificationClient = notificationClient;
+        this.notificationSender = notificationSender;
     }
 
     public Reservation createReservation(Reservation reservation) {
@@ -118,14 +117,6 @@ public class ReservationService {
     }
 
     private void notify(Reservation reservation, String message) {
-        try {
-            notificationClient.sendNotification(Map.of(
-                    "userId", reservation.getUserId(),
-                    "message", message,
-                    "type", "RESERVATION"
-            ));
-        } catch (FeignException e) {
-            // la réservation reste valide même si la notification échoue
-        }
+        notificationSender.send(reservation.getUserId(), message);
     }
 }

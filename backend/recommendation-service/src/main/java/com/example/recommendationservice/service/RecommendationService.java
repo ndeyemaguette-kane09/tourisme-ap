@@ -1,13 +1,9 @@
 package com.example.recommendationservice.service;
 
-import com.example.recommendationservice.client.ReservationClient;
-import com.example.recommendationservice.client.TourismClient;
 import com.example.recommendationservice.entity.Favorite;
 import com.example.recommendationservice.entity.HotelLike;
 import com.example.recommendationservice.repository.FavoriteRepository;
 import com.example.recommendationservice.repository.HotelLikeRepository;
-
-import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -30,17 +26,14 @@ public class RecommendationService {
 
     private final HotelLikeRepository hotelLikeRepository;
     private final FavoriteRepository favoriteRepository;
-    private final TourismClient tourismClient;
-    private final ReservationClient reservationClient;
+    private final CatalogGateway catalogGateway;
 
     public RecommendationService(HotelLikeRepository hotelLikeRepository,
                                  FavoriteRepository favoriteRepository,
-                                 TourismClient tourismClient,
-                                 ReservationClient reservationClient) {
+                                 CatalogGateway catalogGateway) {
         this.hotelLikeRepository = hotelLikeRepository;
         this.favoriteRepository = favoriteRepository;
-        this.tourismClient = tourismClient;
-        this.reservationClient = reservationClient;
+        this.catalogGateway = catalogGateway;
     }
 
     public HotelLike saveLike(HotelLike like) {
@@ -66,7 +59,7 @@ public class RecommendationService {
     }
 
     public List<Map<String, Object>> getCatalog() {
-        return tourismClient.getCatalog();
+        return catalogGateway.catalog();
     }
 
     public List<Map<String, Object>> recommend(Long userId, int limit, List<String> declaredCategories) {
@@ -150,11 +143,7 @@ public class RecommendationService {
     }
 
     private List<Map<String, Object>> userReservations(Long userId) {
-        try {
-            return reservationClient.getReservationsByUser(userId);
-        } catch (FeignException e) {
-            return List.of();
-        }
+        return catalogGateway.reservations(userId);
     }
 
     // évite une liste de 10 hôtels d'affilée en cold start

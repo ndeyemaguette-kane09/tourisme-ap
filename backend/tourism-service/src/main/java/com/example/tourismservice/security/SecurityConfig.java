@@ -30,6 +30,7 @@ public class SecurityConfig {
 
                 // ✅ Auth publique
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
 
                 // ✅ Lecture publique pour tout le monde
                 .requestMatchers(HttpMethod.GET,

@@ -28,6 +28,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
             //  routes publiques
             .requestMatchers("/auth/login", "/auth/register").permitAll()
+            .requestMatchers("/actuator/**").permitAll()
 
             //  admin uniquement
             .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")

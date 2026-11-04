@@ -11,6 +11,7 @@ import 'favorites_screen.dart';
 import '../models/category.dart';
 import 'map_screen.dart';
 import 'search_screen.dart';
+import 'itinerary_screen.dart';
 import '../services/discover_service.dart';
 import '../widgets/item_navigation.dart';
 
@@ -294,6 +295,52 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+
+          const SizedBox(height: 28),
+
+          // ── ITINÉRAIRE ──
+          GestureDetector(
+            onTap: () => _open(const ItineraryScreen()),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [_terraDark, _terraLight],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.route_rounded, color: Colors.white, size: 34),
+                  SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Créer mon itinéraire",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          "Un circuit jour par jour selon vos envies",
+                          style: TextStyle(color: Colors.white70, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 16),
+                ],
+              ),
+            ),
+          ),
 
           const SizedBox(height: 28),
 

@@ -64,8 +64,13 @@ public class SearchController {
                 r.getCity(), r.getImageUrl(), r.getRating(), r.getCategory(), r.getLatitude(), r.getLongitude(), null)));
         beachRepository.findAll().forEach(b -> items.add(item(b.getId(), "beach", b.getName(), b.getDescription(),
                 b.getCity(), b.getImageUrl(), b.getRating(), b.getCategory(), b.getLatitude(), b.getLongitude(), null)));
-        placeRepository.findAll().forEach(p -> items.add(item(p.getId(), "place", p.getName(), p.getDescription(),
-                p.getCity(), p.getImageUrl(), p.getRating(), p.getCategory(), p.getLatitude(), p.getLongitude(), p.getEntryPrice())));
+        placeRepository.findAll().forEach(p -> {
+            Map<String, Object> item = item(p.getId(), "place", p.getName(), p.getDescription(),
+                    p.getCity(), p.getImageUrl(), p.getRating(), p.getCategory(), p.getLatitude(), p.getLongitude(), p.getEntryPrice());
+            item.put("visitDuration", p.getVisitDuration());
+            item.put("region", p.getRegion());
+            items.add(item);
+        });
         return items;
     }
 

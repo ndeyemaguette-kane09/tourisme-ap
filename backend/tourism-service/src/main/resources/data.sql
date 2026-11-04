@@ -109,7 +109,7 @@ INSERT IGNORE INTO place (id, name, description, city, region, address, image_ur
 (120, 'Désert de Lompoul',
  'Petit désert de dunes ocre entre Dakar et Saint-Louis. Nuit sous la tente mauritanienne, balade à dos de dromadaire.',
  'Lompoul', 'Louga', 'Lompoul-sur-Mer', NULL,
- 0, 0, 15.4330, -16.7000, 20, NULL, 7),
+ 0, 0, 15.4330, -16.7000, 6, NULL, 7),
 (121, 'Île de Fadiouth',
  'Île faite de coquillages reliée à Joal par une passerelle en bois, avec son cimetière mixte chrétien et musulman.',
  'Joal-Fadiouth', 'Thiès', 'Passerelle de Joal', NULL,

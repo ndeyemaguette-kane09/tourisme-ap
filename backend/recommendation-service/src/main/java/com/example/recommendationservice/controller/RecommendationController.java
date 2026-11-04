@@ -2,6 +2,7 @@ package com.example.recommendationservice.controller;
 
 import com.example.recommendationservice.entity.Favorite;
 import com.example.recommendationservice.entity.HotelLike;
+import com.example.recommendationservice.service.ItineraryService;
 import com.example.recommendationservice.service.RecommendationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,19 @@ import java.util.Map;
 public class RecommendationController {
 
     private final RecommendationService recommendationService;
+    private final ItineraryService itineraryService;
 
-    public RecommendationController(RecommendationService recommendationService) {
+    public RecommendationController(RecommendationService recommendationService,
+                                    ItineraryService itineraryService) {
         this.recommendationService = recommendationService;
+        this.itineraryService = itineraryService;
+    }
+
+    @GetMapping("/itinerary")
+    public Map<String, Object> itinerary(@RequestParam(defaultValue = "3") int days,
+                                         @RequestParam(required = false) List<String> categories,
+                                         @RequestParam(required = false) String start) {
+        return itineraryService.build(days, categories, start);
     }
 
     @GetMapping("/user/{userId}")

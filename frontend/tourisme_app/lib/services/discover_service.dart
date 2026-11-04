@@ -69,4 +69,23 @@ class DiscoverService {
     }
     throw Exception("Lieu introuvable");
   }
+
+  static Future<Map<String, dynamic>> itinerary({
+    required int days,
+    List<String> categories = const [],
+    String? start,
+  }) async {
+    final uri = Uri.parse("$baseUrl/recommendations/itinerary").replace(queryParameters: {
+      "days": "$days",
+      if (categories.isNotEmpty) "categories": categories.join(","),
+      if (start != null) "start": start,
+    });
+
+    final response = await http.get(uri, headers: Session.headers);
+
+    if (response.statusCode == 200) {
+      return Map<String, dynamic>.from(jsonDecode(utf8.decode(response.bodyBytes)));
+    }
+    throw Exception("Impossible de générer l'itinéraire");
+  }
 }

@@ -215,49 +215,121 @@ class PasswordStrength extends StatelessWidget {
   }
 }
 
-class RoutePainter extends CustomPainter {
-  final double progress;
-  final Color line;
-  final Color end;
-  final double stroke;
+class PiroguePainter extends CustomPainter {
+  final double sail;
+  final double sun;
+  final double time;
 
-  RoutePainter({required this.progress, this.line = AppColors.ink, this.end = AppColors.laterite, this.stroke = 3});
+  PiroguePainter({required this.sail, required this.sun, required this.time});
 
-  static Path pathFor(Size s) {
+  static const sceneTop = 200.0;
+  static const sceneHeight = 140.0;
+  static const _blue = Color(0xFF1F5C78);
+  static const _horizon = 296.0;
+
+  Path _hull() {
     return Path()
-      ..moveTo(s.width * 0.22, s.height * 0.12)
-      ..cubicTo(s.width * 0.70, s.height * 0.16, s.width * 0.12, s.height * 0.44, s.width * 0.58, s.height * 0.52)
-      ..cubicTo(s.width * 0.95, s.height * 0.58, s.width * 0.30, s.height * 0.80, s.width * 0.70, s.height * 0.88);
+      ..moveTo(-64, -22)
+      ..cubicTo(-56, -8, -40, 6, -20, 8)
+      ..lineTo(20, 8)
+      ..cubicTo(40, 6, 56, -8, 64, -22)
+      ..cubicTo(50, -10, 30, -6, 0, -6)
+      ..cubicTo(-30, -6, -50, -10, -64, -22)
+      ..close();
   }
-
-  static const stops = [0.0, 0.5, 1.0];
 
   @override
   void paint(Canvas canvas, Size size) {
-    final path = pathFor(size);
-    final metric = path.computeMetrics().first;
-    final drawn = metric.extractPath(0, metric.length * progress.clamp(0, 1));
-    canvas.drawPath(
-      drawn,
-      Paint()
-        ..color = line
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = stroke
-        ..strokeCap = StrokeCap.round,
-    );
-    for (var i = 0; i < stops.length; i++) {
-      final at = stops[i];
-      final appear = ((progress - at) / 0.12 + 0.5).clamp(0.0, 1.0);
-      if (appear <= 0) continue;
-      final pos = metric.getTangentForOffset(metric.length * at)!.position;
-      final last = i == stops.length - 1;
-      final r = (last ? 11.0 : 6.5) * Curves.elasticOut.transform(appear);
-      canvas.drawCircle(pos, r, Paint()..color = last ? end : line);
+    canvas.save();
+    canvas.scale(size.width / 240);
+    canvas.translate(0, -sceneTop);
+    const w = 240.0;
+
+    canvas.save();
+    canvas.clipRect(const Rect.fromLTWH(0, 0, w, _horizon - 4));
+    canvas.drawCircle(Offset(168, 262 + 46 * (1 - sun)), 34, Paint()..color = AppColors.laterite);
+    canvas.restore();
+
+    const waves = [(_horizon, 6.0, 2.5, 1.0, 16.0), (310.0, 5.0, 2.0, 0.55, 11.4), (324.0, 4.0, 2.0, 0.3, 8.7)];
+    for (final (y, amp, stroke, alpha, speed) in waves) {
+      final off = (time * speed) % 24;
+      final path = Path()..moveTo(-24 - off, y);
+      for (var x = -24 - off; x < w + 24; x += 24) {
+        path.quadraticBezierTo(x + 12, y - amp, x + 24, y);
+      }
+      canvas.drawPath(
+        path,
+        Paint()
+          ..color = AppColors.ink.withOpacity(alpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = stroke
+          ..strokeCap = StrokeCap.round,
+      );
     }
+
+    final bob = math.sin(time * 2.6);
+    final bx = -90 + 210 * sail;
+    final by = 286 - 2 * bob;
+
+    final stern = bx - 58;
+    final appear = (time * 2).clamp(0.0, 1.0);
+    for (var d = 0.0; stern - d > -10; d += 11) {
+      final a = (1 - d / 200).clamp(0.0, 1.0) * appear;
+      if (a <= 0) break;
+      final px = stern - d;
+      canvas.drawCircle(
+        Offset(px, _horizon + 4 + math.sin(px / 14) * 1.2),
+        2.2,
+        Paint()..color = AppColors.laterite.withOpacity(a * 0.85),
+      );
+    }
+
+    canvas.save();
+    canvas.translate(bx, by);
+    canvas.rotate(bob * 0.035);
+
+    final ink = Paint()
+      ..color = AppColors.ink
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawLine(const Offset(34, -6), const Offset(34, -40), ink);
+    final flap = math.sin(time * 7) * 3;
+    canvas.drawPath(
+      Path()
+        ..moveTo(34, -40)
+        ..lineTo(52, -34 + flap)
+        ..lineTo(34, -28)
+        ..close(),
+      Paint()..color = AppColors.laterite,
+    );
+
+    final hull = _hull();
+    canvas.save();
+    canvas.clipPath(hull);
+    canvas.drawRect(const Rect.fromLTWH(-70, -30, 140, 26), Paint()..color = _blue);
+    final soft = Paint()..color = AppColors.lateriteSoft;
+    final lat = Paint()..color = AppColors.laterite;
+    for (var i = -70.0; i < 70; i += 10) {
+      canvas.drawPath(Path()..moveTo(i, -6)..lineTo(i + 5, -14)..lineTo(i + 10, -6)..close(), soft);
+    }
+    for (var i = -66.0; i < 70; i += 10) {
+      canvas.drawPath(Path()..moveTo(i, -14)..lineTo(i + 4, -20)..lineTo(i + 8, -14)..close(), lat);
+    }
+    canvas.drawRect(const Rect.fromLTWH(-70, -4, 140, 3), soft);
+    canvas.drawRect(const Rect.fromLTWH(-70, -1, 140, 3), lat);
+    canvas.drawRect(const Rect.fromLTWH(-70, 2, 140, 9), Paint()..color = AppColors.ink);
+    for (final c in const [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]) {
+      canvas.drawCircle(Offset(c, 5.5), 1.4, soft);
+    }
+    canvas.restore();
+    canvas.drawPath(hull, ink);
+    canvas.restore();
+
+    canvas.restore();
   }
 
   @override
-  bool shouldRepaint(RoutePainter old) => old.progress != progress || old.line != line;
+  bool shouldRepaint(PiroguePainter old) => old.sail != sail || old.sun != sun || old.time != time;
 }
 
 class AuthBackdrop extends StatefulWidget {

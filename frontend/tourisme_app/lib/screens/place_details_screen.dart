@@ -272,7 +272,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                       _info(
                         Icons.confirmation_number_outlined,
                         "Entrée",
-                        price == null || price == 0 ? "Libre" : "${(price as num).round()} FCFA",
+                        price == null ? "—" : price == 0 ? "Libre" : "${(price as num).round()} FCFA",
                       ),
                     ],
                   ),

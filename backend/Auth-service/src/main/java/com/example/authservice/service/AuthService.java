@@ -11,7 +11,9 @@ import com.example.authservice.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
@@ -106,8 +108,14 @@ private final JwtService jwtService;
 
     public User register(RegisterRequest request) {
 
+    if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Cet email est déjà utilisé");
+    }
+
     User user = new User();
+    user.setName(request.getName());
     user.setEmail(request.getEmail());
+    user.setPhone(request.getPhone());
     user.setPassword(passwordEncoder.encode(request.getPassword()));
 
     // ⚠️ rôle par défaut USER

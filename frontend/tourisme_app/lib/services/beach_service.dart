@@ -22,12 +22,16 @@ class BeachService {
 }
 
 Future<void> deleteBeach(int id, String token) async {
-  await http.delete(
+  final response = await http.delete(
     Uri.parse("$baseUrl/beaches/$id"),
     headers: {
       "Authorization": "Bearer $token",
     },
   );
+
+  if (response.statusCode != 200 && response.statusCode != 204) {
+    throw Exception("Erreur suppression plage");
+  }
 }
 
 Future<void> updateBeach(int id, Map<String, dynamic> beach, String token) async {

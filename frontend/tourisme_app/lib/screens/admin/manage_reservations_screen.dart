@@ -74,8 +74,6 @@ class _ManageReservationsScreenState extends State<ManageReservationsScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text("Réservations"),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
       ),
       body: Column(
         children: [

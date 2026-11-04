@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/reservation_service.dart';
 import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 
 class MyReservationsScreen extends StatefulWidget {
   final int userId;
@@ -121,11 +122,12 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                       final color = _statusColors[status] ?? AppColors.accent;
                       final canCancel = status == "EN_ATTENTE" || status == "CONFIRMEE";
 
-                      return FadeSlideIn(index: index, child: Card(
-                        color: Colors.white,
-                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
+                      return FadeSlideIn(index: index, child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.field,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppColors.line),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(14),
@@ -134,16 +136,10 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.hotel, color: AppColors.primary),
-                                  const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       r['hotelName'] ?? "Hôtel #${r['hotelId']}",
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textDark,
-                                      ),
+                                      style: AppTheme.display(size: 18, weight: FontWeight.w600),
                                     ),
                                   ),
                                   Container(
@@ -163,6 +159,7 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                               Text(
                                 "Du ${formatDate(r['checkInDate'])} au ${formatDate(r['checkOutDate'])}"
                                 " · ${r['guests'] ?? 1} pers.",
+                                style: const TextStyle(color: AppColors.muted),
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -174,7 +171,7 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                                   alignment: Alignment.centerRight,
                                   child: TextButton(
                                     onPressed: () => cancel(r),
-                                    child: const Text("Annuler"),
+                                    child: const Text("Annuler", style: TextStyle(color: AppColors.laterite, fontWeight: FontWeight.w600)),
                                   ),
                                 ),
                             ],

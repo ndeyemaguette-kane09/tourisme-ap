@@ -91,10 +91,13 @@ class AppTheme {
         side: const BorderSide(color: AppColors.line),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
-      snackBarTheme: const SnackBarThemeData(
+      snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.ink,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
+      dividerTheme: const DividerThemeData(color: AppColors.line, thickness: 1),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppColors.laterite),
     );
   }
 }

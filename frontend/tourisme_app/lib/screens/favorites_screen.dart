@@ -67,11 +67,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
             children: [
-              Text("Tes favoris", style: AppTheme.display(size: 32)),
+              Text("Tes favoris", style: AppTheme.display(size: 30)),
               const SizedBox(height: 6),
               const Row(
                 children: [
-                  Icon(Icons.cloud_done_outlined, size: 16, color: Color(0xFF1D7A5F)),
+                  Icon(Icons.cloud_done_outlined, size: 16, color: Color(0xFF5E7D5A)),
                   SizedBox(width: 6),
                   Text("Disponibles même sans connexion", style: TextStyle(fontSize: 13, color: AppColors.muted)),
                 ],

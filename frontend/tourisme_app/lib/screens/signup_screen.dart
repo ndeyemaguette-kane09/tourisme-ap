@@ -69,7 +69,6 @@ class _SignupScreenState extends State<SignupScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text("Les mots de passe ne correspondent pas"),
-          backgroundColor: const Color(0xFFB71C1C),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
@@ -94,7 +93,6 @@ class _SignupScreenState extends State<SignupScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text("Compte créé avec succès. Bienvenue !"),
-          backgroundColor: const Color(0xFF2E7D32),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
@@ -105,7 +103,6 @@ class _SignupScreenState extends State<SignupScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text("Erreur lors de l'inscription"),
-          backgroundColor: const Color(0xFFB71C1C),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),

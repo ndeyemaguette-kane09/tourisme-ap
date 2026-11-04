@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/beach.dart';
 import '../models/hotel.dart';
@@ -12,6 +11,9 @@ import 'hotel_details_screen.dart';
 import 'restaurant_details_screen.dart';
 import '../services/discover_service.dart';
 import '../widgets/item_navigation.dart';
+import '../widgets/net_image.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 
 class MapScreen extends StatefulWidget {
   final String token;
@@ -54,11 +56,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late AnimationController _sheetController;
   late Animation<Offset> _sheetAnim;
 
-  // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFB9502B);
-  static const Color _orangeDark = Color(0xFF15171C);
-  static const Color _cream = Color(0xFFFAFAF7);
-  static const Color _amber = Color(0xFFF2F2EE);
+  static const _typeColors = {
+    'beach': Color(0xFF1F5C78),
+    'hotel': Color(0xFFA86A24),
+    'restaurant': Color(0xFF5E7D5A),
+    'place': AppColors.laterite,
+  };
 
   // Centre Sénégal (Dakar)
   static const LatLng _senegalCenter = LatLng(14.6928, -17.4467);
@@ -121,7 +124,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         markers.add(Marker(
           markerId: MarkerId('beach_${beach.id}'),
           position: LatLng(beach.latitude, beach.longitude),
-          icon: await _markerIcon(const Color(0xFF1F5C78)),
+          icon: await _markerIcon(_typeColors['beach']!),
           infoWindow: InfoWindow(title: beach.name, snippet: beach.city),
           onTap: () => _onMarkerTap(beach, 'beach'),
         ));
@@ -134,7 +137,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         markers.add(Marker(
           markerId: MarkerId('hotel_${hotel.id}'),
           position: LatLng(hotel.latitude, hotel.longitude),
-          icon: await _markerIcon(const Color(0xFFA86A24)),
+          icon: await _markerIcon(_typeColors['hotel']!),
           infoWindow: InfoWindow(title: hotel.name, snippet: hotel.city),
           onTap: () => _onMarkerTap(hotel, 'hotel'),
         ));
@@ -149,7 +152,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         markers.add(Marker(
           markerId: MarkerId('restaurant_${restaurant.id}'),
           position: LatLng(restaurant.latitude, restaurant.longitude),
-          icon: await _markerIcon(const Color(0xFF5E7D5A)),
+          icon: await _markerIcon(_typeColors['restaurant']!),
           infoWindow:
               InfoWindow(title: restaurant.name, snippet: restaurant.city),
           onTap: () => _onMarkerTap(restaurant, 'restaurant'),
@@ -166,7 +169,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             (place["latitude"] as num).toDouble(),
             (place["longitude"] as num).toDouble(),
           ),
-          icon: await _markerIcon(const Color(0xFFB9502B)),
+          icon: await _markerIcon(_typeColors['place']!),
           infoWindow: InfoWindow(
             title: place["name"],
             snippet: "${place["city"]} · voir la fiche",
@@ -223,492 +226,180 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-
+    final top = MediaQuery.of(context).padding.top;
     return Scaffold(
-      backgroundColor: _cream,
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // ── CARTE GOOGLE MAPS ──
           isLoading
-              ? _buildLoader()
+              ? const Center(child: CircularProgressIndicator(color: AppColors.laterite))
               : GoogleMap(
-                  initialCameraPosition: const CameraPosition(
-                    target: _senegalCenter,
-                    zoom: 7.0,
-                  ),
-                  onMapCreated: (controller) {
-                    _mapController = controller;
-                    // Style de carte personnalisé (optionnel)
-                    // controller.setMapStyle(_mapStyle);
-                  },
+                  initialCameraPosition: const CameraPosition(target: _senegalCenter, zoom: 7.0),
+                  onMapCreated: (controller) => _mapController = controller,
                   markers: _markers,
                   onTap: (_) => _closeSheet(),
+                  padding: EdgeInsets.only(top: top + 110),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                   zoomControlsEnabled: false,
                   compassEnabled: false,
                   mapToolbarEnabled: false,
                 ),
-
-          // ── HEADER ──
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Container(
-              decoration: const BoxDecoration(
-                color: _orangeDark,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
-              ),
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                  child: Row(
-                    children: [
-                      // Bouton retour
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.2)),
-                          ),
-                          child: const Icon(Icons.arrow_back_ios_new_rounded,
-                              color: Colors.white, size: 17),
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      // Titre
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Carte du Sénégal",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                            Text(
-                              "Explorez plages, hôtels et restaurants",
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 11.5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Bouton recentrer
-                      GestureDetector(
-                        onTap: () {
-                          _mapController?.animateCamera(
-                            CameraUpdate.newCameraPosition(
-                              const CameraPosition(
-                                  target: _senegalCenter, zoom: 7.0),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.2)),
-                          ),
-                          child: const Icon(Icons.my_location_rounded,
-                              color: Colors.white, size: 19),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // ── FILTRES (pills flottantes) ──
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 80,
-            left: 0,
-            right: 0,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
+              color: AppColors.background,
+              padding: EdgeInsets.only(top: top + 12, bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _filterChip(
-                    label: "Plages",
-                    icon: Icons.beach_access_rounded,
-                    color: const Color(0xFF1F5C78),
-                    active: _showBeaches,
-                    onTap: () => _toggleFilter('beach'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text("Carte", style: AppTheme.display(size: 30))),
+                        IconButton(
+                          tooltip: "Recentrer",
+                          style: IconButton.styleFrom(backgroundColor: AppColors.chip),
+                          onPressed: () => _mapController?.animateCamera(
+                            CameraUpdate.newCameraPosition(
+                              const CameraPosition(target: _senegalCenter, zoom: 7.0),
+                            ),
+                          ),
+                          icon: const Icon(Icons.my_location_rounded, color: AppColors.ink, size: 20),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: 10),
-                  _filterChip(
-                    label: "Hôtels",
-                    icon: Icons.hotel_rounded,
-                    color: const Color(0xFFA86A24),
-                    active: _showHotels,
-                    onTap: () => _toggleFilter('hotel'),
-                  ),
-                  const SizedBox(width: 10),
-                  _filterChip(
-                    label: "Restaurants",
-                    icon: Icons.restaurant_rounded,
-                    color: const Color(0xFF5E7D5A),
-                    active: _showRestaurants,
-                    onTap: () => _toggleFilter('restaurant'),
-                  ),
-                  const SizedBox(width: 10),
-                  _filterChip(
-                    label: "Sites",
-                    icon: Icons.place_rounded,
-                    color: const Color(0xFFB9502B),
-                    active: _showPlaces,
-                    onTap: () => _toggleFilter('place'),
+                  const SizedBox(height: 10),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        _filterChip("Sites", 'place', _showPlaces),
+                        _filterChip("Plages", 'beach', _showBeaches),
+                        _filterChip("Hôtels", 'hotel', _showHotels),
+                        _filterChip("Restaurants", 'restaurant', _showRestaurants),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-
-          // ── BOTTOM SHEET DÉTAIL ──
           if (_selectedItem != null)
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: SlideTransition(
-                position: _sheetAnim,
-                child: _buildDetailSheet(),
-              ),
+              child: SlideTransition(position: _sheetAnim, child: _buildDetailSheet()),
             ),
-
-          // ── LÉGENDE ──
-          Positioned(
-            bottom: _selectedItem != null ? 200 : 20,
-            right: 16,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _legendItem(const Color(0xFF1F5C78), Icons.beach_access_rounded, "Plage"),
-                  const SizedBox(height: 8),
-                  _legendItem(
-                      const Color(0xFFA86A24), Icons.hotel_rounded, "Hôtel"),
-                  const SizedBox(height: 8),
-                  _legendItem(const Color(0xFF5E7D5A),
-                      Icons.restaurant_rounded, "Resto"),
-                  const SizedBox(height: 8),
-                  _legendItem(
-                      const Color(0xFFB9502B), Icons.place_rounded, "Site"),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
-  // ── CHIP FILTRE ──
-  Widget _filterChip({
-    required String label,
-    required IconData icon,
-    required Color color,
-    required bool active,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-        decoration: BoxDecoration(
-          color: active ? color : Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: active
-                  ? color.withValues(alpha: 0.35)
-                  : Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon,
-                color: active ? Colors.white : Colors.grey.shade500,
-                size: 16),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                color: active ? Colors.white : Colors.grey.shade600,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ── LÉGENDE ITEM ──
-  Widget _legendItem(Color color, IconData icon, String label) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 28,
-          height: 28,
+  Widget _filterChip(String label, String type, bool active) {
+    final color = _typeColors[type]!;
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: GestureDetector(
+        onTap: () => _toggleFilter(type),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(8),
+            color: active ? AppColors.ink : AppColors.field,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: active ? AppColors.ink : AppColors.line),
           ),
-          child: Icon(icon, color: color, size: 15),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: active ? Colors.white : AppColors.ink,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
-  // ── BOTTOM SHEET DÉTAIL ──
   Widget _buildDetailSheet() {
-    final String name = _getName();
-    final String city = _getCity();
-    final double rating = _getRating();
-    final String imageUrl = _getImageUrl();
-    final Color typeColor = _getTypeColor();
-    final IconData typeIcon = _getTypeIcon();
-    final String typeLabel = _getTypeLabel();
-
+    final rating = _getRating();
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 110),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 24,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.line),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
         children: [
-          // ── IMAGE + INFOS ──
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-            child: Stack(
+          SizedBox(
+            width: 84,
+            height: 84,
+            child: NetImage(
+              url: _getImageUrl(),
+              seed: _getName(),
+              icon: _getTypeIcon(),
+              radius: BorderRadius.circular(16),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  _getTypeLabel().toUpperCase(),
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.muted, letterSpacing: 1),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  _getName(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.display(size: 18, weight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  rating > 0 ? "${_getCity()} · ${rating.toStringAsFixed(1)}" : _getCity(),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                ),
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 130,
-                  width: double.infinity,
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      color: _amber,
-                      child: Center(
-                        child: Icon(typeIcon, color: typeColor, size: 40),
-                      ),
+                  height: 36,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(0, 36),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                     ),
-                  ),
-                ),
-                Container(
-                  height: 130,
-                  color: Colors.black.withValues(alpha: 0.3),
-                ),
-                // Fermer
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: GestureDetector(
-                    onTap: _closeSheet,
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.4),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.close_rounded,
-                          color: Colors.white, size: 16),
-                    ),
-                  ),
-                ),
-                // Badge type
-                Positioned(
-                  top: 12,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: typeColor,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(typeIcon, color: Colors.white, size: 12),
-                        const SizedBox(width: 4),
-                        Text(
-                          typeLabel,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Nom en bas de l'image
-                Positioned(
-                  bottom: 12,
-                  left: 16,
-                  right: 16,
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.3,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    onPressed: _navigateToDetail,
+                    child: const Text("Voir la fiche"),
                   ),
                 ),
               ],
             ),
           ),
-
-          // ── INFOS + BOUTON ──
-          Padding(
-            padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
-            child: Row(
-              children: [
-                // Localisation + note
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.location_on_rounded,
-                              color: Colors.grey.shade400, size: 14),
-                          const SizedBox(width: 4),
-                          Text(
-                            city,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          const Icon(Icons.star_rounded,
-                              color: Color(0xFFD4876A), size: 15),
-                          const SizedBox(width: 4),
-                          Text(
-                            rating.toStringAsFixed(1),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14,
-                              color: Color(0xFF1A1A1A),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Bouton voir détails
-                GestureDetector(
-                  onTap: _navigateToDetail,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: _orange,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _orange.withValues(alpha: 0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.arrow_forward_rounded,
-                            color: Colors.white, size: 16),
-                        SizedBox(width: 6),
-                        Text(
-                          "Voir détails",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          IconButton(
+            tooltip: "Fermer",
+            onPressed: _closeSheet,
+            icon: const Icon(Icons.close_rounded, color: AppColors.muted, size: 20),
           ),
         ],
       ),
@@ -776,13 +467,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     return '';
   }
 
-  Color _getTypeColor() {
-    if (_selectedType == 'beach') return const Color(0xFF1F5C78);
-    if (_selectedType == 'hotel') return const Color(0xFFA86A24);
-    if (_selectedType == 'restaurant') return const Color(0xFF5E7D5A);
-    return _orange;
-  }
-
   IconData _getTypeIcon() {
     if (_selectedType == 'beach') return Icons.beach_access_rounded;
     if (_selectedType == 'hotel') return Icons.hotel_rounded;
@@ -795,33 +479,5 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     if (_selectedType == 'hotel') return 'Hôtel';
     if (_selectedType == 'restaurant') return 'Restaurant';
     return '';
-  }
-
-  Widget _buildLoader() {
-    return Container(
-      color: _cream,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: _orange,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Icon(Icons.map_rounded,
-                  color: Colors.white, size: 32),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "Chargement de la carte…",
-              style: TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

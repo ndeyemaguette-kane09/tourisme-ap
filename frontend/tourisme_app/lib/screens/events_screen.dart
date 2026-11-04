@@ -71,14 +71,14 @@ class _EventsScreenState extends State<EventsScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Material(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(24),
+        color: AppColors.field,
+        borderRadius: BorderRadius.circular(20),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => _showDetails(e),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.line),
             ),
             child: Column(

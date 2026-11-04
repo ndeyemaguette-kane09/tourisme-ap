@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/discover_service.dart';
 import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
+import '../widgets/net_image.dart';
 import '../widgets/item_navigation.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -89,8 +90,9 @@ class _SearchScreenState extends State<SearchScreen> {
         labelStyle: TextStyle(
           color: selected ? Colors.white : AppColors.textDark,
           fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontSize: 13,
         ),
+        side: BorderSide(color: selected ? AppColors.ink : AppColors.line),
         showCheckmark: false,
       ),
     );
@@ -189,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen> {
             height: 52,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 6),
               children: [
                 _chip("Tout", type == null, () {
                   setState(() => type = null);
@@ -206,7 +208,7 @@ class _SearchScreenState extends State<SearchScreen> {
             height: 44,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               children: categories
                   .map((c) => _chip(c[0] + c.substring(1).toLowerCase(), category == c, () {
                         setState(() => category = category == c ? null : c);
@@ -221,7 +223,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 : results.isEmpty
                     ? const Center(child: Text("Aucun résultat"))
                     : ListView.builder(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
                         itemCount: results.length,
                         itemBuilder: (context, i) => FadeSlideIn(key: ValueKey("${results[i]["type"]}-${results[i]["id"]}"), index: i, child: _resultTile(results[i])),
                       ),
@@ -238,32 +240,19 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          color: AppColors.field,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.line),
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.horizontal(left: Radius.circular(18)),
-              child: Image.network(
-                item["imageUrl"] ?? "",
-                width: 96,
-                height: 96,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 96,
-                  height: 96,
-                  color: AppColors.card,
-                  child: Icon(typeIcons[item["type"]], color: AppColors.accent),
-                ),
-              ),
+            NetImage(
+              url: item["imageUrl"],
+              seed: item["name"],
+              icon: typeIcons[item["type"]] ?? Icons.place_rounded,
+              width: 96,
+              height: 96,
+              radius: const BorderRadius.horizontal(left: Radius.circular(19)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -283,7 +272,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(height: 4),
                   Text(
                     "${item["subType"] ?? typeLabels[item["type"]] ?? ""} · ${item["city"] ?? ""}",
-                    style: const TextStyle(fontSize: 12, color: Colors.black54),
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
                   ),
                   const SizedBox(height: 6),
                   Row(

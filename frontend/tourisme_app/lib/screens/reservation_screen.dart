@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../services/reservation_service.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_theme.dart';
 
 class ReservationScreen extends StatefulWidget {
   final int hotelId;
@@ -18,9 +19,7 @@ class ReservationScreen extends StatefulWidget {
   State<ReservationScreen> createState() => _ReservationScreenState();
 }
 
-class _ReservationScreenState extends State<ReservationScreen>
-    with TickerProviderStateMixin {
-  // ── LOGIQUE INCHANGÉE ──
+class _ReservationScreenState extends State<ReservationScreen> {
   DateTime? checkInDate;
   DateTime? checkOutDate;
   int guests = 1;
@@ -29,33 +28,6 @@ class _ReservationScreenState extends State<ReservationScreen>
 
   final ReservationService reservationService = ReservationService();
 
-  late AnimationController _fadeController;
-  late Animation<double> _fadeAnim;
-
-  // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFB9502B);
-  static const Color _orangeDark = Color(0xFF15171C);
-  static const Color _cream = Color(0xFFFAFAF7);
-  static const Color _amber = Color(0xFFF2F2EE);
-
-  @override
-  void initState() {
-    super.initState();
-    _fadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    )..forward();
-    _fadeAnim =
-        CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
-  }
-
-  @override
-  void dispose() {
-    _fadeController.dispose();
-    super.dispose();
-  }
-
-  // ── LOGIQUE DATES INCHANGÉE ──
   Future<void> selectDate(bool isCheckIn) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -66,10 +38,10 @@ class _ReservationScreenState extends State<ReservationScreen>
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: _orange,
+              primary: AppColors.ink,
               onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Color(0xFF1A1A1A),
+              surface: AppColors.background,
+              onSurface: AppColors.ink,
             ),
           ),
           child: child!,
@@ -88,18 +60,15 @@ class _ReservationScreenState extends State<ReservationScreen>
     }
   }
 
-  // ── LOGIQUE CONFIRMATION INCHANGÉE ──
+  void _message(String text) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+
   void confirmReservation() async {
     if (checkInDate == null || checkOutDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Veuillez choisir les dates"),
-          backgroundColor: _orangeDark,
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
+      _message("Veuillez choisir les dates");
       return;
     }
 
@@ -116,34 +85,16 @@ class _ReservationScreenState extends State<ReservationScreen>
       );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Demande de réservation envoyée"),
-          backgroundColor: const Color(0xFF2E7D32),
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
-
+      _message("Demande de réservation envoyée");
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString().replaceFirst("Exception: ", "")),
-          backgroundColor: Colors.grey.shade700,
-          behavior: SnackBarBehavior.floating,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
+      _message(e.toString().replaceFirst("Exception: ", ""));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  // ── Calcul du nombre de nuits ──
   int get _nightCount {
     if (checkInDate == null || checkOutDate == null) return 0;
     return checkOutDate!.difference(checkInDate!).inDays.abs();
@@ -159,450 +110,135 @@ class _ReservationScreenState extends State<ReservationScreen>
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: _cream,
-      body: FadeTransition(
-        opacity: _fadeAnim,
-        child: Stack(
-          children: [
-            // ── HEADER ──
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: size.height * 0.20,
-                decoration: const BoxDecoration(color: _orangeDark),
-              ),
-            ),
-
-            // ── CERCLES DÉCORATIFS ──
-            Positioned(
-              top: -30,
-              right: -40,
-              child: Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.07),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(title: const Text("Réservation")),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+        children: [
+          Text("Tes dates", style: AppTheme.display(size: 26)),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: _dateTile(
+                  label: "Arrivée",
+                  date: checkInDate,
+                  onTap: () => selectDate(true),
                 ),
               ),
-            ),
-            Positioned(
-              top: 30,
-              right: 40,
-              child: Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.07),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _dateTile(
+                  label: "Départ",
+                  date: checkOutDate,
+                  onTap: () => selectDate(false),
                 ),
               ),
-            ),
-
-            // ── ARRONDI CRÈME ──
-            Positioned(
-              top: size.height * 0.17,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 36,
-                decoration: const BoxDecoration(
-                  color: _cream,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(36)),
-                ),
-              ),
-            ),
-
-            // ── CORPS SCROLLABLE ──
-            SafeArea(
-              child: Column(
-                children: [
-                  // Barre top
-                  SizedBox(
-                    height: size.height * 0.12,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.18),
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(
-                                    color: Colors.white.withValues(alpha: 0.3),
-                                    width: 1),
-                              ),
-                              child: const Icon(
-                                  Icons.arrow_back_ios_new_rounded,
-                                  color: Colors.white,
-                                  size: 16),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Réservation",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              Text(
-                                "Complétez votre séjour",
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // Contenu scrollable
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(24, 8, 24, 120),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // ── SECTION DATES ──
-                          _sectionTitle(
-                              Icons.calendar_month_rounded, "Vos dates"),
-                          const SizedBox(height: 14),
-
-                          // Dates côte à côte
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _dateTile(
-                                  label: "Arrivée",
-                                  icon: Icons.flight_land_rounded,
-                                  date: checkInDate,
-                                  onTap: () => selectDate(true),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _dateTile(
-                                  label: "Départ",
-                                  icon: Icons.flight_takeoff_rounded,
-                                  date: checkOutDate,
-                                  onTap: () => selectDate(false),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          // Résumé nuits
-                          if (_nightCount > 0) ...[
-                            const SizedBox(height: 12),
-                            _nightSummary(),
-                          ],
-
-                          const SizedBox(height: 28),
-
-                          // ── SECTION VOYAGEURS ──
-                          _sectionTitle(
-                              Icons.groups_rounded, "Voyageurs"),
-                          const SizedBox(height: 14),
-                          _guestSelector(),
-
-                          const SizedBox(height: 28),
-
-                          // ── SECTION PAIEMENT ──
-                          _sectionTitle(
-                              Icons.payment_rounded, "Moyen de paiement"),
-                          const SizedBox(height: 14),
-                          _paymentSelector(),
-
-                          const SizedBox(height: 28),
-
-                          // ── DIVIDER DÉCO ──
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Divider(
-                                      color: Colors.grey.shade200,
-                                      thickness: 1)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12),
-                                child: Icon(Icons.hotel_rounded,
-                                    color: Colors.grey.shade300, size: 16),
-                              ),
-                              Expanded(
-                                  child: Divider(
-                                      color: Colors.grey.shade200,
-                                      thickness: 1)),
-                            ],
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          // Footer
-                          const Center(
-                            child: Text(
-                              "Teranga • Culture • Découverte",
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.grey,
-                                letterSpacing: 0.8,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // ── BOUTON CTA FIXE ──
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-                decoration: BoxDecoration(
-                  color: _cream,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
-                      blurRadius: 20,
-                      offset: const Offset(0, -6),
-                    ),
-                  ],
-                ),
-                child: Container(
-                  height: 58,
-                  decoration: BoxDecoration(
-                    color: _orange,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _orange.withValues(alpha: 0.45),
-                        blurRadius: 18,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(18),
-                      onTap: _isLoading ? null : confirmReservation,
-                      child: Center(
-                        child: _isLoading
-                            ? const SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2.5,
-                                ),
-                              )
-                            : const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.check_circle_rounded,
-                                      color: Colors.white, size: 20),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    "Confirmer la réservation",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                      letterSpacing: 0.3,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            ],
+          ),
+          if (_nightCount > 0) ...[
+            const SizedBox(height: 10),
+            Text(
+              "$_nightCount nuit${_nightCount > 1 ? 's' : ''}",
+              style: const TextStyle(color: AppColors.muted, fontWeight: FontWeight.w600),
             ),
           ],
+          const SizedBox(height: 28),
+          _sectionTitle("Voyageurs"),
+          _guestSelector(),
+          const SizedBox(height: 28),
+          _sectionTitle("Moyen de paiement"),
+          _paymentSelector(),
+          const SizedBox(height: 4),
+          const Text(
+            "Paiement fictif : aucune somme n'est débitée.",
+            style: TextStyle(color: AppColors.muted, fontSize: 13),
+          ),
+        ],
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+          child: ElevatedButton(
+            onPressed: _isLoading ? null : confirmReservation,
+            child: _isLoading
+                ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white),
+                  )
+                : const Text("Confirmer la réservation"),
+          ),
         ),
       ),
     );
   }
 
-  // ── WIDGETS UI ──
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Text(
+        title.toUpperCase(),
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted, letterSpacing: 1),
+      ),
+    );
+  }
 
-  Widget _sectionTitle(IconData icon, String title) {
-    return Row(
-      children: [
-        Container(
-          width: 3,
-          height: 18,
-          decoration: BoxDecoration(
-            color: _orange,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Icon(icon, color: _orange, size: 18),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: Color(0xFF1A1A1A),
-            letterSpacing: 0.1,
-          ),
-        ),
-      ],
+  BoxDecoration _tile(bool selected) {
+    return BoxDecoration(
+      color: AppColors.field,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: selected ? AppColors.ink : AppColors.line,
+        width: selected ? 1.5 : 1,
+      ),
     );
   }
 
   Widget _dateTile({
     required String label,
-    required IconData icon,
     required DateTime? date,
     required VoidCallback onTap,
   }) {
-    final bool selected = date != null;
+    final selected = date != null;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: selected ? _amber : Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: selected ? _orange.withValues(alpha: 0.4) : Colors.grey.shade200,
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: selected
-                  ? _orange.withValues(alpha: 0.1)
-                  : Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+        decoration: _tile(selected),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(icon,
-                    size: 16,
-                    color: selected ? _orange : Colors.grey.shade400),
-                const SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: selected ? _orangeDark : Colors.grey.shade500,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
+            Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            const SizedBox(height: 6),
             Text(
               selected ? _formatDate(date) : "Choisir",
               style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: selected ? const Color(0xFF1A1A1A) : Colors.grey.shade400,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: selected ? AppColors.ink : AppColors.muted,
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _nightSummary() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: _orangeDark,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.nights_stay_rounded,
-              color: Colors.white, size: 16),
-          const SizedBox(width: 8),
-          Text(
-            "$_nightCount nuit${_nightCount > 1 ? 's' : ''} sélectionnée${_nightCount > 1 ? 's' : ''}",
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-            ),
-          ),
-        ],
       ),
     );
   }
 
   Widget _guestSelector() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: _tile(false),
       child: Row(
         children: [
-          const Icon(Icons.person_rounded, color: _orange, size: 22),
-          const SizedBox(width: 12),
           Expanded(
             child: Text(
               "$guests voyageur${guests > 1 ? 's' : ''}",
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF1A1A1A),
-              ),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
-          // Bouton -
           _counterBtn(
             icon: Icons.remove_rounded,
             onTap: () {
@@ -610,18 +246,7 @@ class _ReservationScreenState extends State<ReservationScreen>
             },
             enabled: guests > 1,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Text(
-              "$guests",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                color: _orange,
-              ),
-            ),
-          ),
-          // Bouton +
+          const SizedBox(width: 10),
           _counterBtn(
             icon: Icons.add_rounded,
             onTap: () => setState(() => guests++),
@@ -640,19 +265,13 @@ class _ReservationScreenState extends State<ReservationScreen>
     return GestureDetector(
       onTap: enabled ? onTap : null,
       child: Container(
-        width: 34,
-        height: 34,
+        width: 36,
+        height: 36,
         decoration: BoxDecoration(
-          color: enabled ? _amber : Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: enabled ? _orange.withValues(alpha: 0.3) : Colors.grey.shade200),
+          color: enabled ? AppColors.chip : AppColors.background,
+          shape: BoxShape.circle,
         ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: enabled ? _orange : Colors.grey.shade400,
-        ),
+        child: Icon(icon, size: 18, color: enabled ? AppColors.ink : AppColors.line),
       ),
     );
   }
@@ -676,65 +295,31 @@ class _ReservationScreenState extends State<ReservationScreen>
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             margin: const EdgeInsets.only(bottom: 10),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            decoration: BoxDecoration(
-              color: selected ? _amber : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: selected
-                    ? _orange.withValues(alpha: 0.5)
-                    : Colors.grey.shade200,
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: selected
-                      ? _orange.withValues(alpha: 0.08)
-                      : Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: _tile(selected),
             child: Row(
               children: [
                 logo != null
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
                           logo,
-                          width: 38,
-                          height: 38,
+                          width: 36,
+                          height: 36,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => _methodIcon(icon, selected),
+                          errorBuilder: (_, __, ___) => _methodIcon(icon),
                         ),
                       )
-                    : _methodIcon(icon, selected),
+                    : _methodIcon(icon),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Text(
-                    val,
-                    style: TextStyle(
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w700,
-                      color: selected
-                          ? const Color(0xFF1A1A1A)
-                          : Colors.grey.shade600,
-                    ),
-                  ),
+                  child: Text(val, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                 ),
-                if (selected)
-                  Container(
-                    width: 22,
-                    height: 22,
-                    decoration: const BoxDecoration(
-                      color: _orange,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.check_rounded,
-                        color: Colors.white, size: 14),
-                  ),
+                Icon(
+                  selected ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded,
+                  color: selected ? AppColors.ink : AppColors.line,
+                  size: 22,
+                ),
               ],
             ),
           ),
@@ -743,15 +328,15 @@ class _ReservationScreenState extends State<ReservationScreen>
     );
   }
 
-  Widget _methodIcon(IconData icon, bool selected) {
+  Widget _methodIcon(IconData icon) {
     return Container(
-      width: 38,
-      height: 38,
+      width: 36,
+      height: 36,
       decoration: BoxDecoration(
-        color: selected ? _orange : Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.chip,
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(icon, color: selected ? Colors.white : Colors.grey.shade400, size: 20),
+      child: Icon(icon, color: AppColors.ink, size: 20),
     );
   }
 }

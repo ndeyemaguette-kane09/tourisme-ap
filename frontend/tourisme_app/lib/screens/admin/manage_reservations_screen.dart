@@ -134,7 +134,6 @@ class _ManageReservationsScreenState extends State<ManageReservationsScreen> {
                                           const SizedBox(width: 8),
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color(0xFF2E7D32),
                                             ),
                                             onPressed: () => updateStatus(r["id"], "confirm"),
                                             child: const Text("Confirmer",

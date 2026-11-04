@@ -144,7 +144,29 @@ Photos issues de Wikimedia Commons, sous licence libre. Les auteurs et licences 
 - Île de Saint-Louis — [Island_of_Saint-Louis-113799.jpg](https://commons.wikimedia.org/wiki/File:Island_of_Saint-Louis-113799.jpg)
 - Pont Faidherbe — [Saintlouis_pont_Faidherbe.jpg](https://commons.wikimedia.org/wiki/File:Saintlouis_pont_Faidherbe.jpg)
 
-Les autres lieux affichent un visuel de remplacement en attendant leurs photos.
+- Maison des esclaves — [Maison des Esclaves 04045.JPG](https://commons.wikimedia.org/wiki/File:Maison_des_Esclaves_04045.JPG), Serge Ottaviani
+- Musée des Civilisations noires — [Musée des civilisations noires 2022.jpg](https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_des_civilisations_noires_2022.jpg), PMO Barbados, domaine public
+- Musée Théodore Monod — [Musée d'art africain Théodore Monod.jpg](https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_d'art_africain_Th%C3%A9odore_Monod.jpg), Zythème
+- Mosquée de la Divinité — [Ouakam-Mosquée de la Divinité (3).jpg](https://commons.wikimedia.org/wiki/File:Ouakam-Mosqu%C3%A9e_de_la_Divinit%C3%A9_(3).jpg), Jeff Attaway, CC BY 2.0
+- Phare des Mamelles — [PhareMamelles4.JPG](https://commons.wikimedia.org/wiki/File:PhareMamelles4.JPG), Ji-Elle
+- Grande Mosquée de Tivaouane — [La mosquée de serigne Babacar sy.jpg](https://commons.wikimedia.org/wiki/File:La_mosqu%C3%A9e_de_serigne_Babacar_sy.jpg), Sallboss
+- Médina Baye — [MedinaBaayMosque.jpg](https://commons.wikimedia.org/wiki/File:MedinaBaayMosque.jpg), Joseph Hill, CC BY-SA 2.5
+- Basilique de Popenguine — [PopenguineChurch.JPG](https://commons.wikimedia.org/wiki/File:PopenguineChurch.JPG), Ji-Elle
+- Parc du Djoudj — [Pélicans au Parc national du Djoudj.jpg](https://commons.wikimedia.org/wiki/File:P%C3%A9licans_au_Parc_national_du_Djoudj.jpg), Ji-Elle
+- Langue de Barbarie — [Le nouveau embouchure de Saint-Louis situant au Parc National de la Langue de Barbarie (PNLB) 05.jpg](https://commons.wikimedia.org/wiki/File:Le_nouveau_embouchure_de_Saint-Louis_situant_au_Parc_National_de_la_Langue_de_Barbarie_(PNLB)_05.jpg), 6artphotographie
+- Delta du Saloum — [Mangrove île du Saloum Sénégal.jpg](https://commons.wikimedia.org/wiki/File:Mangrove_%C3%AEle_du_Saloum_S%C3%A9n%C3%A9gal.jpg), Ourytima, CC BY-SA 4.0
+- Réserve de Bandia — [Girafe dans la réserve de Bandia Sénégal 01.jpg](https://commons.wikimedia.org/wiki/File:Girafe_dans_la_r%C3%A9serve_de_Bandia_S%C3%A9n%C3%A9gal_01.jpg), Josi Salgado, CC BY-SA 4.0
+- Désert de Lompoul — [2017-06 Lompoul Desert 2.jpg](https://commons.wikimedia.org/wiki/File:2017-06_Lompoul_Desert_2.jpg), Mich-nguyen, CC BY-SA 4.0
+- Île de Fadiouth — [Pont de l’Aire Marine Protégée de Joal-Fadiouth 18.jpg](https://commons.wikimedia.org/wiki/File:Pont_de_l%E2%80%99Aire_Marine_Prot%C3%A9g%C3%A9e_de_Joal-Fadiouth_18.jpg), Wuzyprod
+- Île de Carabane — [Carabane-Bolongs.JPG](https://commons.wikimedia.org/wiki/File:Carabane-Bolongs.JPG), Ji-Elle
+- Parc du Niokolo-Koba — [Paysage du parc Niokolo Koba du Sénégal.jpg](https://commons.wikimedia.org/wiki/File:Paysage_du_parc_Niokolo_Koba_du_S%C3%A9n%C3%A9gal.jpg), COD photographer
+- Cascade de Dindéfélo — [Cascade de Dindefelo 02.jpg](https://commons.wikimedia.org/wiki/File:Cascade_de_Dindefelo_02.jpg), Mouha.ibs, CC BY-SA 4.0
+- Plage de Cap Skirring — [Cap-Skirring-Beach-2007.jpg](https://commons.wikimedia.org/wiki/File:Cap-Skirring-Beach-2007.jpg), Bjørn Christian Tørrissen, CC BY-SA 3.0
+- Plage de la Somone — [Lagune de LA SOMONE.jpg](https://commons.wikimedia.org/wiki/File:Lagune_de_LA_SOMONE.jpg), Faisans.jeanluc, CC BY-SA 3.0
+- Plage de Popenguine — [Plage réserve naturelle de Popenguine, Thies Sénégal, Juin 2022.jpg](https://commons.wikimedia.org/wiki/File:Plage_r%C3%A9serve_naturelle_de_Popenguine,_Thies_S%C3%A9n%C3%A9gal,_Juin_2022.jpg), Ousmane Goudiaby 95
+- Plage de Toubab Dialaw — [Toubab Dialaw 294A2254 Senegal.jpg](https://commons.wikimedia.org/wiki/File:Toubab_Dialaw_294A2254_Senegal.jpg), Christian Pirkl
+
+Les hôtels, les restaurants, la plage des Almadies, le village de Soumbédioune et le marché Kermel affichent un visuel de remplacement : pas de photo libre fiable trouvée pour eux.
 
 ## Pistes d'évolution
 

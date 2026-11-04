@@ -178,3 +178,25 @@ UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePat
 UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Touba_moschee.jpg?width=1200' WHERE id = 110 AND image_url IS NULL;
 UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Island_of_Saint-Louis-113799.jpg?width=1200' WHERE id = 114 AND image_url IS NULL;
 UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Saintlouis_pont_Faidherbe.jpg?width=1200' WHERE id = 115 AND image_url IS NULL;
+
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Maison_des_Esclaves_04045.JPG?width=1200' WHERE id = 101 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mus%C3%A9e_des_civilisations_noires_2022.jpg?width=1200' WHERE id = 103 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mus%C3%A9e_d''art_africain_Th%C3%A9odore_Monod.jpg?width=1200' WHERE id = 104 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Ouakam-Mosqu%C3%A9e_de_la_Divinit%C3%A9_(3).jpg?width=1200' WHERE id = 106 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/PhareMamelles4.JPG?width=1200' WHERE id = 107 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/La_mosqu%C3%A9e_de_serigne_Babacar_sy.jpg?width=1200' WHERE id = 111 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/MedinaBaayMosque.jpg?width=1200' WHERE id = 112 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/PopenguineChurch.JPG?width=1200' WHERE id = 113 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%A9licans_au_Parc_national_du_Djoudj.jpg?width=1200' WHERE id = 116 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Le_nouveau_embouchure_de_Saint-Louis_situant_au_Parc_National_de_la_Langue_de_Barbarie_(PNLB)_05.jpg?width=1200' WHERE id = 117 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Mangrove_%C3%AEle_du_Saloum_S%C3%A9n%C3%A9gal.jpg?width=1200' WHERE id = 118 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Girafe_dans_la_r%C3%A9serve_de_Bandia_S%C3%A9n%C3%A9gal_01.jpg?width=1200' WHERE id = 119 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/2017-06_Lompoul_Desert_2.jpg?width=1200' WHERE id = 120 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Pont_de_l%E2%80%99Aire_Marine_Prot%C3%A9g%C3%A9e_de_Joal-Fadiouth_18.jpg?width=1200' WHERE id = 121 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Carabane-Bolongs.JPG?width=1200' WHERE id = 122 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Paysage_du_parc_Niokolo_Koba_du_S%C3%A9n%C3%A9gal.jpg?width=1200' WHERE id = 123 AND image_url IS NULL;
+UPDATE place SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Cascade_de_Dindefelo_02.jpg?width=1200' WHERE id = 124 AND image_url IS NULL;
+UPDATE beach SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Cap-Skirring-Beach-2007.jpg?width=1200' WHERE id = 100 AND image_url IS NULL;
+UPDATE beach SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Lagune_de_LA_SOMONE.jpg?width=1200' WHERE id = 101 AND image_url IS NULL;
+UPDATE beach SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Plage_r%C3%A9serve_naturelle_de_Popenguine,_Thies_S%C3%A9n%C3%A9gal,_Juin_2022.jpg?width=1200' WHERE id = 102 AND image_url IS NULL;
+UPDATE beach SET image_url = 'https://commons.wikimedia.org/wiki/Special:FilePath/Toubab_Dialaw_294A2254_Senegal.jpg?width=1200' WHERE id = 103 AND image_url IS NULL;

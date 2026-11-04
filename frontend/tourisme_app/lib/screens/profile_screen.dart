@@ -168,13 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 _profileOption(
                   icon: Icons.lock_outline_rounded,
                   title: "Mot de passe",
-                  onTap: () async {
-                    final ok = await Navigator.push<bool>(
-                      context,
-                      MaterialPageRoute(builder: (_) => PasswordScreen(userId: widget.userId)),
-                    );
-                    if (ok == true && mounted) showAdminMessage(context, "Mot de passe mis à jour");
-                  },
+                  onTap: _openPassword,
                 ),
                 const SizedBox(height: 20),
                 _sectionTitle("Aide"),
@@ -216,6 +210,14 @@ class _ProfileScreenState extends State<ProfileScreen>
       setState(() => _name = Session.userName ?? _name);
       showAdminMessage(context, "Informations enregistrées");
     }
+  }
+
+  Future<void> _openPassword() async {
+    final ok = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => PasswordScreen(userId: widget.userId)),
+    );
+    if (ok == true && mounted) showAdminMessage(context, "Mot de passe mis à jour");
   }
 
   void _logout() {

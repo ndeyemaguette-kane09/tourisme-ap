@@ -5,6 +5,7 @@ import 'add_hotel_screen.dart';
 import 'add_beach_screen.dart';
 import 'manage_hotels_screen.dart';
 import 'manage_beaches_screen.dart';
+import 'manage_reservations_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   final String token;
@@ -277,6 +278,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                               colors: [Color(0xFFFF8A65), Color(0xFFFFB74D)],
                             ),
                             screen: ManageBeachesScreen(token: widget.token),
+                          ),
+                          _adminActionCard(
+                            context,
+                            title: "Réservations",
+                            subtitle: "Confirmer ou annuler les demandes",
+                            icon: Icons.event_available,
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFBF360C), Color(0xFFF57C00)],
+                            ),
+                            screen: ManageReservationsScreen(token: widget.token),
                           ),
                         ],
                       ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
+import 'session.dart';
 
 class AuthService {
   final String baseUrl = ApiConfig.baseUrl;
@@ -30,6 +31,10 @@ class AuthService {
       userId = data['userId'];
       userName = data['name'];
       role = data['role'];
+
+      Session.userId = userId;
+      Session.token = token;
+      Session.userName = userName;
 
       return token;
     } else {

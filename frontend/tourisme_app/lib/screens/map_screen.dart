@@ -10,6 +10,8 @@ import '../services/restaurant_service.dart';
 import 'beach_details_screen.dart';
 import 'hotel_details_screen.dart';
 import 'restaurant_details_screen.dart';
+import '../services/discover_service.dart';
+import '../widgets/item_navigation.dart';
 
 class MapScreen extends StatefulWidget {
   final String token;
@@ -34,6 +36,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   List<Beach> beaches = [];
   List<Hotel> hotels = [];
   List<Restaurant> restaurants = [];
+  List<Map<String, dynamic>> places = [];
   Set<Marker> _markers = {};
   bool isLoading = true;
 
@@ -41,6 +44,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   bool _showBeaches = true;
   bool _showHotels = true;
   bool _showRestaurants = true;
+  bool _showPlaces = true;
 
   // ── Item sélectionné ──
   dynamic _selectedItem; // Beach | Hotel | Restaurant | null
@@ -92,11 +96,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         RestaurantService()
             .getRestaurants(widget.token)
             .catchError((_) => <Restaurant>[]),
+        DiscoverService.search(type: "place")
+            .catchError((_) => <Map<String, dynamic>>[]),
       ]);
 
       beaches = (results[0] as List).cast<Beach>();
       hotels = (results[1] as List).cast<Hotel>();
       restaurants = (results[2] as List).cast<Restaurant>();
+      places = (results[3] as List).cast<Map<String, dynamic>>();
     } catch (_) {}
 
     if (mounted) {
@@ -111,10 +118,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
     if (_showBeaches) {
       for (final beach in beaches) {
-        if (beach.latitude == null || beach.longitude == null) continue;
+        if (beach.latitude == 0 && beach.longitude == 0) continue;
         markers.add(Marker(
           markerId: MarkerId('beach_${beach.id}'),
-          position: LatLng(beach.latitude!, beach.longitude!),
+          position: LatLng(beach.latitude, beach.longitude),
           icon: await _markerIcon(_orange),
           infoWindow: InfoWindow(title: beach.name, snippet: beach.city),
           onTap: () => _onMarkerTap(beach, 'beach'),
@@ -124,10 +131,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
     if (_showHotels) {
       for (final hotel in hotels) {
-        if (hotel.latitude == null || hotel.longitude == null) continue;
+        if (hotel.latitude == 0 && hotel.longitude == 0) continue;
         markers.add(Marker(
           markerId: MarkerId('hotel_${hotel.id}'),
-          position: LatLng(hotel.latitude!, hotel.longitude!),
+          position: LatLng(hotel.latitude, hotel.longitude),
           icon: await _markerIcon(const Color(0xFF1565C0)),
           infoWindow: InfoWindow(title: hotel.name, snippet: hotel.city),
           onTap: () => _onMarkerTap(hotel, 'hotel'),
@@ -137,16 +144,35 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
     if (_showRestaurants) {
       for (final restaurant in restaurants) {
-        if (restaurant.latitude == null || restaurant.longitude == null) {
+        if (restaurant.latitude == 0 && restaurant.longitude == 0) {
           continue;
         }
         markers.add(Marker(
           markerId: MarkerId('restaurant_${restaurant.id}'),
-          position: LatLng(restaurant.latitude!, restaurant.longitude!),
+          position: LatLng(restaurant.latitude, restaurant.longitude),
           icon: await _markerIcon(const Color(0xFF2E7D32)),
           infoWindow:
               InfoWindow(title: restaurant.name, snippet: restaurant.city),
           onTap: () => _onMarkerTap(restaurant, 'restaurant'),
+        ));
+      }
+    }
+
+    if (_showPlaces) {
+      for (final place in places) {
+        if (place["latitude"] == null || place["longitude"] == null) continue;
+        markers.add(Marker(
+          markerId: MarkerId('place_${place["id"]}'),
+          position: LatLng(
+            (place["latitude"] as num).toDouble(),
+            (place["longitude"] as num).toDouble(),
+          ),
+          icon: await _markerIcon(const Color(0xFF6A1B9A)),
+          infoWindow: InfoWindow(
+            title: place["name"],
+            snippet: "${place["city"]} · voir la fiche",
+            onTap: () => openItem(context, place),
+          ),
         ));
       }
     }
@@ -191,6 +217,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       if (type == 'beach') _showBeaches = !_showBeaches;
       if (type == 'hotel') _showHotels = !_showHotels;
       if (type == 'restaurant') _showRestaurants = !_showRestaurants;
+      if (type == 'place') _showPlaces = !_showPlaces;
     });
     _buildMarkers();
   }
@@ -353,6 +380,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     active: _showRestaurants,
                     onTap: () => _toggleFilter('restaurant'),
                   ),
+                  const SizedBox(width: 10),
+                  _filterChip(
+                    label: "Sites",
+                    icon: Icons.place_rounded,
+                    color: const Color(0xFF6A1B9A),
+                    active: _showPlaces,
+                    onTap: () => _toggleFilter('place'),
+                  ),
                 ],
               ),
             ),
@@ -399,6 +434,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   const SizedBox(height: 8),
                   _legendItem(const Color(0xFF2E7D32),
                       Icons.restaurant_rounded, "Resto"),
+                  const SizedBox(height: 8),
+                  _legendItem(
+                      const Color(0xFF6A1B9A), Icons.place_rounded, "Site"),
                 ],
               ),
             ),

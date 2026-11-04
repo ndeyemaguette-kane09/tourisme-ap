@@ -33,7 +33,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   Future<void> _removeFavorite(int index) async {
-    await FavoriteService.removeFavorite(favorites[index]["id"]);
+    await FavoriteService.removeFavorite(favorites[index]);
     setState(() => favorites.removeAt(index));
   }
 

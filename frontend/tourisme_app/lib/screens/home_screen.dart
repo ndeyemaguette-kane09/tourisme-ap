@@ -10,6 +10,9 @@ import 'beach_swipe_screen.dart';
 import 'favorites_screen.dart';
 import '../models/category.dart';
 import 'map_screen.dart';
+import 'search_screen.dart';
+import '../services/discover_service.dart';
+import '../widgets/item_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   final String token;
@@ -38,20 +41,42 @@ class _HomeScreenState extends State<HomeScreen> {
   File? profileImage;
   List<Category> categories = [];
 
-  final List<Map<String, dynamic>> places = const [
-    {"title": "Dakar", "image": "https://picsum.photos/400/300?1", "tag": "Capitale"},
-    {"title": "Saly", "image": "https://picsum.photos/400/300?2", "tag": "Plage"},
-    {"title": "Gorée", "image": "https://picsum.photos/400/300?3", "tag": "Histoire"},
-    {"title": "Lac Rose", "image": "https://picsum.photos/400/300?4", "tag": "Nature"},
-    {"title": "Saint-Louis", "image": "https://picsum.photos/400/300?5", "tag": "Culture"},
-    {"title": "Casamance", "image": "https://picsum.photos/400/300?6", "tag": "Aventure"},
-  ];
+  List<Map<String, dynamic>> popular = [];
+  List<Map<String, dynamic>> recommended = [];
 
   @override
   void initState() {
     super.initState();
     _loadCategories();
     _loadProfileImage();
+    _loadDiscover();
+  }
+
+  Future<void> _loadDiscover() async {
+    try {
+      final all = await DiscoverService.search(type: "place");
+      final recos = await DiscoverService.recommendations(limit: 8);
+      if (!mounted) return;
+      setState(() {
+        popular = all.take(3).toList();
+        recommended = recos;
+      });
+    } catch (e) {
+      debugPrint("ERREUR DISCOVER: $e");
+    }
+  }
+
+  void _openSearch({String? query, String? category}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SearchScreen(initialQuery: query, initialCategory: category),
+      ),
+    );
+  }
+
+  void _open(Widget screen) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   Future<void> _loadCategories() async {
@@ -69,11 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (path != null && mounted) {
       setState(() => profileImage = File(path));
     }
-  }
-
-  List<Map<String, dynamic>> _randomPlaces() {
-    final shuffled = List<Map<String, dynamic>>.from(places)..shuffle();
-    return shuffled.take(3).toList();
   }
 
   String _greeting() {
@@ -102,8 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final recommended = _randomPlaces();
-
     Widget homeContent = SafeArea(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -215,8 +233,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () => _openSearch(),
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.search, color: _terra),
                       hintText: "Rechercher une destination...",
                       hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
@@ -231,11 +251,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ── Stats rapides ──
                 Row(
                   children: [
-                    _statBadge(Icons.hotel_rounded, "Hôtels"),
+                    _statBadge(Icons.hotel_rounded, "Hôtels", () => _open(HotelSwipeScreen(
+                          token: widget.token,
+                          userId: widget.userId,
+                          userName: widget.userName,
+                        ))),
                     const SizedBox(width: 10),
-                    _statBadge(Icons.beach_access_rounded, "Plages"),
+                    _statBadge(Icons.beach_access_rounded, "Plages",
+                        () => _open(BeachSwipeScreen(token: widget.token))),
                     const SizedBox(width: 10),
-                    _statBadge(Icons.restaurant_rounded, "Restos"),
+                    _statBadge(Icons.restaurant_rounded, "Restos", () => _open(RestaurantSwipeScreen(
+                          token: widget.token,
+                          userId: widget.userId,
+                        ))),
                   ],
                 ),
               ],
@@ -260,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     .map((c) => _categoryItem(
                           c.name,
                           _iconForCategory(c.name),
-                          () => debugPrint("CATEGORY: ${c.name}"),
+                          () => _openSearch(category: c.name),
                         ))
                     .toList(),
               ),
@@ -270,16 +298,19 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 28),
 
           // ── DESTINATIONS POPULAIRES ──
-          _sectionTitle("Populaire", "Voir tout"),
+          _sectionTitle("Incontournables", "Voir tout", onAction: () => _openSearch()),
           const SizedBox(height: 12),
-          _destinationCard("Dakar", "https://picsum.photos/500/300?10", "Capitale"),
-          _destinationCard("Saly", "https://picsum.photos/500/300?11", "Plage"),
-          _destinationCard("Île de Gorée", "https://picsum.photos/500/300?12", "Patrimoine"),
+          ...popular.map((p) => _destinationCard(
+                p["name"] ?? "",
+                p["imageUrl"] ?? "",
+                "${p["city"]} · ${_label(p["category"])}",
+                () => openItem(context, p),
+              )),
 
           const SizedBox(height: 28),
 
           // ── RECOMMANDÉS ──
-          _sectionTitle("Recommandé pour vous", null),
+          if (recommended.isNotEmpty) _sectionTitle("Recommandé pour vous", null),
           const SizedBox(height: 12),
           SizedBox(
             height: 155,
@@ -287,7 +318,12 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: recommended
-                  .map((p) => _smallCard(p["title"]!, p["image"]!, p["tag"]!))
+                  .map((p) => _smallCard(
+                        p["name"] ?? "",
+                        p["imageUrl"] ?? "",
+                        p["reason"] ?? typeLabels[p["type"]] ?? "",
+                        () => openItem(context, p),
+                      ))
                   .toList(),
             ),
           ),
@@ -350,9 +386,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── WIDGETS HELPER ──
 
-  Widget _statBadge(IconData icon, String label) {
+  String _label(dynamic category) {
+    if (category == null) return "";
+    final c = category.toString();
+    return c[0] + c.substring(1).toLowerCase();
+  }
+
+  Widget _statBadge(IconData icon, String label, VoidCallback onTap) {
     return Expanded(
-      child: Container(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.18),
@@ -375,10 +419,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      ),
     );
   }
 
-  Widget _sectionTitle(String title, String? action) {
+  Widget _sectionTitle(String title, String? action, {VoidCallback? onAction}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
@@ -393,12 +438,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           if (action != null)
-            Text(
-              action,
-              style: const TextStyle(
-                fontSize: 13,
-                color: _terra,
-                fontWeight: FontWeight.w600,
+            GestureDetector(
+              onTap: onAction,
+              child: Text(
+                action,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: _terra,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
         ],
@@ -455,8 +503,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _destinationCard(String title, String imageUrl, String tag) {
-    return Container(
+  Widget _destinationCard(String title, String imageUrl, String tag, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 14),
       height: 180,
       decoration: BoxDecoration(
@@ -474,7 +524,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(imageUrl, fit: BoxFit.cover),
+            Image.network(imageUrl, fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(color: _terraLight)),
             DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -539,11 +590,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 
-  Widget _smallCard(String title, String imageUrl, String tag) {
-    return Container(
+  Widget _smallCard(String title, String imageUrl, String tag, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       width: 145,
       margin: const EdgeInsets.only(right: 14),
       decoration: BoxDecoration(
@@ -561,7 +615,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(imageUrl, fit: BoxFit.cover),
+            Image.network(imageUrl, fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(color: _terraLight)),
             DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -602,6 +657,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/session.dart';
 import 'my_reservations_screen.dart';
 import 'login_screen.dart';
 import 'dart:io';
@@ -252,11 +253,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                     icon: Icons.logout,
                     title: "Déconnexion",
                     subtitle: "À bientôt !",
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
-                    ),
+                    onTap: () {
+                      Session.clear();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        (route) => false,
+                      );
+                    },
                     isDestructive: true,
                   ),
                   const SizedBox(height: 30),

@@ -12,14 +12,20 @@ class AuthService {
   String? role;
 
   Future<String?> login(String email, String password) async {
-    final response = await http.post(
+    final http.Response response;
+    try {
+      response = await http.post(
       Uri.parse("$baseUrl/auth/login"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "email": email,
         "password": password,
       }),
-    );
+    ).timeout(const Duration(seconds: 15));
+    } catch (e) {
+      print("LOGIN ERROR: $e");
+      return null;
+    }
 
     print("LOGIN STATUS: ${response.statusCode}");
     print("LOGIN BODY: ${response.body}");
@@ -43,7 +49,9 @@ class AuthService {
   }
   
   Future<bool> register(String name, String email, String password) async {
-    final response = await http.post(
+    final http.Response response;
+    try {
+      response = await http.post(
       Uri.parse("$baseUrl/auth/register"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
@@ -51,7 +59,11 @@ class AuthService {
         "email": email,
         "password": password,
       }),
-    );
+    ).timeout(const Duration(seconds: 15));
+    } catch (e) {
+      print("REGISTER ERROR: $e");
+      return false;
+    }
 print("REGISTER STATUS: ${response.statusCode}");
 print("REGISTER BODY: ${response.body}");
     return response.statusCode == 200 || response.statusCode == 201;

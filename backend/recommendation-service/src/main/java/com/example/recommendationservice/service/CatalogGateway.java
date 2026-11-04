@@ -33,7 +33,6 @@ public class CatalogGateway {
         return catalog;
     }
 
-    // tourism-service indisponible : on sert le dernier catalogue reçu
     private List<Map<String, Object>> cachedCatalog(Throwable error) {
         log.warn("Catalogue indisponible, utilisation du cache ({} éléments) : {}", lastCatalog.size(), error.getMessage());
         return lastCatalog;

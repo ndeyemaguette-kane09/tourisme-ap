@@ -46,7 +46,7 @@ class ReservationService {
       body: jsonEncode({
         "userId": userId,
         "hotelId": hotelId,
-        "checkInDate": checkInDate.toIso8601String().split('T')[0],
+        "checkInDate": checkInDate.toIso8601String().split('T')[0],  // "2026-04-10"
         "checkOutDate": checkOutDate.toIso8601String().split('T')[0],
         "guests": guests,
       }),

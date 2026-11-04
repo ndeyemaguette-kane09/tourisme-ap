@@ -49,9 +49,7 @@ class FavoriteService {
           "city": item["city"] ?? "",
         }),
       );
-    } catch (_) {
-      // pas de réseau : le favori reste en local
-    }
+    } catch (_) {}
   }
 
   static Future<List<Map<String, dynamic>>> getFavorites() async {

@@ -15,7 +15,6 @@ public class ItineraryService {
     // deux villes plus proches que ça peuvent partager une même journée
     static final double SAME_DAY_KM = 70;
 
-    // au-delà de cette distance, une ville très intéressante peut perdre face à une ville proche
     static final double DISTANCE_PENALTY_KM = 150;
 
     private static final double[] DAKAR = {14.6928, -17.4467};

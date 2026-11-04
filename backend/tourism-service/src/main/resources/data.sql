@@ -1,5 +1,3 @@
--- Données de démo chargées à chaque démarrage (INSERT IGNORE : rien n'est dupliqué).
--- Les identifiants commencent à 100 pour ne pas toucher aux lignes saisies via l'admin.
 -- Coordonnées GPS approximatives, prix des hôtels indicatifs (FCFA / nuit).
 
 INSERT IGNORE INTO category (id, name, description) VALUES

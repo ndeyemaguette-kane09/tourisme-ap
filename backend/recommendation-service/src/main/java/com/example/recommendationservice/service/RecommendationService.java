@@ -101,7 +101,6 @@ public class RecommendationService {
         List<Map<String, Object>> result = new ArrayList<>();
 
         if (profile.isEmpty()) {
-            // cold start : rien sur l'utilisateur, on propose les lieux les mieux notés en variant les types
             catalog.stream()
                     .sorted(Comparator.comparingDouble(this::rating).reversed())
                     .forEach(item -> result.add(withScore(item, rating(item) / 5, "Parmi les lieux les mieux notés")));
@@ -146,7 +145,6 @@ public class RecommendationService {
         return catalogGateway.reservations(userId);
     }
 
-    // évite une liste de 10 hôtels d'affilée en cold start
     private List<Map<String, Object>> diversify(List<Map<String, Object>> sorted, int limit) {
         Map<String, Deque<Map<String, Object>>> byType = new LinkedHashMap<>();
         for (Map<String, Object> item : sorted) {

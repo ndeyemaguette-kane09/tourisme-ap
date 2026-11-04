@@ -48,12 +48,14 @@ public class ReservationService {
             reservation.setGuests(1);
         }
 
+        // Vérifier si l'utilisateur existe
         try {
             userClient.getUserById(reservation.getUserId());
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable");
         }
 
+        // Vérifier si l'hôtel existe
         Map<String, Object> hotel;
         try {
             hotel = hotelClient.getHotelById(reservation.getHotelId());
@@ -70,11 +72,14 @@ public class ReservationService {
         reservation.setId(null);
         reservation.setHotelName((String) hotel.get("name"));
         reservation.setTotalPrice(pricePerNight * nights);
+        // Définir le statut
         reservation.setStatus(ReservationStatus.EN_ATTENTE);
         reservation.setCreatedAt(LocalDateTime.now());
 
+        // Sauvegarder réservation
         Reservation saved = reservationRepository.save(reservation);
 
+        // Envoyer notification
         notify(saved, "Votre demande de réservation à " + saved.getHotelName() + " a bien été enregistrée");
 
         return saved;

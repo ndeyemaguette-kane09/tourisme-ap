@@ -1,4 +1,4 @@
-# Discover Sénégal
+# Cap Teranga
 
 Application mobile de tourisme intelligente pour découvrir le Sénégal : sites historiques, lieux religieux, nature, plages, hôtels et restaurants, avec des recommandations personnalisées et un générateur d'itinéraire jour par jour.
 
@@ -103,7 +103,7 @@ Lancés avec le reste de la stack :
 
 | Outil | URL | Usage |
 |---|---|---|
-| Grafana | http://localhost:3000 | Dashboard « Discover Sénégal » : requêtes/s, latence p95, erreurs 5xx, état des circuit breakers, mémoire JVM, connexions DB |
+| Grafana | http://localhost:3000 | Dashboard « Cap Teranga » : requêtes/s, latence p95, erreurs 5xx, état des circuit breakers, mémoire JVM, connexions DB |
 | Prometheus | http://localhost:9090 | Collecte des métriques `/actuator/prometheus` de chaque service |
 | Zipkin | http://localhost:9411 | Traces distribuées (Micrometer Tracing + Brave), propagées dans les appels Feign |
 
@@ -132,6 +132,19 @@ Resilience4j protège les appels inter-services :
 ## Données
 
 Le jeu de données (`tourism-service/src/main/resources/data.sql`) couvre Dakar, Saint-Louis, la Petite-Côte, le Sine-Saloum, Touba, Tivaouane, Kaolack, la Casamance et le Sénégal oriental. Les coordonnées GPS sont approximatives et les prix des hôtels sont indicatifs.
+
+## Crédits photos
+
+Photos issues de Wikimedia Commons, sous licence libre. Les auteurs et licences exactes sont indiqués sur chaque page :
+
+- Île de Gorée — [Ile-de-goree.jpg](https://commons.wikimedia.org/wiki/File:Ile-de-goree.jpg)
+- Monument de la Renaissance africaine — [Monument_renaissance.jpg](https://commons.wikimedia.org/wiki/File:Monument_renaissance.jpg)
+- Lac Rose — [Lac_Rose_in_Senegal.jpg](https://commons.wikimedia.org/wiki/File:Lac_Rose_in_Senegal.jpg)
+- Grande Mosquée de Touba — [Touba_moschee.jpg](https://commons.wikimedia.org/wiki/File:Touba_moschee.jpg)
+- Île de Saint-Louis — [Island_of_Saint-Louis-113799.jpg](https://commons.wikimedia.org/wiki/File:Island_of_Saint-Louis-113799.jpg)
+- Pont Faidherbe — [Saintlouis_pont_Faidherbe.jpg](https://commons.wikimedia.org/wiki/File:Saintlouis_pont_Faidherbe.jpg)
+
+Les autres lieux affichent un visuel de remplacement en attendant leurs photos.
 
 ## Pistes d'évolution
 

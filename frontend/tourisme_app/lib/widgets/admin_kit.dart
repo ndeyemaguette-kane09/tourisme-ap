@@ -328,7 +328,7 @@ class _AdminListPageState extends State<AdminListPage> {
           ),
           child: Row(
             children: [
-              NetImage(url: row.imageUrl, seed: row.title, icon: widget.icon, radius: 12, width: 64, height: 64),
+              NetImage(url: row.imageUrl, seed: row.title, icon: widget.icon, radius: BorderRadius.circular(12), width: 64, height: 64),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

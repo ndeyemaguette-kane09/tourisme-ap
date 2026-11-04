@@ -308,7 +308,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                               ),
                             ),
                             Text(
-                              "🇸🇳 Explorez plages, hôtels et restaurants",
+                              "Explorez plages, hôtels et restaurants",
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 11.5,

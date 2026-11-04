@@ -93,7 +93,7 @@ class _SignupScreenState extends State<SignupScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Compte créé avec succès ! Bienvenue 🎉"),
+          content: const Text("Compte créé avec succès. Bienvenue !"),
           backgroundColor: const Color(0xFF2E7D32),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

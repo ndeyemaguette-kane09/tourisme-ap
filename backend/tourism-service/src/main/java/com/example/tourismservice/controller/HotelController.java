@@ -79,7 +79,7 @@ if (categoryObj instanceof Map<?, ?> categoryMap) {
                 City city = cityService.findByName(cityName);
                 hotel.setCity(city);
             } catch (Exception e) {
-                System.out.println("⚠️ City not found: " + cityName);
+                System.out.println("City not found: " + cityName);
             }
         }
 
@@ -144,13 +144,13 @@ public Hotel updateHotel(@PathVariable Long id, @RequestBody Map<String, Object>
     existing.setPrice(Double.parseDouble(data.get("price").toString()));
     existing.setImageUrl((String) data.get("imageUrl"));
 
-    // 🔥 FIX RATING
+    // FIX RATING
     Object ratingObj = data.get("rating");
     if (ratingObj != null) {
         existing.setRating(Double.parseDouble(ratingObj.toString()));
     }
 
-    // 🔥 FIX CITY (handle both city and cityName)
+    // FIX CITY (handle both city and cityName)
     Object cityObj = data.get("city");
     if (cityObj == null) {
         cityObj = data.get("cityName");
@@ -159,15 +159,15 @@ public Hotel updateHotel(@PathVariable Long id, @RequestBody Map<String, Object>
     if (cityObj != null) {
         String cityName = cityObj.toString().trim();
 
-        // 🔥 update visible field
+        // update visible field
         existing.setCityName(cityName);
 
         try {
-            // 🔥 update relation safely
+            // update relation safely
             City city = cityService.findByName(cityName);
             existing.setCity(city);
         } catch (Exception e) {
-            System.out.println("⚠️ City not found: " + cityName);
+            System.out.println("City not found: " + cityName);
         }
     }
     Double lat = Values.toDouble(data.get("latitude"));

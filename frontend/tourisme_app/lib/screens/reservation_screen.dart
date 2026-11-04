@@ -119,7 +119,7 @@ class _ReservationScreenState extends State<ReservationScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("✅ Demande de réservation envoyée"),
+          content: const Text("Demande de réservation envoyée"),
           backgroundColor: const Color(0xFF2E7D32),
           behavior: SnackBarBehavior.floating,
           shape:
@@ -273,7 +273,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                                 ),
                               ),
                               Text(
-                                "Complétez votre séjour 🏨",
+                                "Complétez votre séjour",
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 12.5,
@@ -370,7 +370,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                           // Footer
                           const Center(
                             child: Text(
-                              "🇸🇳 Teranga • Culture • Découverte",
+                              "Teranga • Culture • Découverte",
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.grey,

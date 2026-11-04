@@ -75,14 +75,14 @@ try {
 System.out.println("EMAIL = " + email);
             if (jwtService.isTokenValid(token, userDetails.getUsername())) {
                 System.out.println("TOKEN VALID");
-                // 🔥 Extract role from token
+                // Extract role from token
                 String role = jwtService.extractClaim(token, claims -> claims.get("role", String.class));
 
-                // 🔥 Convert role to Spring Security format
+                // Convert role to Spring Security format
                List<SimpleGrantedAuthority> authorities =
         List.of(new SimpleGrantedAuthority(role));
 
-                // 🔥 Create authentication with role
+                // Create authentication with role
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,

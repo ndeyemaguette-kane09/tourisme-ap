@@ -117,7 +117,7 @@ public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Map<Strin
     //  IMAGE FIX
     String image = (String) data.get("imageUrl");
     if (image != null) {
-        System.out.println("🔥 IMAGE RECUE: " + data.get("imageUrl"));
+        System.out.println("IMAGE RECUE: " + data.get("imageUrl"));
         restaurant.setImageUrl(image);
     }
 

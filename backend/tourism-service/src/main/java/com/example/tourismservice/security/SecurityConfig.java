@@ -28,11 +28,11 @@ public class SecurityConfig {
 
     .authorizeHttpRequests(auth -> auth
 
-                // ✅ Auth publique
+                // Auth publique
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
 
-                // ✅ Lecture publique pour tout le monde
+                // Lecture publique pour tout le monde
                 .requestMatchers(HttpMethod.GET,
                     "/hotels/**",
                     "/restaurants/**",
@@ -51,10 +51,10 @@ public class SecurityConfig {
 
                 
 
-                // ✅ Avis : tout le monde peut poster un review
+                // Avis : tout le monde peut poster un review
                 .requestMatchers(HttpMethod.POST, "/reviews/**").permitAll()
 
-                // ✅ Création/modification/suppression : ADMIN uniquement
+                // Création/modification/suppression : ADMIN uniquement
                 .requestMatchers(HttpMethod.POST,
                     "/hotels/**",
                     "/restaurants/**",
@@ -70,7 +70,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/**").hasAuthority("ADMIN")
 
-                // ✅ Tout le reste nécessite d'être connecté
+                // Tout le reste nécessite d'être connecté
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

@@ -88,4 +88,15 @@ class DiscoverService {
     }
     throw Exception("Impossible de générer l'itinéraire");
   }
+
+  static Future<void> likeHotel(int hotelId, bool liked) async {
+    if (!Session.isLoggedIn) return;
+    try {
+      await http.post(
+        Uri.parse("$baseUrl/recommendations/like"),
+        headers: Session.headers,
+        body: jsonEncode({"userId": Session.userId, "hotelId": hotelId, "liked": liked}),
+      );
+    } catch (_) {}
+  }
 }

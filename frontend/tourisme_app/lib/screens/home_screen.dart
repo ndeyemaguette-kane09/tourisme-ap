@@ -14,6 +14,7 @@ import 'events_screen.dart';
 import '../services/discover_service.dart';
 import '../services/event_service.dart';
 import '../services/favorite_service.dart';
+import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/item_navigation.dart';
@@ -225,22 +226,22 @@ class _HomeTabState extends State<_HomeTab> {
     return SafeArea(
       bottom: false,
       child: RefreshIndicator(
-        color: AppColors.coral,
+        color: AppColors.laterite,
         onRefresh: () async {
           await Future.wait([_loadFeatured(), _loadRecommended()]);
         },
         child: ListView(
           padding: const EdgeInsets.only(top: 16, bottom: 120),
           children: [
-            _header(),
+            FadeSlideIn(index: 0, child: _header()),
             const SizedBox(height: 18),
-            _searchBar(),
+            FadeSlideIn(index: 1, child: _searchBar()),
             const SizedBox(height: 16),
-            _filterChips(),
+            FadeSlideIn(index: 2, child: _filterChips()),
             const SizedBox(height: 16),
-            _carousel(),
+            FadeSlideIn(index: 3, child: _carousel()),
             const SizedBox(height: 16),
-            _quickLinks(),
+            FadeSlideIn(index: 4, child: _quickLinks()),
             const SizedBox(height: 24),
             if (_recommended.isNotEmpty) ...[
               _sectionTitle("Pour toi", onMore: () => _open(const SearchScreen())),
@@ -269,7 +270,7 @@ class _HomeTabState extends State<_HomeTab> {
               TextSpan(
                 text: "Cap Teranga",
                 style: AppTheme.display(size: 26),
-                children: [TextSpan(text: ".", style: AppTheme.display(size: 26, color: AppColors.coral))],
+                children: [TextSpan(text: ".", style: AppTheme.display(size: 26, color: AppColors.laterite))],
               ),
             ),
           ),
@@ -280,7 +281,7 @@ class _HomeTabState extends State<_HomeTab> {
               label: "Mon profil",
               child: CircleAvatar(
                 radius: 22,
-                backgroundColor: AppColors.coral,
+                backgroundColor: AppColors.laterite,
                 backgroundImage: widget.profileImage != null ? FileImage(widget.profileImage!) : null,
                 child: widget.profileImage == null
                     ? Text(_initials(), style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.ink))
@@ -372,7 +373,10 @@ class _HomeTabState extends State<_HomeTab> {
 
   Widget _carousel() {
     if (_loading) {
-      return const SizedBox(height: 320, child: Center(child: CircularProgressIndicator(color: AppColors.coral)));
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Skeleton(height: 320, radius: 28),
+      );
     }
     if (_featured.isEmpty) {
       return const SizedBox(height: 120, child: Center(child: Text("Aucun lieu pour ce filtre pour le moment")));
@@ -432,7 +436,7 @@ class _HomeTabState extends State<_HomeTab> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          NetImage(url: item["imageUrl"], seed: item["name"]),
+          NetImage(url: item["imageUrl"], seed: item["name"], heroTag: "img-${item["type"]}-${item["id"]}"),
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -549,7 +553,10 @@ class _HomeTabState extends State<_HomeTab> {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, i) {
           final item = _recommended[i];
-          return GestureDetector(
+          return FadeSlideIn(
+            index: i,
+            offset: 0,
+            child: GestureDetector(
             onTap: () => openItem(context, item),
             child: SizedBox(
               width: 156,
@@ -580,6 +587,7 @@ class _HomeTabState extends State<_HomeTab> {
                 ],
               ),
             ),
+          ),
           );
         },
       ),
@@ -605,7 +613,7 @@ class _HomeTabState extends State<_HomeTab> {
                     children: [
                       Text(
                         "PROCHAIN GRAND RENDEZ-VOUS · ${EventService.countdown(event).toUpperCase()}",
-                        style: const TextStyle(color: AppColors.coralSoft, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8),
+                        style: const TextStyle(color: AppColors.lateriteSoft, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8),
                       ),
                       const SizedBox(height: 6),
                       Text(event["name"] ?? "", style: AppTheme.display(size: 19, color: Colors.white)),
@@ -617,7 +625,7 @@ class _HomeTabState extends State<_HomeTab> {
                     ],
                   ),
                 ),
-                const Icon(Icons.calendar_month_rounded, color: AppColors.coral, size: 30),
+                const Icon(Icons.calendar_month_rounded, color: AppColors.laterite, size: 30),
               ],
             ),
           ),
@@ -630,7 +638,7 @@ class _HomeTabState extends State<_HomeTab> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Material(
-        color: AppColors.coral,
+        color: AppColors.laterite,
         borderRadius: BorderRadius.circular(24),
         child: InkWell(
           borderRadius: BorderRadius.circular(24),
@@ -704,16 +712,15 @@ class _FavoriteButtonState extends State<_FavoriteButton> {
       label: _added ? "Retirer des favoris" : "Ajouter aux favoris",
       child: GestureDetector(
         onTap: _toggle,
-        child: AnimatedScale(
-          scale: _added ? 1.1 : 1,
-          duration: const Duration(milliseconds: 200),
+        child: PopOnChange(
+          active: _added,
           child: Container(
             width: 44,
             height: 44,
             decoration: const BoxDecoration(color: AppColors.background, shape: BoxShape.circle),
             child: Icon(
               _added ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-              color: _added ? AppColors.coral : AppColors.ink,
+              color: _added ? AppColors.laterite : AppColors.ink,
               size: 22,
             ),
           ),

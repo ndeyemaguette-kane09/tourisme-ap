@@ -32,7 +32,7 @@ Future<bool> confirmDelete(BuildContext context, String name) async {
         ),
         TextButton(
           onPressed: () => Navigator.pop(ctx, true),
-          child: const Text("Supprimer", style: TextStyle(color: AppColors.coral, fontWeight: FontWeight.w700)),
+          child: const Text("Supprimer", style: TextStyle(color: AppColors.laterite, fontWeight: FontWeight.w700)),
         ),
       ],
     ),
@@ -271,7 +271,7 @@ class _AdminListPageState extends State<AdminListPage> {
               future: _future,
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator(color: AppColors.coral));
+                  return const Center(child: CircularProgressIndicator(color: AppColors.laterite));
                 }
                 if (snapshot.hasError) {
                   return Center(
@@ -288,7 +288,7 @@ class _AdminListPageState extends State<AdminListPage> {
                   return const Center(child: Text("Aucun résultat", style: TextStyle(color: AppColors.muted)));
                 }
                 return RefreshIndicator(
-                  color: AppColors.coral,
+                  color: AppColors.laterite,
                   onRefresh: () async => _refresh(),
                   child: ListView.separated(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 96),
@@ -343,7 +343,7 @@ class _AdminListPageState extends State<AdminListPage> {
                       const Padding(
                         padding: EdgeInsets.only(top: 4),
                         child: Text("Pas de coordonnées GPS",
-                            style: TextStyle(color: AppColors.coral, fontSize: 12, fontWeight: FontWeight.w600)),
+                            style: TextStyle(color: AppColors.laterite, fontSize: 12, fontWeight: FontWeight.w600)),
                       ),
                   ],
                 ),

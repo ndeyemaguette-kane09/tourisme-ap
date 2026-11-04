@@ -98,7 +98,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: RefreshIndicator(
-          color: AppColors.coral,
+          color: AppColors.laterite,
           onRefresh: loadCounts,
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
@@ -109,7 +109,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     child: Text.rich(TextSpan(
                       text: "Cap Teranga",
                       style: AppTheme.display(size: 26),
-                      children: [TextSpan(text: ".", style: AppTheme.display(size: 26, color: AppColors.coral))],
+                      children: [TextSpan(text: ".", style: AppTheme.display(size: 26, color: AppColors.laterite))],
                     )),
                   ),
                   IconButton(
@@ -168,7 +168,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               Container(
                 width: 44,
                 height: 44,
-                decoration: const BoxDecoration(color: AppColors.coral, shape: BoxShape.circle),
+                decoration: const BoxDecoration(color: AppColors.laterite, shape: BoxShape.circle),
                 child: const Icon(Icons.event_note_rounded, color: Colors.white),
               ),
               const SizedBox(width: 14),
@@ -207,7 +207,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: AppColors.coral),
+              Icon(icon, color: AppColors.laterite),
               const Spacer(),
               Text(count?.toString() ?? "–", style: AppTheme.display(size: 28)),
               Text(label, style: const TextStyle(color: AppColors.muted)),

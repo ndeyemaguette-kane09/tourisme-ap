@@ -33,9 +33,9 @@ class _ReservationScreenState extends State<ReservationScreen>
   late Animation<double> _fadeAnim;
 
   // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _orange = Color(0xFFB9502B);
   static const Color _orangeDark = Color(0xFF15171C);
-  static const Color _orangeLight = Color(0xFFFF8A6B);
+  static const Color _orangeLight = Color(0xFFD4876A);
   static const Color _cream = Color(0xFFFAFAF7);
   static const Color _amber = Color(0xFFF2F2EE);
 

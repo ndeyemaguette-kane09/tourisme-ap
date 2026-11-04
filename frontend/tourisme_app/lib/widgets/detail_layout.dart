@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/favorite_service.dart';
 import '../services/session.dart';
+import 'motion.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'net_image.dart';
@@ -133,7 +134,7 @@ class _DetailLayoutState extends State<DetailLayout> {
                     onPressed: () => setSheetState(() => rating = i + 1.0),
                     icon: Icon(
                       i < rating ? Icons.star_rounded : Icons.star_outline_rounded,
-                      color: AppColors.coral,
+                      color: AppColors.laterite,
                       size: 32,
                     ),
                   );
@@ -208,6 +209,7 @@ class _DetailLayoutState extends State<DetailLayout> {
                 child: Stack(
                   children: [
                     NetImage(
+                      heroTag: "img-${widget.type}-${widget.id}",
                       url: widget.imageUrl,
                       seed: widget.name,
                       height: 320,
@@ -220,11 +222,14 @@ class _DetailLayoutState extends State<DetailLayout> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             _roundButton(Icons.arrow_back_rounded, "Retour", () => Navigator.pop(context)),
-                            _roundButton(
-                              _favorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                              _favorite ? "Retirer des favoris" : "Ajouter aux favoris",
-                              _toggleFavorite,
-                              color: _favorite ? AppColors.coral : AppColors.ink,
+                            PopOnChange(
+                              active: _favorite,
+                              child: _roundButton(
+                                _favorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                                _favorite ? "Retirer des favoris" : "Ajouter aux favoris",
+                                _toggleFavorite,
+                                color: _favorite ? AppColors.laterite : AppColors.ink,
+                              ),
                             ),
                           ],
                         ),
@@ -280,7 +285,7 @@ class _DetailLayoutState extends State<DetailLayout> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            const Icon(Icons.star_rounded, size: 18, color: AppColors.coral),
+                            const Icon(Icons.star_rounded, size: 18, color: AppColors.laterite),
                             const SizedBox(width: 2),
                             Text(
                               "${_average.toStringAsFixed(1).replaceAll('.', ',')} (${reviews.length})",
@@ -340,7 +345,7 @@ class _DetailLayoutState extends State<DetailLayout> {
                         ),
                         const SizedBox(height: 8),
                         if (_loadingReviews)
-                          const Center(child: CircularProgressIndicator(color: AppColors.coral))
+                          const Center(child: CircularProgressIndicator(color: AppColors.laterite))
                         else if (reviews.isEmpty)
                           const Text("Pas encore d'avis. Sois le premier à partager ton expérience.",
                               style: TextStyle(color: AppColors.muted))
@@ -383,7 +388,7 @@ class _DetailLayoutState extends State<DetailLayout> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(info.icon, size: 20, color: AppColors.coral),
+          Icon(info.icon, size: 20, color: AppColors.laterite),
           const SizedBox(height: 6),
           Text(info.label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
           Text(
@@ -426,7 +431,7 @@ class _DetailLayoutState extends State<DetailLayout> {
                 Row(
                   children: [
                     Expanded(child: Text(name, style: const TextStyle(fontWeight: FontWeight.w700))),
-                    const Icon(Icons.star_rounded, size: 16, color: AppColors.coral),
+                    const Icon(Icons.star_rounded, size: 16, color: AppColors.laterite),
                     Text(" ${r["rating"]}"),
                   ],
                 ),

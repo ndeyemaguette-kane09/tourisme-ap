@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/event_service.dart';
+import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/net_image.dart';
@@ -30,7 +31,7 @@ class _EventsScreenState extends State<EventsScreen> {
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.coral));
+            return const SkeletonList(count: 3, itemHeight: 240, padding: EdgeInsets.fromLTRB(20, 4, 20, 20));
           }
           if (snapshot.hasError) {
             return Center(
@@ -55,7 +56,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   padding: EdgeInsets.only(top: 40),
                   child: Center(child: Text("Aucun événement à venir", style: TextStyle(color: AppColors.muted))),
                 ),
-              ...events.map(_card),
+              for (var i = 0; i < events.length; i++) FadeSlideIn(index: i, child: _card(events[i])),
             ],
           );
         },
@@ -108,11 +109,11 @@ class _EventsScreenState extends State<EventsScreen> {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today_rounded, size: 15, color: AppColors.coral),
+                          const Icon(Icons.calendar_today_rounded, size: 15, color: AppColors.laterite),
                           const SizedBox(width: 6),
                           Text(EventService.dateLabel(e), style: const TextStyle(fontWeight: FontWeight.w600)),
                           const SizedBox(width: 8),
-                          if (!confirmed) _pill("Date estimée", AppColors.coralSoft, AppColors.ink),
+                          if (!confirmed) _pill("Date estimée", AppColors.lateriteSoft, AppColors.ink),
                         ],
                       ),
                       const SizedBox(height: 4),

@@ -134,7 +134,7 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
                 .map((t) => ChoiceChip(
                       label: Text(t),
                       selected: subType.text == t,
-                      selectedColor: AppColors.coralSoft,
+                      selectedColor: AppColors.lateriteSoft,
                       backgroundColor: AppColors.chip,
                       side: BorderSide.none,
                       onSelected: (_) => setState(() => subType.text = t),

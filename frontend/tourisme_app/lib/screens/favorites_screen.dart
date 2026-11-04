@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/favorite_service.dart';
+import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/item_navigation.dart';
@@ -61,7 +62,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: RefreshIndicator(
-          color: AppColors.coral,
+          color: AppColors.laterite,
           onRefresh: _loadFavorites,
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -79,9 +80,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               _segmentBar(),
               const SizedBox(height: 18),
               if (_loading)
-                const Padding(
-                  padding: EdgeInsets.only(top: 60),
-                  child: Center(child: CircularProgressIndicator(color: AppColors.coral)),
+                const Column(
+                  children: [
+                    Skeleton(height: 200, radius: 18),
+                    SizedBox(height: 16),
+                    Skeleton(height: 140, radius: 18),
+                  ],
                 )
               else if (shown.isEmpty)
                 _empty()
@@ -89,9 +93,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: Column(children: [for (var i = 0; i < left.length; i++) _card(left[i], i.isEven)])),
+                    Expanded(
+                      child: Column(children: [
+                        for (var i = 0; i < left.length; i++)
+                          FadeSlideIn(key: ValueKey("l${left[i]["type"]}${left[i]["id"]}"), index: i * 2, child: _card(left[i], i.isEven)),
+                      ]),
+                    ),
                     const SizedBox(width: 12),
-                    Expanded(child: Column(children: [for (var i = 0; i < right.length; i++) _card(right[i], i.isOdd)])),
+                    Expanded(
+                      child: Column(children: [
+                        for (var i = 0; i < right.length; i++)
+                          FadeSlideIn(key: ValueKey("r${right[i]["type"]}${right[i]["id"]}"), index: i * 2 + 1, child: _card(right[i], i.isOdd)),
+                      ]),
+                    ),
                   ],
                 ),
             ],
@@ -151,6 +165,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             Stack(
               children: [
                 NetImage(
+                  heroTag: "img-$type-${item["id"]}",
                   url: item["image"],
                   seed: item["title"],
                   icon: typeIcons[type] ?? Icons.place_rounded,
@@ -170,7 +185,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         width: 40,
                         height: 40,
                         decoration: const BoxDecoration(color: AppColors.background, shape: BoxShape.circle),
-                        child: const Icon(Icons.favorite_rounded, color: AppColors.coral, size: 20),
+                        child: const Icon(Icons.favorite_rounded, color: AppColors.laterite, size: 20),
                       ),
                     ),
                   ),
@@ -196,7 +211,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       padding: const EdgeInsets.only(top: 60),
       child: Column(
         children: [
-          const Icon(Icons.favorite_border_rounded, size: 48, color: AppColors.coral),
+          const Icon(Icons.favorite_border_rounded, size: 48, color: AppColors.laterite),
           const SizedBox(height: 12),
           Text("Rien ici pour l'instant", style: AppTheme.display(size: 20, weight: FontWeight.w700)),
           const SizedBox(height: 6),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../services/discover_service.dart';
+import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
 import '../widgets/item_navigation.dart';
 
@@ -216,13 +217,13 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           Expanded(
             child: isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const SkeletonList(itemHeight: 76)
                 : results.isEmpty
                     ? const Center(child: Text("Aucun résultat"))
                     : ListView.builder(
                         padding: const EdgeInsets.all(12),
                         itemCount: results.length,
-                        itemBuilder: (context, i) => _resultTile(results[i]),
+                        itemBuilder: (context, i) => FadeSlideIn(key: ValueKey("${results[i]["type"]}-${results[i]["id"]}"), index: i, child: _resultTile(results[i])),
                       ),
           ),
         ],

@@ -228,7 +228,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               children: [
                 CircleAvatar(
                   radius: 18,
-                  backgroundColor: day["day"] == 1 ? AppColors.coral : AppColors.ink,
+                  backgroundColor: day["day"] == 1 ? AppColors.laterite : AppColors.ink,
                   child: Text(
                     "J${day["day"]}",
                     style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800),

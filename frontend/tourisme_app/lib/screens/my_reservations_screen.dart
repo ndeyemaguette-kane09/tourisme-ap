@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/reservation_service.dart';
+import '../widgets/motion.dart';
 import '../theme/app_colors.dart';
 
 class MyReservationsScreen extends StatefulWidget {
@@ -30,10 +31,10 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
   };
 
   static const _statusColors = {
-    "EN_ATTENTE": Color(0xFFFF8A6B),
-    "CONFIRMEE": Color(0xFF2E7D32),
+    "EN_ATTENTE": Color(0xFFD4876A),
+    "CONFIRMEE": Color(0xFF5E7D5A),
     "ANNULEE": Color(0xFF9E9E9E),
-    "TERMINEE": Color(0xFF1565C0),
+    "TERMINEE": Color(0xFF15171C),
   };
 
   @override
@@ -106,7 +107,7 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
         title: const Text("Mes réservations"),
       ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const SkeletonList(itemHeight: 120)
           : reservations.isEmpty
               ? const Center(child: Text("Aucune réservation pour le moment"))
               : RefreshIndicator(
@@ -120,7 +121,7 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                       final color = _statusColors[status] ?? AppColors.accent;
                       final canCancel = status == "EN_ATTENTE" || status == "CONFIRMEE";
 
-                      return Card(
+                      return FadeSlideIn(index: index, child: Card(
                         color: Colors.white,
                         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         shape: RoundedRectangleBorder(
@@ -179,7 +180,7 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                             ],
                           ),
                         ),
-                      );
+                      ));
                     },
                   ),
                 ),

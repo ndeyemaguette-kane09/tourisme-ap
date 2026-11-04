@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         opacity: _fadeAnim,
         child: SafeArea(
           child: RefreshIndicator(
-            color: AppColors.coral,
+            color: AppColors.laterite,
             onRefresh: _loadCounts,
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 120),
@@ -178,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           children: [
             CircleAvatar(
               radius: 36,
-              backgroundColor: AppColors.coralSoft,
+              backgroundColor: AppColors.lateriteSoft,
               backgroundImage: profileImage != null ? FileImage(profileImage!) : null,
               child: profileImage == null
                   ? Text(
@@ -242,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
-    final color = isDestructive ? AppColors.coral : AppColors.ink;
+    final color = isDestructive ? AppColors.laterite : AppColors.ink;
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
       leading: Icon(icon, color: color),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
+import '../widgets/motion.dart';
 
 class AppTheme {
   static TextStyle display({double size = 28, FontWeight weight = FontWeight.w800, Color color = AppColors.ink}) {
@@ -28,15 +29,24 @@ class AppTheme {
     final base = ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.coral,
+        seedColor: AppColors.laterite,
         primary: AppColors.ink,
-        secondary: AppColors.coral,
+        secondary: AppColors.laterite,
         surface: AppColors.background,
       ),
       scaffoldBackgroundColor: AppColors.background,
     );
 
     return base.copyWith(
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: SoftPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.macOS: SoftPageTransitionsBuilder(),
+          TargetPlatform.windows: SoftPageTransitionsBuilder(),
+          TargetPlatform.linux: SoftPageTransitionsBuilder(),
+        },
+      ),
       textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).apply(
         bodyColor: AppColors.ink,
         displayColor: AppColors.ink,

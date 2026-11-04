@@ -8,6 +8,7 @@ class NetImage extends StatelessWidget {
   final BorderRadius radius;
   final double? width;
   final double? height;
+  final Object? heroTag;
 
   const NetImage({
     super.key,
@@ -17,6 +18,7 @@ class NetImage extends StatelessWidget {
     this.radius = BorderRadius.zero,
     this.width,
     this.height,
+    this.heroTag,
   });
 
   Widget _placeholder() {
@@ -32,7 +34,7 @@ class NetImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasUrl = url != null && url!.trim().isNotEmpty;
-    return ClipRRect(
+    final image = ClipRRect(
       borderRadius: radius,
       child: hasUrl
           ? Image.network(
@@ -41,10 +43,25 @@ class NetImage extends StatelessWidget {
               height: height,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => _placeholder(),
-              loadingBuilder: (context, child, progress) =>
-                  progress == null ? child : _placeholder(),
+              frameBuilder: (context, child, frame, sync) {
+                if (sync) return child;
+                return Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    _placeholder(),
+                    AnimatedOpacity(
+                      opacity: frame == null ? 0 : 1,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeOut,
+                      child: child,
+                    ),
+                  ],
+                );
+              },
             )
           : _placeholder(),
     );
+    if (heroTag == null) return image;
+    return Hero(tag: heroTag!, child: image);
   }
 }

@@ -160,7 +160,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
           ]),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            activeColor: AppColors.coral,
+            activeColor: AppColors.laterite,
             title: const Text("Date officielle"),
             subtitle: const Text("À activer une fois la date annoncée (croissant lunaire observé)"),
             value: confirmed,

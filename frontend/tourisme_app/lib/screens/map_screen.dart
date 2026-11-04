@@ -55,9 +55,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late Animation<Offset> _sheetAnim;
 
   // ── Palette Teranga ──
-  static const Color _orange = Color(0xFFFF6B4A);
+  static const Color _orange = Color(0xFFB9502B);
   static const Color _orangeDark = Color(0xFF15171C);
-  static const Color _orangeLight = Color(0xFFFF8A6B);
+  static const Color _orangeLight = Color(0xFFD4876A);
   static const Color _cream = Color(0xFFFAFAF7);
   static const Color _amber = Color(0xFFF2F2EE);
 
@@ -122,7 +122,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         markers.add(Marker(
           markerId: MarkerId('beach_${beach.id}'),
           position: LatLng(beach.latitude, beach.longitude),
-          icon: await _markerIcon(_orange),
+          icon: await _markerIcon(const Color(0xFF1F5C78)),
           infoWindow: InfoWindow(title: beach.name, snippet: beach.city),
           onTap: () => _onMarkerTap(beach, 'beach'),
         ));
@@ -135,7 +135,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         markers.add(Marker(
           markerId: MarkerId('hotel_${hotel.id}'),
           position: LatLng(hotel.latitude, hotel.longitude),
-          icon: await _markerIcon(const Color(0xFF1565C0)),
+          icon: await _markerIcon(const Color(0xFFA86A24)),
           infoWindow: InfoWindow(title: hotel.name, snippet: hotel.city),
           onTap: () => _onMarkerTap(hotel, 'hotel'),
         ));
@@ -150,7 +150,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         markers.add(Marker(
           markerId: MarkerId('restaurant_${restaurant.id}'),
           position: LatLng(restaurant.latitude, restaurant.longitude),
-          icon: await _markerIcon(const Color(0xFF2E7D32)),
+          icon: await _markerIcon(const Color(0xFF5E7D5A)),
           infoWindow:
               InfoWindow(title: restaurant.name, snippet: restaurant.city),
           onTap: () => _onMarkerTap(restaurant, 'restaurant'),
@@ -167,7 +167,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             (place["latitude"] as num).toDouble(),
             (place["longitude"] as num).toDouble(),
           ),
-          icon: await _markerIcon(const Color(0xFF6A1B9A)),
+          icon: await _markerIcon(const Color(0xFFB9502B)),
           infoWindow: InfoWindow(
             title: place["name"],
             snippet: "${place["city"]} · voir la fiche",
@@ -360,7 +360,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   _filterChip(
                     label: "Plages",
                     icon: Icons.beach_access_rounded,
-                    color: _orange,
+                    color: const Color(0xFF1F5C78),
                     active: _showBeaches,
                     onTap: () => _toggleFilter('beach'),
                   ),
@@ -368,7 +368,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   _filterChip(
                     label: "Hôtels",
                     icon: Icons.hotel_rounded,
-                    color: const Color(0xFF1565C0),
+                    color: const Color(0xFFA86A24),
                     active: _showHotels,
                     onTap: () => _toggleFilter('hotel'),
                   ),
@@ -376,7 +376,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   _filterChip(
                     label: "Restaurants",
                     icon: Icons.restaurant_rounded,
-                    color: const Color(0xFF2E7D32),
+                    color: const Color(0xFF5E7D5A),
                     active: _showRestaurants,
                     onTap: () => _toggleFilter('restaurant'),
                   ),
@@ -384,7 +384,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   _filterChip(
                     label: "Sites",
                     icon: Icons.place_rounded,
-                    color: const Color(0xFF6A1B9A),
+                    color: const Color(0xFFB9502B),
                     active: _showPlaces,
                     onTap: () => _toggleFilter('place'),
                   ),
@@ -427,16 +427,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _legendItem(_orange, Icons.beach_access_rounded, "Plage"),
+                  _legendItem(const Color(0xFF1F5C78), Icons.beach_access_rounded, "Plage"),
                   const SizedBox(height: 8),
                   _legendItem(
-                      const Color(0xFF1565C0), Icons.hotel_rounded, "Hôtel"),
+                      const Color(0xFFA86A24), Icons.hotel_rounded, "Hôtel"),
                   const SizedBox(height: 8),
-                  _legendItem(const Color(0xFF2E7D32),
+                  _legendItem(const Color(0xFF5E7D5A),
                       Icons.restaurant_rounded, "Resto"),
                   const SizedBox(height: 8),
                   _legendItem(
-                      const Color(0xFF6A1B9A), Icons.place_rounded, "Site"),
+                      const Color(0xFFB9502B), Icons.place_rounded, "Site"),
                 ],
               ),
             ),
@@ -674,7 +674,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       Row(
                         children: [
                           const Icon(Icons.star_rounded,
-                              color: Color(0xFFFF8A6B), size: 15),
+                              color: Color(0xFFD4876A), size: 15),
                           const SizedBox(width: 4),
                           Text(
                             rating.toStringAsFixed(1),
@@ -799,9 +799,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   Color _getTypeColor() {
-    if (_selectedType == 'beach') return _orange;
-    if (_selectedType == 'hotel') return const Color(0xFF1565C0);
-    if (_selectedType == 'restaurant') return const Color(0xFF2E7D32);
+    if (_selectedType == 'beach') return const Color(0xFF1F5C78);
+    if (_selectedType == 'hotel') return const Color(0xFFA86A24);
+    if (_selectedType == 'restaurant') return const Color(0xFF5E7D5A);
     return _orange;
   }
 

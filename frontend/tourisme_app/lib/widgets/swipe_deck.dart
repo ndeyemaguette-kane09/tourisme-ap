@@ -133,7 +133,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
 
   Widget _deck() {
     if (_loading) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.coral));
+      return const Center(child: CircularProgressIndicator(color: AppColors.laterite));
     }
     if (_engine == null || _finished) {
       return Center(
@@ -142,7 +142,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(widget.icon, size: 48, color: AppColors.coral),
+              Icon(widget.icon, size: 48, color: AppColors.laterite),
               const SizedBox(height: 12),
               Text(
                 _entries.isEmpty ? "Rien à afficher pour le moment" : "Tu as tout vu",
@@ -184,7 +184,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            NetImage(url: e.imageUrl, seed: e.name, icon: widget.icon),
+            NetImage(url: e.imageUrl, seed: e.name, icon: widget.icon, heroTag: "img-${e.type}-${e.id}"),
             DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -225,7 +225,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
-                      const Icon(Icons.star_rounded, size: 16, color: AppColors.coralSoft),
+                      const Icon(Icons.star_rounded, size: 16, color: AppColors.lateriteSoft),
                       Text(
                         " ${e.rating.toStringAsFixed(1).replaceAll('.', ',')}",
                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
@@ -272,7 +272,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
           button(Icons.close_rounded, "Passer", AppColors.field, AppColors.ink, 60,
               () => _engine?.currentItem?.nope()),
           const SizedBox(width: 24),
-          button(Icons.favorite_rounded, "J'aime", AppColors.coral, Colors.white, 72,
+          button(Icons.favorite_rounded, "J'aime", AppColors.laterite, Colors.white, 72,
               () => _engine?.currentItem?.like()),
         ],
       ),

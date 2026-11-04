@@ -195,7 +195,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                 height: 150,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.07),
+                  color: Colors.white.withValues(alpha: 0.07),
                 ),
               ),
             ),
@@ -207,7 +207,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                 height: 70,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.07),
+                  color: Colors.white.withValues(alpha: 0.07),
                 ),
               ),
             ),
@@ -246,10 +246,10 @@ class _ReservationScreenState extends State<ReservationScreen>
                               width: 44,
                               height: 44,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
+                                color: Colors.white.withValues(alpha: 0.18),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
-                                    color: Colors.white.withOpacity(0.3),
+                                    color: Colors.white.withValues(alpha: 0.3),
                                     width: 1),
                               ),
                               child: const Icon(
@@ -397,7 +397,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                   color: _cream,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 20,
                       offset: const Offset(0, -6),
                     ),
@@ -414,7 +414,7 @@ class _ReservationScreenState extends State<ReservationScreen>
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: _orange.withOpacity(0.45),
+                        color: _orange.withValues(alpha: 0.45),
                         blurRadius: 18,
                         offset: const Offset(0, 8),
                       ),
@@ -510,14 +510,14 @@ class _ReservationScreenState extends State<ReservationScreen>
           color: selected ? _amber : Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: selected ? _orange.withOpacity(0.4) : Colors.grey.shade200,
+            color: selected ? _orange.withValues(alpha: 0.4) : Colors.grey.shade200,
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
               color: selected
-                  ? _orange.withOpacity(0.1)
-                  : Colors.black.withOpacity(0.04),
+                  ? _orange.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -545,7 +545,7 @@ class _ReservationScreenState extends State<ReservationScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              selected ? _formatDate(date!) : "Choisir",
+              selected ? _formatDate(date) : "Choisir",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
@@ -597,7 +597,7 @@ class _ReservationScreenState extends State<ReservationScreen>
         border: Border.all(color: Colors.grey.shade200, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -661,7 +661,7 @@ class _ReservationScreenState extends State<ReservationScreen>
           color: enabled ? _amber : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: enabled ? _orange.withOpacity(0.3) : Colors.grey.shade200),
+              color: enabled ? _orange.withValues(alpha: 0.3) : Colors.grey.shade200),
         ),
         child: Icon(
           icon,
@@ -697,15 +697,15 @@ class _ReservationScreenState extends State<ReservationScreen>
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: selected
-                    ? _orange.withOpacity(0.5)
+                    ? _orange.withValues(alpha: 0.5)
                     : Colors.grey.shade200,
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: selected
-                      ? _orange.withOpacity(0.08)
-                      : Colors.black.withOpacity(0.03),
+                      ? _orange.withValues(alpha: 0.08)
+                      : Colors.black.withValues(alpha: 0.03),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),

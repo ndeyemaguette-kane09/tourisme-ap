@@ -141,7 +141,8 @@ class _EventFormScreenState extends State<EventFormScreen> {
           const Text("Lieu associé", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
           const SizedBox(height: 6),
           DropdownButtonFormField<int?>(
-            value: places.any((p) => p["id"] == placeId) ? placeId : null,
+            key: ValueKey(places.length),
+            initialValue: places.any((p) => p["id"] == placeId) ? placeId : null,
             hint: Text(places.isEmpty ? "Chargement…" : "Aucun"),
             isExpanded: true,
             items: [
@@ -160,7 +161,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
           ]),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            activeColor: AppColors.laterite,
+            activeThumbColor: AppColors.laterite,
             title: const Text("Date officielle"),
             subtitle: const Text("À activer une fois la date annoncée (croissant lunaire observé)"),
             value: confirmed,

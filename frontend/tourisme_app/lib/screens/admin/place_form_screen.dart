@@ -118,7 +118,8 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
           const Text("Catégorie *", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
           const SizedBox(height: 6),
           DropdownButtonFormField<int>(
-            value: categories.any((c) => c.id == categoryId) ? categoryId : null,
+            key: ValueKey(categories.length),
+            initialValue: categories.any((c) => c.id == categoryId) ? categoryId : null,
             hint: Text(categories.isEmpty ? "Chargement…" : "Choisir"),
             items: categories
                 .map((c) => DropdownMenuItem(value: c.id, child: Text(_label(c.name))))

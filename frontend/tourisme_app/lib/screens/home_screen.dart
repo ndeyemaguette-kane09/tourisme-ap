@@ -413,7 +413,7 @@ class _HomeTabState extends State<_HomeTab> {
                           height: 3,
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
-                            color: i <= _slide ? Colors.white : Colors.white.withOpacity(0.35),
+                            color: i <= _slide ? Colors.white : Colors.white.withValues(alpha: 0.35),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -442,7 +442,7 @@ class _HomeTabState extends State<_HomeTab> {
               gradient: LinearGradient(
                 begin: Alignment.center,
                 end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+                colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
               ),
             ),
           ),
@@ -462,7 +462,7 @@ class _HomeTabState extends State<_HomeTab> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.22),
+                      color: Colors.white.withValues(alpha: 0.22),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(category, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),

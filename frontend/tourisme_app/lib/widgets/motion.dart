@@ -260,7 +260,7 @@ class PiroguePainter extends CustomPainter {
       canvas.drawPath(
         path,
         Paint()
-          ..color = AppColors.ink.withOpacity(alpha)
+          ..color = AppColors.ink.withValues(alpha: alpha)
           ..style = PaintingStyle.stroke
           ..strokeWidth = stroke
           ..strokeCap = StrokeCap.round,
@@ -280,7 +280,7 @@ class PiroguePainter extends CustomPainter {
       canvas.drawCircle(
         Offset(px, _horizon + 4 + math.sin(px / 14) * 1.2),
         2.2,
-        Paint()..color = AppColors.laterite.withOpacity(a * 0.85),
+        Paint()..color = AppColors.laterite.withValues(alpha: a * 0.85),
       );
     }
 

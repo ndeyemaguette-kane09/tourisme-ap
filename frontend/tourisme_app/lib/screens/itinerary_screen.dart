@@ -108,7 +108,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               return FilterChip(
                 label: Text(e.value),
                 selected: on,
-                selectedColor: AppColors.accent.withOpacity(0.25),
+                selectedColor: AppColors.accent.withValues(alpha: 0.25),
                 checkmarkColor: AppColors.primary,
                 onSelected: (_) => setState(() {
                   on ? selected.remove(e.key) : selected.add(e.key);

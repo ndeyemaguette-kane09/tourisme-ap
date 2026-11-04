@@ -27,7 +27,7 @@ class NetImage extends StatelessWidget {
       height: height,
       color: AppColors.placeholderFor(seed ?? url),
       alignment: Alignment.center,
-      child: Icon(icon, color: Colors.white.withOpacity(0.85), size: 32),
+      child: Icon(icon, color: Colors.white.withValues(alpha: 0.85), size: 32),
     );
   }
 

@@ -190,7 +190,7 @@ class _SwipeDeckState extends State<SwipeDeck> {
                 gradient: LinearGradient(
                   begin: Alignment.center,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.65)],
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.65)],
                 ),
               ),
             ),
